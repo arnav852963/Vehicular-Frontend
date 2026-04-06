@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Message = ({payload , me , timestamp , read=false }) => {
+export const Message = ({payload , me , timestamp , read=false  , sent  = false}) => {
     return (
         <>
 
@@ -10,8 +10,8 @@ export const Message = ({payload , me , timestamp , read=false }) => {
                         className={
                             "relative overflow-hidden px-3.5 py-2.5 shadow-lg shadow-black/20 ring-1 " +
                             (me
-                                ? "rounded-2xl rounded-br-md bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 text-slate-50 ring-cyan-400/15"
-                                : "rounded-2xl rounded-bl-md bg-zinc-900/70 text-zinc-100 ring-white/10")
+                                ? "rounded-2xl rounded-br-md bg-gradient-to-b from-slate-700 via-slate-800 to-slate-950 text-slate-50 ring-cyan-400/20"
+                                : "rounded-2xl rounded-bl-md bg-zinc-950/70 text-zinc-100 ring-white/10")
                         }
                     >
                        
@@ -19,7 +19,11 @@ export const Message = ({payload , me , timestamp , read=false }) => {
                             className={
                                 "pointer-events-none absolute inset-0 opacity-100 " +
                                 (me
-                                    ? "bg-[radial-gradient(120%_80%_at_50%_0%,rgba(56,189,248,0.22),transparent_60%)]"
+                                    ? (read
+                                        ? "bg-[radial-gradient(120%_80%_at_50%_0%,rgba(16,185,129,0.22),transparent_60%)]"
+                                        : sent
+                                            ? "bg-[radial-gradient(120%_80%_at_50%_0%,rgba(56,189,248,0.22),transparent_60%)]"
+                                            : "bg-[radial-gradient(120%_80%_at_50%_0%,rgba(148,163,184,0.16),transparent_60%)]")
                                     : "bg-[radial-gradient(120%_80%_at_50%_0%,rgba(148,163,184,0.10),transparent_60%)]")
                             }
                         />
@@ -29,12 +33,41 @@ export const Message = ({payload , me , timestamp , read=false }) => {
                             className={
                                 "pointer-events-none absolute bottom-0 h-3 w-3 rotate-45 ring-1 " +
                                 (me
-                                    ? "-right-1 bg-slate-900 ring-cyan-400/15"
-                                    : "-left-1 bg-zinc-900/70 ring-white/10")
+                                    ? "-right-1 bg-slate-950 ring-cyan-400/20"
+                                    : "-left-1 bg-zinc-950/70 ring-white/10")
                             }
                         />
 
                         <div className="relative">
+                            {me && (
+                                <div className="mb-1.5 flex items-center justify-end gap-1.5">
+                                    {/* status dot */}
+                                    <span
+                                        className={
+                                            "h-1.5 w-1.5 rounded-full " +
+                                            (read
+                                                ? "bg-emerald-400 shadow-[0_0_0_3px_rgba(16,185,129,0.12)]"
+                                                : sent
+                                                    ? "bg-cyan-400 shadow-[0_0_0_3px_rgba(34,211,238,0.12)]"
+                                                    : "bg-slate-400/70 shadow-[0_0_0_3px_rgba(148,163,184,0.10)]")
+                                        }
+                                        aria-hidden="true"
+                                    />
+                                    <span
+                                        className={
+                                            "text-[10px] font-semibold tracking-wide " +
+                                            (read
+                                                ? "text-emerald-300/95"
+                                                : sent
+                                                    ? "text-cyan-200/95"
+                                                    : "text-slate-300/80")
+                                        }
+                                    >
+                                        {read ? "READ" : sent ? "SENT" : "SENDING"}
+                                    </span>
+                                </div>
+                            )}
+
                             {payload?.image && (
                                 <div className="mb-2">
                                     <img
@@ -62,23 +95,25 @@ export const Message = ({payload , me , timestamp , read=false }) => {
                             {timestamp}
                         </p>
 
-                       
                         {me && (
                             <span
                                 className={
                                     "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-semibold ring-1 transition " +
                                     (read
                                         ? "bg-emerald-500/10 text-emerald-300 ring-emerald-500/25"
-                                        : "bg-zinc-500/10 text-zinc-300 ring-white/10")
+                                        : sent
+                                            ? "bg-cyan-500/10 text-cyan-200 ring-cyan-500/25"
+                                            : "bg-slate-500/10 text-slate-300 ring-white/10")
                                 }
-                                aria-label={read ? "Read" : "Delivered"}
-                                title={read ? "Read" : "Delivered"}
+                                aria-label={read ? "Read" : sent ? "Sent" : "Sending"}
+                                title={read ? "Read" : sent ? "Sent" : "Sending"}
                             >
                                 <span className="inline-flex items-center gap-0.5">
-                                    <span className={read ? "text-emerald-300" : "text-zinc-300"}>✓</span>
-                                    <span className={read ? "text-emerald-300" : "text-zinc-500/70"}>✓</span>
+                                    {/* first tick appears once sent; second tick becomes bright when read */}
+                                    <span className={sent || read ? (read ? "text-emerald-300" : "text-cyan-200") : "text-slate-500/50"}>✓</span>
+                                    <span className={read ? "text-emerald-300" : "text-slate-500/60"}>✓</span>
                                 </span>
-                                <span>{read ? "Read" : "Delivered"}</span>
+                                <span>{read ? "Read" : sent ? "Sent" : "Sending"}</span>
                             </span>
                         )}
                     </div>
