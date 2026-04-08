@@ -2,7 +2,7 @@ import React, {useId} from "react";
 
 
 export const Input = React.forwardRef( ({
-    label,
+    label="",
     type,
     className="",
     ...props

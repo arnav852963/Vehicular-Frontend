@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Message = ({payload , me , timestamp , read=false  , sent  = false}) => {
+export const Message = ({payload , me , time , read=false  , sent  = false , received =false}) => {
     return (
         <>
 
@@ -46,10 +46,12 @@ export const Message = ({payload , me , timestamp , read=false  , sent  = false}
                                         className={
                                             "h-1.5 w-1.5 rounded-full " +
                                             (read
-                                                ? "bg-emerald-400 shadow-[0_0_0_3px_rgba(16,185,129,0.12)]"
-                                                : sent
+                                                ? "bg-sky-400 shadow-[0_0_0_3px_rgba(56,189,248,0.14)]"
+                                                : received
                                                     ? "bg-cyan-400 shadow-[0_0_0_3px_rgba(34,211,238,0.12)]"
-                                                    : "bg-slate-400/70 shadow-[0_0_0_3px_rgba(148,163,184,0.10)]")
+                                                    : sent
+                                                        ? "bg-slate-200/80 shadow-[0_0_0_3px_rgba(226,232,240,0.10)]"
+                                                        : "bg-slate-400/70 shadow-[0_0_0_3px_rgba(148,163,184,0.10)]")
                                         }
                                         aria-hidden="true"
                                     />
@@ -57,13 +59,15 @@ export const Message = ({payload , me , timestamp , read=false  , sent  = false}
                                         className={
                                             "text-[10px] font-semibold tracking-wide " +
                                             (read
-                                                ? "text-emerald-300/95"
-                                                : sent
+                                                ? "text-sky-200/95"
+                                                : received
                                                     ? "text-cyan-200/95"
-                                                    : "text-slate-300/80")
+                                                    : sent
+                                                        ? "text-slate-200/90"
+                                                        : "text-slate-300/80")
                                         }
                                     >
-                                        {read ? "READ" : sent ? "SENT" : "SENDING"}
+                                        {read ? "READ" : received ? "RECEIVED" : sent ? "SENT" : "SENDING"}
                                     </span>
                                 </div>
                             )}
@@ -87,33 +91,49 @@ export const Message = ({payload , me , timestamp , read=false  , sent  = false}
                                     {payload.text}
                                 </p>
                             )}
+
                         </div>
                     </div>
 
                     <div className={`flex items-center gap-2 ${me ? "justify-end" : "justify-start"}`}>
-                        <p className="text-[11px] font-medium text-slate-400/90">
-                            {timestamp}
-                        </p>
+                        {!!time && (
+                            <p className={`text-[11px] font-medium ${me ? "text-slate-300/70" : "text-slate-400/90"}`}>
+                                {time}
+                            </p>
+                        )}
 
                         {me && (
                             <span
                                 className={
                                     "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-semibold ring-1 transition " +
                                     (read
-                                        ? "bg-emerald-500/10 text-emerald-300 ring-emerald-500/25"
-                                        : sent
+                                        ? "bg-sky-500/10 text-sky-200 ring-sky-500/25"
+                                        : received
                                             ? "bg-cyan-500/10 text-cyan-200 ring-cyan-500/25"
-                                            : "bg-slate-500/10 text-slate-300 ring-white/10")
+                                            : sent
+                                                ? "bg-slate-500/10 text-slate-100/90 ring-white/10"
+                                                : "bg-slate-500/10 text-slate-300 ring-white/10")
                                 }
-                                aria-label={read ? "Read" : sent ? "Sent" : "Sending"}
-                                title={read ? "Read" : sent ? "Sent" : "Sending"}
+                                aria-label={read ? "Read" : received ? "Received" : sent ? "Sent" : "Sending"}
+                                title={read ? "Read" : received ? "Received" : sent ? "Sent" : "Sending"}
                             >
                                 <span className="inline-flex items-center gap-0.5">
-                                    {/* first tick appears once sent; second tick becomes bright when read */}
-                                    <span className={sent || read ? (read ? "text-emerald-300" : "text-cyan-200") : "text-slate-500/50"}>✓</span>
-                                    <span className={read ? "text-emerald-300" : "text-slate-500/60"}>✓</span>
+                                    <span
+                                        className={(sent || received || read)
+                                            ? (read ? "text-sky-200" : received ? "text-cyan-200" : "text-slate-200/90")
+                                            : "text-slate-500/50"}
+                                    >
+                                        ✓
+                                    </span>
+                                    <span
+                                        className={(received || read)
+                                            ? (read ? "text-sky-200" : "text-cyan-200")
+                                            : "text-slate-500/60"}
+                                    >
+                                        ✓
+                                    </span>
                                 </span>
-                                <span>{read ? "Read" : sent ? "Sent" : "Sending"}</span>
+                                <span>{read ? "Read" : received ? "Received" : sent ? "Sent" : "Sending"}</span>
                             </span>
                         )}
                     </div>
