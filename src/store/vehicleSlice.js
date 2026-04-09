@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
     vehicleExist:false,
-    vehicleImages:null
+    vehicle:null
 }
 
 export const vehicleSlice = createSlice({
@@ -10,10 +10,10 @@ export const vehicleSlice = createSlice({
     initialState,
     reducers:{
 
-        addVehicleImages: (state , action)=>{
+        addVehicle: (state , action)=>{
             state. vehicleExist = true
 
-            state. vehicleImages = action.payload
+            state. vehicle = action.payload
 
         }
 
@@ -22,5 +22,5 @@ export const vehicleSlice = createSlice({
 
     }
 })
-export const  {addVehicleImages} = vehicleSlice.actions
+export const  {addVehicle} = vehicleSlice.actions
 export const vehicleReducers = vehicleSlice.reducer

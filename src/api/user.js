@@ -23,6 +23,9 @@ import {api} from "./api.js";
 
     userLogout: ()=>{
         return api.patch("/user/logout")
-    }
+    },
+     getUserChats:()=>{
+     return api.get("/user/getUserChats")
+     }
     
 }

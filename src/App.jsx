@@ -10,7 +10,10 @@ import {useDispatch} from "react-redux";
 
 function App() {
 
-    const [error, setError] = useState(null)
+    const [error, setError] = useState({
+        error: false,
+        message: ""
+    })
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -34,7 +37,7 @@ function App() {
 
             dispatch(login(res?.data?.data))
 
-                navigate('/')
+
         } catch (e) {
             setError({error: true, message: "An error occurred while fetching user data"})
 
@@ -49,6 +52,36 @@ function App() {
         })()
 
     }, []);
+
+
+
+
+    useEffect(() => {
+        ;(async ()=>{
+
+            try {
+
+                const refreshUser = await userApi.refreshUserToken()
+
+                if(refreshUser?.data?.statusCode !== 200) {
+
+                    navigate("/signup")
+                }
+            } catch (e){
+
+
+                navigate("/signup")
+
+
+            }
+
+
+        })()
+
+
+    }, [])
+
+// race condition of get user and refreshtoken
     
     if(error.error) {
         return (
