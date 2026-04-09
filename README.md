@@ -11,7 +11,10 @@
 
 Vehicular solves a real-world problem: contacting a vehicle owner (blocked driveway, lights left on, minor incident) **without exposing phone numbers**. Vehicle owners register their vehicles and place a generated QR code on the windshield. Anyone can scan it and instantly open an **anonymous, real-time** chat with the owner.
 
-This repository contains the **frontend** (React + Vite). The backend is assumed to be a separate Node/Express service.
+This repository contains the **frontend** (React + Vite).
+
+> **Backend Repository (Node/Express):**
+> ### 👉 https://github.com/arnav852963/vehicular
 
 ---
 
