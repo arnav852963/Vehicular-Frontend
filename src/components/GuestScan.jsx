@@ -26,7 +26,7 @@ export const GuestScan = () => {
 
 
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState({})
+    const [error, setError] = useState({error: false, message: ""})
     const [other, setOther] = useState(false)
     const [message, setMessage] = useState("");
 
@@ -143,7 +143,7 @@ const handleOnclickOption = (option) => {
 
 
         if(receit.success){
-            navigate(`/chat/${session}`)
+            navigate(`/guest/chat/${session}`)
 
 
         }
@@ -181,7 +181,7 @@ const handleOther = () => {
 
         if(receit.success){
 
-            navigate(`/chat/${session}`)
+            navigate(`/guest/chat/${session}`)
         }
 
 

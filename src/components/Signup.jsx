@@ -6,7 +6,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 import {authApi} from "../api/auth.js";
 import {useDispatch} from "react-redux";
 import {login as authLogin , logout as authLogout} from "../store/authSlice.js";
- import {useNavigate} from "react-router-dom";
+ import {useLocation, useNavigate} from "react-router-dom";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Logo } from "./Logo";
 
@@ -22,6 +22,10 @@ export const Signup = () => {
 
     const navigate  = useNavigate()
     const googleProvider = new GoogleAuthProvider();
+
+    const location = useLocation()
+
+    const pathAfterSubmit = String(location?.state?.from) || "/"
 
     const handleGoogleLogin = async () => {
         try {
@@ -58,7 +62,7 @@ export const Signup = () => {
             }
 
             dispatch(authLogin(res?.data?.data))
-            navigate("/")
+            navigate(pathAfterSubmit)
             setLoading(false)
 
 
@@ -198,7 +202,7 @@ export const Signup = () => {
             }
 
             dispatch(authLogin(res?.data?.data))
-            navigate("/")
+            navigate(pathAfterSubmit)
             setLoading(false)
 
 
