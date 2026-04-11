@@ -1,0 +1,4 @@
+toh abhi vo read , recieved wala krna hai
+
+agr user hai logged in to direct alert bhjejna hai
+

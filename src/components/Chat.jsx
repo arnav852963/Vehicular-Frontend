@@ -72,7 +72,7 @@ export const Chat = () => {
                     sessionId
                 }
             } , (reciet)=>{
-                if(reciet.status === "ok"){
+                if(reciet.success){
                     toast(<Notification message="joined room successfully" />)
                 }
                     else {
@@ -85,6 +85,7 @@ export const Chat = () => {
 
 
         socket.current.on("NEW_MESSAGE" , (message) =>{
+            message.timestamp = new Date.toLocaleString()
             setMessages((prev) => [...prev , message])
         })
 
@@ -166,6 +167,8 @@ export const Chat = () => {
 
 
 
+            } else {
+                toast(<Notification message={"could not send message " + reciet.message} />)
             }
 
         })
