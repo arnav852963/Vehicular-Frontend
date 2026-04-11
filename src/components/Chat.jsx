@@ -48,7 +48,7 @@ export const Chat = () => {
         if(!isOwner){
 
             socket.current = connectSocket({
-                guestSessionId: sessionId
+                sessionId
             })
 
 
@@ -62,7 +62,7 @@ export const Chat = () => {
         else {
 
             socket.current = connectSocket({
-                ownerToken:ownerToken
+                sessionId
             })
 
 
@@ -122,7 +122,7 @@ export const Chat = () => {
                     setLoading(false)
                     return
                 }
-                setMessages(res?.data?.data)
+                setMessages(res?.data?.data?.messages)
                 setLoading(false)
 
             }  catch (e){
@@ -190,7 +190,7 @@ export const Chat = () => {
             socket.current?.emit("client_action", {
                 type: "STOP_TYPING",
             })
-        } , 1000)
+        } , 2000)
 
 
     }, [text]);

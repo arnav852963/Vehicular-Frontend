@@ -19,7 +19,6 @@ export const GuestScan = () => {
     const {qrId} = useParams()
 
 
-    const socket = useRef(null);
 
     const [scannedVehicleInfo, setScannedVehicleInfo] = useState(null)
 
@@ -32,67 +31,35 @@ export const GuestScan = () => {
 
     const options =["You’re blocking me", "Lights are on", "Window is open", "Your alarm is going off", "Someone hit/scratched your vehicle", "Other"]
 
-    const [session, setSession] = useState('')
 
-    const dispatch = useDispatch()
+
+
 
     const navigate = useNavigate()
 
 
-
-
-
     useEffect(() => {
-
         setLoading(true)
 
-        ;(async () => {
-            try {
-                const res = await vehicleApi.scanQr(qrId)
+        ;(async ()=>{
 
-                if(!res || !res?.data || res?.data?.statusCode !== 200){
-                    setError(()=>({ error: true ,     message:"Failed to scan QR code"}))
-                    setLoading(false)
-                    return
-                }
+            const res = await vehicleApi.getVehicleByQrId(qrId)
 
-                dispatch(setInfoAfterScan(res?.data?.data))
-                setScannedVehicleInfo(()=> res?.data?.data?.vehicleInfo)
-                setSession(()=> res?.data?.data?.guestSessionId  )
-
-                socket.current = connectSocket({
-                    guestSessionId: res?.data?.data?.guestSessionId
-                })
-
-
-                socket.current.on("CONNECTED_TO_SERVER" , (message)=>{
-
-                    toast(<Notification message={message}/> )
-                })
-
+            if (!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200) {
+                setError({error: true, message: "Failed to fetch vehicle data"})
                 setLoading(false)
-
-
-
-
-
-
-
-
-
-
-
-
-
-            } catch (e){
-                setError(()=>({ error: true ,     message:"An error occurred while scanning QR code " + e.message}))
-                setLoading(false)
+                return
 
             }
+
+            setScannedVehicleInfo(res?.data?.data)
+            setLoading(false)
+
 
 
         })()
 
+    }, [qrId]);
 
 
 
@@ -101,16 +68,6 @@ export const GuestScan = () => {
 
 
 
-        return () => {
-            if (socket.current) {
-                socket.current.disconnect();
-            }
-        };
-
-
-
-
-    }, []);
 
 
 
@@ -118,78 +75,60 @@ export const GuestScan = () => {
 
 
 
-const handleOnclickOption = (option) => {
 
-    if (option === "Other") {
-        setOther(true)
-        return
+
+
+const handleOnclickOption = async (option ) => {
+
+        if(option === "Other"){
+            setOther(true)
+            return
+        }
+
+        const cleanMessage = filter.clean(option)
+
+    try {
+            const res = await vehicleApi.scanQr(qrId , {
+                senderType: "guest",
+                message: cleanMessage,
+            })
+
+        if (!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200) {
+            toast(<Notification message={"Failed to send alert. Please try again."} />)
+            setError({error: true, message: "Failed to send alert"})
+            setLoading(false)
+            return
+        }
+
+        navigate(`/guest/chat/${res?.data?.data?.sessionId}`)
+
+
+
+
+
+    } catch (e) {
+
+        toast(<Notification message={e.message || "An error occurred while sending alert. Please try again."} />)
+        setError({error: true, message: e.message || "An error occurred while sending alert"})
+        setLoading(false)
+
     }
 
 
 
-    socket.current.timeout(5000).emit("client_action" , {
-        type:"TRIGGER_ALERT",
-        payload: {
-            text:option,
-        }
-    } , (error  , receit) =>{
-        if(error) {
-            setError(() => ({error: true, message: "Failed to send alert " + error.message}))
-            toast(<Notification message={"Failed to send alert " + error.message}/>)
-            return
-        }
 
 
 
 
-        if(receit.success){
-            navigate(`/guest/chat/${session}`)
-
-
-        }
 
 
 
-    })
+
 
 }
 
 
-const handleOther = () => {
 
-    if(!message.trim()) {
-        toast(<Notification message={"Please enter a message"}/>)
-        return
-    }
-
-    const cleanMessage = filter.clean(message)
-
-    socket.current.timeout(5000).emit("client_action" , {
-        type:"TRIGGER_ALERT",
-        payload: {
-            text: cleanMessage,
-        }
-    } , (error  , receit) =>{
-        if(error) {
-            setError(() => ({error: true, message: "Failed to send alert " + error.message}))
-            toast(<Notification message={"Failed to send alert " + error.message}/>)
-            return
-        }
-
-
-
-
-        if(receit.success){
-
-            navigate(`/guest/chat/${session}`)
-        }
-
-
-
-    })
-
-
-}
 
 if(error?.error) {
     return (
@@ -317,7 +256,8 @@ if(error?.error) {
                         </div>
 
                         <button
-                            onClick={handleOther}
+                            value={message}
+                            onClick={()=> handleOnclickOption(message)}
                             className="mt-3 inline-flex w-full items-center justify-center rounded-2xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-zinc-950 shadow-sm transition hover:bg-cyan-400 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
                         >
                             Send alert

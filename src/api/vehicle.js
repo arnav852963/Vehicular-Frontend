@@ -37,6 +37,11 @@ export const vehicleApi = {
         return api.post(`/vehicle/qrScanned/${qrId}`)
 
 
+    },
+
+    getVehicleByQrId:(qrId , message)=>{
+        return api.get(`/vehicle/getVehicleByQrId/${qrId}` , message)
+
     }
 
 
