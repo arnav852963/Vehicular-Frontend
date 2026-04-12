@@ -8,3 +8,8 @@ also a page to view old chats(chjat specific just like vehicles)
 
 
 also see how to unlink imaged cloudinary if the api goes down after the images are uploaded
+
+blocking the ip of spammers
+
+
+addd active qr session

@@ -14,6 +14,8 @@ export const VehicleInfo = () => {
     })
 
     const {vehicleId} = useParams();
+    const [qr, setQr] = useState(null)
+    const [showQr, setShowQr] = useState()
 
 
     useEffect(() => {
@@ -30,7 +32,8 @@ export const VehicleInfo = () => {
                     return
 
                 }
-                setVehicleInfo(res?.data?.data)
+                setVehicleInfo(res?.data?.data?.vehicle)
+                setQr(res?.data?.data?.qrImage)
                 setLoading(false)
             } catch (e) {
                 setError({error: true, message: e.message || "An error occurred while fetching vehicle data"})
@@ -160,12 +163,49 @@ export const VehicleInfo = () => {
                             </div>
                         ) : null}
 
-                        {vehicleInfo?.qr ? (
+                        {qr ? (
                             <div className="mt-6">
-                                <Qr qr={vehicleInfo.qr} plateNumber={vehicleInfo?.plateNumber} />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowQr(true)}
+                                    className="w-full rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-4 py-3 text-sm font-semibold text-cyan-100 shadow-[0_10px_30px_-18px_rgba(34,211,238,0.45)] transition active:scale-[0.99]"
+                                >
+                                    Show QR (screenshot-friendly)
+                                </button>
                             </div>
                         ) : null}
                     </div>
+
+                    {showQr && qr ? (
+                        <div className="fixed inset-0 z-50">
+                            <button
+                                type="button"
+                                aria-label="Close QR"
+                                onClick={() => setShowQr(false)}
+                                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                            />
+
+                            <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-md px-4 pb-5">
+                                <div className="rounded-3xl border border-zinc-800/70 bg-zinc-950/95 p-4 shadow-[0_22px_70px_-40px_rgba(0,0,0,0.85)]">
+                                    <div className="mb-3 flex items-center justify-between gap-3">
+                                        <div className="min-w-0">
+                                            <p className="text-xs font-medium tracking-wide text-zinc-400">QR Code</p>
+                                            <p className="mt-0.5 text-sm font-semibold text-zinc-100">Screenshot or print</p>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowQr(false)}
+                                            className="shrink-0 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-2 text-xs font-semibold text-zinc-200"
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
+
+                                    <Qr qr={qr} plateNumber={vehicleInfo?.plateNumber} />
+                                </div>
+                            </div>
+                        </div>
+                    ) : null}
                 </div>
             )
 
