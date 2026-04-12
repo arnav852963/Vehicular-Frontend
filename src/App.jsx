@@ -14,7 +14,7 @@ function App() {
         error: false,
         message: ""
     })
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -28,7 +28,7 @@ function App() {
 
             const res = await userApi.getUser()
             if (!res || !res?.data || res?.data?.statusCode !== 200) {
-                setError({error: true, message: "Failed to fetch user data"})
+
                 navigate('/signup')
                 dispatch(logout())
                 setLoading(false)
@@ -37,9 +37,11 @@ function App() {
 
             dispatch(login(res?.data?.data))
 
+                setLoading(false)
+
 
         } catch (e) {
-            setError({error: true, message: "An error occurred while fetching user data"})
+
 
                 navigate('/signup')
                 dispatch(logout())
@@ -65,9 +67,15 @@ function App() {
 
                 if(refreshUser?.data?.statusCode !== 200) {
 
+                    setLoading(false)
+
                     navigate("/signup")
+
                 }
             } catch (e){
+
+
+                setLoading(false)
 
 
                 navigate("/signup")

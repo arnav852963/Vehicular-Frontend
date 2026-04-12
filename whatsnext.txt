@@ -2,3 +2,9 @@ toh abhi vo read , recieved wala krna hai
 
 agr user hai logged in to direct alert bhjejna hai
 
+user profile update
+
+also a page to view old chats(chjat specific just like vehicles)
+
+
+also see how to unlink imaged cloudinary if the api goes down after the images are uploaded

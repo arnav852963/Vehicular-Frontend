@@ -22,15 +22,25 @@ const options = ["CAR", "MOTORCYCLE", "TRUCK", "BUS", "OTHER"]
 
     const addUserVehicle = async (data) => {
         if(!data)throw Error("No data provided")
+
+        console.log(data)
         
         setLoading(true)
         setError(()=> ({ error: false ,  message:""}))
-        
+
         const formData = new FormData();
-        
-        for(const key in data){
-            formData.append(key, data[key])
+
+        for (const key in data) {
+            if (key === "vehicleImages" && data[key] instanceof FileList) {
+                for (let i = 0; i < data[key].length; i++) {
+                    formData.append("vehicleImages", data[key][i]);
+                }
+            } else {
+                formData.append(key, data[key]);
+            }
         }
+
+       console.log( Object.fromEntries(formData))
         
         try {
             
@@ -48,7 +58,7 @@ const options = ["CAR", "MOTORCYCLE", "TRUCK", "BUS", "OTHER"]
             }
             
             
-            navigate('/vehicles')
+            navigate('/vehicle')
             
             
             
@@ -118,27 +128,27 @@ if(error?.error){
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit()} className="space-y-4">
+                <form onSubmit={handleSubmit(addUserVehicle)} className="space-y-4">
                     <div className="rounded-3xl border border-zinc-800/70 bg-zinc-950/50 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur sm:p-6">
                         <div className="space-y-4">
                             <Select
                                 options={options}
                                 label="Vehicle Type"
-                                {...register("VehicleType" , {required:true})}
+                                {...register("vehicleType" , {required:true})}
                             />
 
                             <Input
                                 label="Plate Number"
                                 type="text"
                                 placeholder="Enter plate number"
-                                {...register("PlateNumber" , {required:true})}
+                                {...register("plateNumber" , {required:true})}
                             />
 
                             <Input
                                 type="text"
                                 label="Describe your vehicle"
                                 placeholder="Describe your vehicle in one sentence"
-                                {...register("Description" , {required:true})}
+                                {...register("description" , {required:true})}
                             />
 
                             <div className="rounded-2xl border border-zinc-800/70 bg-zinc-950/40 p-3">
@@ -146,7 +156,12 @@ if(error?.error){
                                     type="file"
                                     label="Upload Vehicle Image"
                                     accept="image/*"
-                                    {...register("VehicleImage" , {required:true})}
+                                    multiple
+                                    {...register("vehicleImages" , {required:true ,validate: (value)=> {
+
+                                        if(value.length>4) return "You can upload up to 4 images"
+                                        return true
+                                        } })}
                                 />
                                 <p className="mt-2 text-xs text-zinc-400/90">
                                     Use a clear photo—helps guests confirm they scanned the right vehicle.

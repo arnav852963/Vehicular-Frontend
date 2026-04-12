@@ -92,7 +92,7 @@ export const HomePage = () => {
             if (!getVehicles || !getVehicles?.data || !getVehicles?.data?.data || getVehicles?.data?.statusCode !== 200) {
                 setError({
                     error: true,
-                    message: getVehicles?.data?.message || "could not fetch vehicles"
+                    message: getVehicles?.data?.message || "could not fetch vehicles hey  load"
                 })
                 setLoading(false)
                 return
@@ -126,7 +126,7 @@ export const HomePage = () => {
 
                 setError({
                     error: true,
-                    message: e?.response?.data?.message || "could not fetch vehicles"
+                    message: String(e?.message) || "could not fetch vehicles daimmm "
                 })
                 setLoading(false)
                 }
@@ -148,7 +148,7 @@ useEffect(() => {
 
     if(!user && !loading){
 
-        navigate('/signin')
+        navigate('/signup')
 
 
 
@@ -239,7 +239,7 @@ if(error && error?.error){
                         </div>
                         <div className="flex items-center gap-2">
                             <Link
-                                to="/vehicles"
+                                to="/vehicle"
                                 className="rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2 text-xs font-medium text-zinc-200"
                             >
                                 Vehicles

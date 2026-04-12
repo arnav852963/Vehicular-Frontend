@@ -25,7 +25,7 @@ export const Header = () => {
             }
             
             dispatch(logout())
-            navigate('/signin')
+            navigate('/signup')
             
             
             

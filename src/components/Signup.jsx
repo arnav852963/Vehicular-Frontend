@@ -25,7 +25,10 @@ export const Signup = () => {
 
     const location = useLocation()
 
-    const pathAfterSubmit = String(location?.state?.from) || "/"
+    let pathAfterSubmit = location?.state?.from ? location?.state?.from : '/'
+    pathAfterSubmit  = String(pathAfterSubmit)
+
+
 
     const handleGoogleLogin = async () => {
         try {
