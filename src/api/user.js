@@ -18,11 +18,11 @@ import {api} from "./api.js";
     },
 
     updateUserProfile: (data)=>{
-        return api.patch("/user/updateProfile", data)
+        return api.post("/user/updateProfile", data)
     },
 
     userLogout: ()=>{
-        return api.patch("/user/logout")
+        return api.post("/user/logout")
     },
      getUserChats:()=>{
      return api.get("/user/getUserChats")

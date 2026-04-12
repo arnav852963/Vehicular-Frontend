@@ -18,7 +18,7 @@ export const vehicleApi = {
     },
 
     updateVehicleImage: (formData , vehicleId)=>{
-        return  api.patch(`/vehicle/updateVehicleImage/${vehicleId}` , formData , {
+        return  api.post(`/vehicle/updateVehicleImage/${vehicleId}` , formData , {
             headers:{"Content-Type": "multipart/form-data"}
         })
     },
