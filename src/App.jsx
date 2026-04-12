@@ -29,7 +29,7 @@ function App() {
             const res = await userApi.getUser()
             if (!res || !res?.data || res?.data?.statusCode !== 200) {
                 setError({error: true, message: "Failed to fetch user data"})
-                navigate('/signin')
+                navigate('/signup')
                 dispatch(logout())
                 setLoading(false)
                 return
@@ -41,7 +41,7 @@ function App() {
         } catch (e) {
             setError({error: true, message: "An error occurred while fetching user data"})
 
-                navigate('/signin')
+                navigate('/signup')
                 dispatch(logout())
             setLoading(false)
 
