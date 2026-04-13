@@ -43,19 +43,26 @@ export const GuestScan = () => {
 
         ;(async ()=>{
 
-            const res = await vehicleApi.getVehicleByQrId(qrId)
+            try {
 
-            if (!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200) {
-                setError({error: true, message: "Failed to fetch vehicle data"})
+
+                const res = await vehicleApi.getVehicleByQrId(qrId)
+
+                if (!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200) {
+                    setError({error: true, message: "Failed to fetch vehicle data"})
+                    setLoading(false)
+                    return
+
+                }
+
+                setScannedVehicleInfo(res?.data?.data)
                 setLoading(false)
-                return
+
+            } catch (e) {
+                setError({error: true, message: e.message || "An error occurred while fetching vehicle data"})
+                setLoading(false)
 
             }
-
-            setScannedVehicleInfo(res?.data?.data)
-            setLoading(false)
-
-
 
         })()
 

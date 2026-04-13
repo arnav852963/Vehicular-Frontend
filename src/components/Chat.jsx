@@ -257,6 +257,7 @@ if(error.error){
                                 <ul className="space-y-2">
                                     {messages.map((message , index) =>(
                                         <li key={index}>
+
                                             <Message
                                                 payload={message?.message}
                                                 me={isOwner === (message?.senderType === "owner")}

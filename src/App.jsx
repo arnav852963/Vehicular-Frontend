@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react'
 
-import {Outlet, useNavigate} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {BottomTabs} from "./components/bottomtabs/BottomTabs.jsx";
 import { useEffect } from 'react';
 import {Header} from "./components/Header/Header.jsx";
@@ -10,8 +10,12 @@ import {useDispatch} from "react-redux";
 import {connectSocket} from "./connection.js";
 import {toast} from "react-toastify";
 import {Notification} from "./components/Notification.jsx";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
+
+     const location = useLocation()
 
     const [error, setError] = useState({
         error: false,
@@ -25,6 +29,13 @@ function App() {
     const socket = useRef(null);
 
     useEffect(() => {
+        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  ) {
+            setLoading(false)
+
+            return ;
+
+
+        }
 
         setLoading(true)
         setError(()=> ({ error: false ,  message:""}))
@@ -35,13 +46,19 @@ function App() {
             const res = await userApi.getUser()
             if (!res || !res?.data || res?.data?.statusCode !== 200) {
 
-                navigate('/signup')
+                navigate('/signup' ,  {
+                    state: {
+                        from: location?.pathname
+                    },
+                    replace: true
+                })
                 dispatch(logout())
                 setLoading(false)
                 return
             }
 
             dispatch(login(res?.data?.data))
+                setUser(res?.data?.data)
 
                 setLoading(false)
 
@@ -49,7 +66,12 @@ function App() {
         } catch (e) {
 
 
-                navigate('/signup')
+                navigate('/signup' ,  {
+                    state: {
+                        from: location?.pathname
+                    },
+                    replace: true
+                })
                 dispatch(logout())
             setLoading(false)
 
@@ -59,12 +81,15 @@ function App() {
 
         })()
 
-    }, [dispatch , navigate]);
+    }, [dispatch , navigate , location.pathname]);
 
 
 
 
     useEffect(() => {
+
+
+        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  ) {  setLoading(false)  ;   return}
         ;(async ()=>{
 
             try {
@@ -75,7 +100,12 @@ function App() {
 
                     setLoading(false)
 
-                    navigate("/signup")
+                    navigate("/signup" ,  {
+                        state: {
+                            from: location?.pathname
+                        },
+                        replace: true
+                    })
 
                 }
             } catch (e){
@@ -84,7 +114,12 @@ function App() {
                 setLoading(false)
 
 
-                navigate("/signup")
+                navigate("/signup" ,  {
+                    state: {
+                        from: location?.pathname
+                    },
+                    replace: true
+                })
 
 
             }
@@ -93,11 +128,12 @@ function App() {
         })()
 
 
-    }, [])
+    }, [location.pathname])
 
 
 
     useEffect(() => {
+        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  )  {  setLoading(false)  ;   return}
 
 
         if(!user)  return;
@@ -137,7 +173,7 @@ function App() {
         }
 
 
-    }, [user]);
+    }, [user , location.pathname ]);
 
 
 
@@ -177,6 +213,7 @@ function App() {
 
   return !loading ? (
 
+
       
       <div className="min-h-dvh bg-zinc-950 text-zinc-100">
 
@@ -195,6 +232,8 @@ function App() {
 
 
   ) : (
+
+
       <div className="min-h-dvh bg-zinc-950 text-zinc-100">
           <div className="mx-auto flex min-h-dvh w-full max-w-md items-center justify-center px-4 py-10 sm:max-w-lg">
               <div

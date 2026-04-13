@@ -32,15 +32,15 @@ export const vehicleApi = {
 
 },
 
-    scanQr:(qrId)=>{
+    scanQr:(qrId  , message)=>{
 
-        return api.post(`/vehicle/qrScanned/${qrId}`)
+        return api.post(`/vehicle/qrScanned/${qrId}` , message)
 
 
     },
 
-    getVehicleByQrId:(qrId , message)=>{
-        return api.get(`/vehicle/getVehicleByQrId/${qrId}` , message)
+    getVehicleByQrId:(qrId )=>{
+        return api.get(`/vehicle/getVehicleByQrId/${qrId}`)
 
     }
 
