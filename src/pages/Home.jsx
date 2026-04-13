@@ -14,7 +14,7 @@ import {Container} from "../components/Container.jsx";
 export const HomePage = () => {
 
     const user = useSelector((state) => state.auth.userInfo)
-    const socket = useRef(null);
+
     const [vehicles, setVehicles] = useState([])
     const [error, setError] = useState({
         error: false,
@@ -35,47 +35,7 @@ export const HomePage = () => {
 
 
 
-    useEffect(() => {
 
-
-        if(!user?._id)  return;
-        socket.current = connectSocket({
-            ownerToken: user._id
-        })
-
-
-        socket.current.on("ALERT" , (data)=>{
-            const {sessionId} = data
-
-            if(sessionId){
-
-                toast(
-
-
-                            <Notification  message="you have a alert. click me"  />
-                 , {
-
-                        autoClose: false,
-                        closeOnClick:true,
-                        onClick: ()=> navigate(`/chat/${sessionId}`)
-                    })
-
-
-            }
-
-
-
-
-        })
-
-        return () => {
-            if(socket.current){
-                socket.current.disconnect();
-            }
-        }
-
-
-    }, [user?._id]);
 
 
     useEffect(()=>{

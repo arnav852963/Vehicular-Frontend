@@ -1,4 +1,4 @@
-import { useState} from 'react'
+import React, {useRef, useState} from 'react'
 
 import {Outlet, useNavigate} from "react-router-dom";
 import {BottomTabs} from "./components/bottomtabs/BottomTabs.jsx";
@@ -7,6 +7,9 @@ import {Header} from "./components/Header/Header.jsx";
 import {userApi} from "./api/user.js";
 import {login , logout} from "./store/authSlice.js";
 import {useDispatch} from "react-redux";
+import {connectSocket} from "./connection.js";
+import {toast} from "react-toastify";
+import {Notification} from "./components/Notification.jsx";
 
 function App() {
 
@@ -17,6 +20,9 @@ function App() {
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [user, setUser] = useState(null)
+
+    const socket = useRef(null);
 
     useEffect(() => {
 
@@ -53,7 +59,7 @@ function App() {
 
         })()
 
-    }, []);
+    }, [dispatch , navigate]);
 
 
 
@@ -88,6 +94,52 @@ function App() {
 
 
     }, [])
+
+
+
+    useEffect(() => {
+
+
+        if(!user)  return;
+        socket.current = connectSocket({
+            ownerToken: user._id
+        })
+
+
+        socket.current.on("ALERT" , (data)=>{
+            const {sessionId} = data
+
+            if(sessionId){
+
+                toast(
+
+
+                    <Notification  message="you have a alert. click me"  />
+                    , {
+
+                        autoClose: false,
+                        closeOnClick:true,
+                        onClick: ()=> navigate(`/chat/${sessionId}`)
+                    })
+
+
+            }
+
+
+
+
+        })
+
+        return () => {
+            if(socket.current){
+                socket.current.disconnect();
+            }
+        }
+
+
+    }, [user]);
+
+
 
 // race condition of get user and refreshtoken
     
