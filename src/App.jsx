@@ -29,7 +29,7 @@ function App() {
     const socket = useRef(null);
 
     useEffect(() => {
-        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  ) {
+        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  ||   location.pathname.includes('/signup') ) {
             setLoading(false)
 
             return ;
@@ -81,7 +81,7 @@ function App() {
 
         })()
 
-    }, [dispatch , navigate , location.pathname]);
+    }, []);
 
 
 
@@ -89,7 +89,7 @@ function App() {
     useEffect(() => {
 
 
-        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  ) {  setLoading(false)  ;   return}
+        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  ||   location.pathname.includes('/signup')  ) {  setLoading(false)  ;   return}
         ;(async ()=>{
 
             try {
@@ -133,13 +133,11 @@ function App() {
 
 
     useEffect(() => {
-        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  )  {  setLoading(false)  ;   return}
+        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  ||   location.pathname.includes('/signup')  )  {  setLoading(false)  ;   return}
 
 
         if(!user)  return;
-        socket.current = connectSocket({
-            ownerToken: user._id
-        })
+        socket.current = connectSocket()
 
 
         socket.current.on("ALERT" , (data)=>{
@@ -173,7 +171,7 @@ function App() {
         }
 
 
-    }, [user , location.pathname ]);
+    }, [user]);
 
 
 

@@ -15,7 +15,7 @@ export const VehicleInfo = () => {
 
     const {vehicleId} = useParams();
     const [qr, setQr] = useState(null)
-    const [showQr, setShowQr] = useState()
+    const [showQr, setShowQr] = useState(false)
 
 
     useEffect(() => {
