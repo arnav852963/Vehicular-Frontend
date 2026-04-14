@@ -5,6 +5,8 @@ export const ProfileComponent = () => {
 
     const userInfo  = useSelector((state) => state.auth.userInfo);
 
+    const avatarSrc = typeof userInfo?.avatar === "string" && userInfo.avatar.trim() ? userInfo.avatar.trim() : "";
+
 
 
 
@@ -31,12 +33,16 @@ export const ProfileComponent = () => {
 
                     <div className="shrink-0">
                         <div className="h-14 w-14 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60">
-                            {userInfo?.avatar ? (
+                            {avatarSrc ? (
                                 <img
-                                    src={userInfo.avatar}
+                                    src={avatarSrc}
                                     alt="Avatar"
                                     className="h-full w-full object-cover"
                                     loading="lazy"
+                                    referrerPolicy="no-referrer"
+                                    onError={(e) => {
+                                        e.currentTarget.style.display = "none";
+                                    }}
                                 />
                             ) : (
                                 <div className="flex h-full w-full items-center justify-center">
@@ -74,18 +80,6 @@ export const ProfileComponent = () => {
                             <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/55 p-4">
                                 <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Email</p>
                                 <p className="mt-1 break-all text-base font-semibold text-zinc-100">{userInfo.email}</p>
-                            </div>
-                        ) : null}
-
-                        {userInfo?.avatar ? (
-                            <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/55 p-4">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Avatar</p>
-                                        <p className="mt-1 break-all text-sm text-zinc-400">{userInfo.avatar}</p>
-                                    </div>
-                                    <div className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_0_6px_rgba(16,185,129,0.12)]" />
-                                </div>
                             </div>
                         ) : null}
 

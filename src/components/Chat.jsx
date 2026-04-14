@@ -17,6 +17,8 @@ export const Chat = () => {
 
     const [loading, setLoading] = useState(true)
 
+    const [online , setOnline] = useState(true)
+
 
     const  socket = useRef(null)
 
@@ -26,9 +28,12 @@ export const Chat = () => {
 
     const [typing, setTyping] = useState(false)
 
+    const scrollContainerRef = useRef(null)
+    const bottomRef = useRef(null)
 
 
-    const ownerToken = useSelector((state) => state.auth.userInfo._id)
+
+
 
     const [error, setError] = useState({
         error:false,
@@ -40,7 +45,7 @@ export const Chat = () => {
     const [text, setText] = useState("")
 
 
-    const isOwner = useSelector((state)=> state.auth.isAuthenticated)
+    const isOwner = useSelector((state)=> state?.auth?.isAuthenticated)
 
 
     useEffect(() => {
@@ -64,6 +69,7 @@ export const Chat = () => {
             socket.current = connectSocket({
                 sessionId
             })
+        }
 
 
             socket.current.emit("client_action" , {
@@ -81,11 +87,13 @@ export const Chat = () => {
             } )
 
 
-        }
+
 
 
         socket.current.on("NEW_MESSAGE" , (message) =>{
-            message.timestamp = new Date.toLocaleString()
+
+            console.log("new message received " , message)
+            message.timestamp = new Date().toLocaleString()
             setMessages((prev) => [...prev , message])
         })
 
@@ -97,6 +105,11 @@ export const Chat = () => {
             setTyping(false)
         })
 
+
+        socket.current.on('DISCONNECTED' , ()=>{
+            setOnline(false)
+        })
+
         return ()=>{
             if(socket.current){
                 socket.current.disconnect()
@@ -106,7 +119,7 @@ export const Chat = () => {
 
 
 
-    }, [isOwner , sessionId , ownerToken]);
+    }, [isOwner , sessionId ]);
 
 
 
@@ -142,6 +155,16 @@ export const Chat = () => {
 
 
     }, [sessionId]);
+
+
+    useEffect(() => {
+        const el = scrollContainerRef.current
+        if (!el) return
+
+        requestAnimationFrame(() => {
+            bottomRef.current?.scrollIntoView({behavior: "smooth", block: "end"})
+        })
+    }, [messages.length, typing])
 
 
 
@@ -236,7 +259,7 @@ if(error.error){
                         <div className="flex items-center gap-2">
                             <span className={"inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-medium " + (typing ? "border-amber-500/30 bg-amber-500/10 text-amber-200" : "border-white/10 bg-white/5 text-slate-300/80")}>
                                 <span className={"h-1.5 w-1.5 rounded-full " + (typing ? "bg-amber-400 shadow-[0_0_0_3px_rgba(251,191,36,0.12)]" : "bg-slate-400/60")} aria-hidden="true" />
-                                {typing ? "Typing" : "Online"}
+                                {typing ? "Typing" : (online ? "Online" : "Offline") }
                             </span>
                         </div>
                     </div>
@@ -244,7 +267,7 @@ if(error.error){
 
                 <div className="flex-1 px-4 py-4">
                     <div className="rounded-2xl border border-white/10 bg-slate-900/40 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
-                        <div className="max-h-[calc(100svh-168px)] overflow-y-auto px-3 py-4">
+                        <div ref={scrollContainerRef} className="max-h-[calc(100svh-168px)] overflow-y-auto px-3 py-4">
                             {messages.length === 0 ? (
                                 <div className="mx-auto flex max-w-[22rem] flex-col items-center gap-3 py-10 text-center">
                                     <div className="h-12 w-12 rounded-2xl border border-white/10 bg-white/5" />
@@ -266,6 +289,28 @@ if(error.error){
                                             />
                                         </li>
                                     ))}
+
+                                    {typing ? (
+                                        <li>
+                                            <div className="flex w-full justify-start py-1.5">
+                                                <div className="max-w-[86%] sm:max-w-[75%]">
+                                                    <div className="relative overflow-hidden rounded-2xl rounded-bl-md bg-zinc-950/70 px-3.5 py-2.5 text-zinc-100 shadow-lg shadow-black/20 ring-1 ring-white/10">
+                                                        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,rgba(148,163,184,0.10),transparent_60%)]" />
+                                                        <div className="relative flex items-center gap-2">
+                                                            <span className="inline-flex items-center gap-1">
+                                                                <span className="h-2 w-2 animate-bounce rounded-full bg-amber-400 [animation-delay:-0.2s]" />
+                                                                <span className="h-2 w-2 animate-bounce rounded-full bg-amber-400 [animation-delay:-0.1s]" />
+                                                                <span className="h-2 w-2 animate-bounce rounded-full bg-amber-400" />
+                                                            </span>
+                                                            <span className="text-xs font-medium text-slate-300/70">Typing…</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ) : null}
+
+                                    <li ref={bottomRef} />
                                 </ul>
                             )}
                         </div>
