@@ -4,6 +4,27 @@ import {vehicleApi} from "../api/vehicle.js";
 import {MyVehicles} from "./MyVehicles.jsx";
 import {Qr} from "./Qr.jsx";
 
+
+const base64ToBlob = (base64, contentType = "image/png") => {
+
+    const cleaned = base64.includes("base64,") ? base64.split("base64,")[1] : base64;
+
+    const byteCharacters = atob(cleaned);
+    const byteArrays = [];
+    const sliceSize = 1024;
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) byteNumbers[i] = slice.charCodeAt(i);
+        byteArrays.push(new Uint8Array(byteNumbers));
+    }
+
+    return new Blob(byteArrays, { type: contentType });
+};
+
+
+
 export const VehicleInfo = () => {
 
     const [vehicleInfo, setVehicleInfo] = useState({})
@@ -16,6 +37,28 @@ export const VehicleInfo = () => {
     const {vehicleId} = useParams();
     const [qr, setQr] = useState(null)
     const [showQr, setShowQr] = useState(false)
+
+    const handleDownloadQr = () => {
+        if (!qr) return
+
+        const mimeMatch = typeof qr === "string" ? qr.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,/) : null
+        const mime = mimeMatch?.[1] || "image/png"
+
+        const blob = base64ToBlob(qr, mime)
+        const plate = vehicleInfo?.plateNumber ? String(vehicleInfo.plateNumber).replace(/\s+/g, "") : null
+        const qrId = vehicleInfo?.qrId ? String(vehicleInfo.qrId).replace(/\s+/g, "") : null
+        const filename = `vehicular-qr-${plate || qrId || "vehicle"}.png`
+
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        URL.revokeObjectURL(url)
+    }
+    
 
 
     useEffect(() => {
@@ -192,13 +235,22 @@ export const VehicleInfo = () => {
                                             <p className="text-xs font-medium tracking-wide text-zinc-400">QR Code</p>
                                             <p className="mt-0.5 text-sm font-semibold text-zinc-100">Screenshot or print</p>
                                         </div>
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowQr(false)}
-                                            className="shrink-0 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-2 text-xs font-semibold text-zinc-200"
-                                        >
-                                            Close
-                                        </button>
+                                        <div className="flex shrink-0 items-center gap-2">
+                                            <button
+                                                type="button"
+                                                onClick={handleDownloadQr}
+                                                className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-100 shadow-[0_10px_30px_-22px_rgba(16,185,129,0.45)] transition active:scale-[0.99]"
+                                            >
+                                                Download QR
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowQr(false)}
+                                                className="rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-2 text-xs font-semibold text-zinc-200 transition active:scale-[0.99]"
+                                            >
+                                                Close
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <Qr qr={qr} plateNumber={vehicleInfo?.plateNumber} />
