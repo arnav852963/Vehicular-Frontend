@@ -30,6 +30,7 @@ const base64ToBlob = (base64, contentType = "image/png") => {
 export const VehicleInfo = () => {
 
     const [vehicleInfo, setVehicleInfo] = useState({})
+    const [activationLoading, setActivationLoading] = useState(false)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState({
         error: false,
@@ -64,6 +65,7 @@ export const VehicleInfo = () => {
 
 
     const handleQrActivation =async ()=>{
+        setActivationLoading(true)
 
         try{
 
@@ -71,13 +73,16 @@ export const VehicleInfo = () => {
 
             if(!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200){
                toast(<Notification message={ activationQr ?   "failed to deactivate Qr " : "failed to activate Qr"} />)
+                setActivationLoading(false)
                 return
             }
             setActivationQr(res?.data?.data)
+            setActivationLoading(false)
 
         } catch (e){
 
             toast(<Notification message={ activationQr ?   "failed to deactivate Qr " : "failed to activate Qr"} />)
+            setActivationLoading(false)
 
 
 
@@ -253,17 +258,25 @@ export const VehicleInfo = () => {
                         <button
                             type="button"
                             onClick={handleQrActivation}
-                            className={`w-full rounded-2xl px-4 py-3 text-sm font-semibold shadow-[0_10px_34px_-20px_rgba(0,0,0,0.65)] ring-1 transition active:scale-[0.99] ${
+                            disabled={activationLoading}
+                            className={`w-full rounded-2xl px-4 py-3 text-sm font-semibold shadow-[0_10px_34px_-20px_rgba(0,0,0,0.65)] ring-1 transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 ${
                                 activationQr
                                     ? "border border-rose-500/20 bg-rose-500/10 text-rose-100 ring-rose-500/25"
                                     : "border border-emerald-500/20 bg-emerald-500/10 text-emerald-100 ring-emerald-500/25"
                             }`}
                         >
-                            {activationQr ? "Deactivate QR" : "Activate QR"}
+                            {activationLoading ? (
+                                <span className="flex items-center justify-center gap-2">
+                                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-b-transparent" />
+                                    <span>{activationQr ? "Deactivating…" : "Activating…"}</span>
+                                </span>
+                            ) : (
+                                <span>{activationQr ? "Deactivate QR" : "Activate QR"}</span>
+                            )}
                         </button>
                         <p className="mt-2 text-center text-xs text-zinc-500">
                             {activationQr
-                                ? "Turning this off disables new guest scans." 
+                                ? "Turning this off disables new guest scans."
                                 : "Turning this on allows guests to scan and contact you."}
                         </p>
                     </div>
