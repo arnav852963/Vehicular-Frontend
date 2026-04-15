@@ -42,6 +42,10 @@ export const vehicleApi = {
     getVehicleByQrId:(qrId )=>{
         return api.get(`/vehicle/getVehicleByQrId/${qrId}`)
 
+    },
+
+    activateDeactivateQr: (vehicleId)=>{
+        return api.patch(`/vehicle/activateQr/${vehicleId}`)
     }
 
 

@@ -3,6 +3,8 @@ import {useParams} from "react-router-dom";
 import {vehicleApi} from "../api/vehicle.js";
 import {MyVehicles} from "./MyVehicles.jsx";
 import {Qr} from "./Qr.jsx";
+import {toast} from "react-toastify";
+import {Notification} from "./Notification.jsx";
 
 
 const base64ToBlob = (base64, contentType = "image/png") => {
@@ -33,6 +35,7 @@ export const VehicleInfo = () => {
         error: false,
         message: ""
     })
+    const [activationQr, setActivationQr] = useState(true)
 
     const {vehicleId} = useParams();
     const [qr, setQr] = useState(null)
@@ -58,7 +61,31 @@ export const VehicleInfo = () => {
         a.remove()
         URL.revokeObjectURL(url)
     }
-    
+
+
+    const handleQrActivation =async ()=>{
+
+        try{
+
+            const res = await vehicleApi.activateDeactivateQr(vehicleId)
+
+            if(!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200){
+               toast(<Notification message={ activationQr ?   "failed to deactivate Qr " : "failed to activate Qr"} />)
+                return
+            }
+            setActivationQr(res?.data?.data)
+
+        } catch (e){
+
+            toast(<Notification message={ activationQr ?   "failed to deactivate Qr " : "failed to activate Qr"} />)
+
+
+
+        }
+
+
+
+    }
 
 
     useEffect(() => {
@@ -77,6 +104,7 @@ export const VehicleInfo = () => {
                 }
                 setVehicleInfo(res?.data?.data?.vehicle)
                 setQr(res?.data?.data?.qrImage)
+                setActivationQr(res?.data?.data?.vehicle?.activateQr)
                 setLoading(false)
             } catch (e) {
                 setError({error: true, message: e.message || "An error occurred while fetching vehicle data"})
@@ -183,6 +211,8 @@ export const VehicleInfo = () => {
                             </section>
                         ) : null}
 
+
+
                         {(vehicleInfo?.createdAt || vehicleInfo?.updatedAt) ? (
                             <section className="mt-3 grid grid-cols-2 gap-3">
                                 {vehicleInfo?.createdAt ? (
@@ -217,6 +247,25 @@ export const VehicleInfo = () => {
                                 </button>
                             </div>
                         ) : null}
+                    </div>
+
+                    <div className="relative mx-auto w-full max-w-md px-4 pb-6">
+                        <button
+                            type="button"
+                            onClick={handleQrActivation}
+                            className={`w-full rounded-2xl px-4 py-3 text-sm font-semibold shadow-[0_10px_34px_-20px_rgba(0,0,0,0.65)] ring-1 transition active:scale-[0.99] ${
+                                activationQr
+                                    ? "border border-rose-500/20 bg-rose-500/10 text-rose-100 ring-rose-500/25"
+                                    : "border border-emerald-500/20 bg-emerald-500/10 text-emerald-100 ring-emerald-500/25"
+                            }`}
+                        >
+                            {activationQr ? "Deactivate QR" : "Activate QR"}
+                        </button>
+                        <p className="mt-2 text-center text-xs text-zinc-500">
+                            {activationQr
+                                ? "Turning this off disables new guest scans." 
+                                : "Turning this on allows guests to scan and contact you."}
+                        </p>
                     </div>
 
                     {showQr && qr ? (
