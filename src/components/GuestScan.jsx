@@ -1,11 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {vehicleApi} from "../api/vehicle.js";
-import {useDispatch} from "react-redux";
+
 import {toast} from "react-toastify";
 import {Notification} from "./Notification.jsx";
-import {setInfoAfterScan} from "../store/scanSlice.js";
-import {connectSocket} from "../connection.js";
+
 import {Input} from "./Input.jsx";
 import {Filter} from "bad-words";
 const filter = new Filter();
@@ -28,6 +27,10 @@ export const GuestScan = () => {
     const [error, setError] = useState({error: false, message: ""})
     const [other, setOther] = useState(false)
     const [message, setMessage] = useState("");
+    const [imageData, setImageData] = useState(null)
+    const [imageBlob, setImageBlob] = useState("")
+
+    const [buttonClicked, setButtonClicked] = useState(false)
 
     const options =["You’re blocking me", "Lights are on", "Window is open", "Your alarm is going off", "Someone hit/scratched your vehicle", "Other"]
 
@@ -85,14 +88,20 @@ export const GuestScan = () => {
 
 
 
-const handleOnclickOption = async (option ) => {
+const handleOnclickOption = async (message ) => {
 
-        if(option === "Other"){
-            setOther(true)
-            return
-        }
 
-        const cleanMessage = filter.clean(option)
+
+
+        const cleanMessage = filter.clean(message)
+
+    const formData = new FormData();
+    formData.append('message' , {
+        senderType: "guest",
+        message: cleanMessage
+    })
+
+    formData.append('captured' , imageData)
 
     try {
             const res = await vehicleApi.scanQr(qrId , {
@@ -200,7 +209,12 @@ if(error?.error) {
                             return (
                                 <button
                                     key={index}
-                                    onClick={() => handleOnclickOption(option)}
+                                    onClick={() => {
+
+                                        if(option === "Other")  setOther(true);
+
+
+                                       else {setMessage(option) ; setButtonClicked(true)  }}}
                                     value={option}
                                     className={
                                         "group w-full rounded-2xl border px-4 py-4 text-left shadow-sm outline-none transition active:scale-[0.99] " +
@@ -264,7 +278,7 @@ if(error?.error) {
 
                         <button
                             value={message}
-                            onClick={()=> handleOnclickOption(message)}
+                            onClick={()=> setButtonClicked(true)}
                             className="mt-3 inline-flex w-full items-center justify-center rounded-2xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-zinc-950 shadow-sm transition hover:bg-cyan-400 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
                         >
                             Send alert
@@ -281,7 +295,88 @@ if(error?.error) {
                         This message reaches the owner anonymously. No phone numbers are shared.
                     </p>
                 )}
+
+
+
             </div>
+
+
+            <div className="mt-4">
+
+                {buttonClicked && (
+                    <div className="rounded-3xl border border-zinc-800/70 bg-zinc-950/40 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur sm:p-6">
+                        <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                                <h2 className="text-base font-semibold tracking-tight text-zinc-50">Add a proof photo (optional)</h2>
+                                <p className="mt-1 text-sm leading-6 text-zinc-300/90">
+                                    If it’s safe, capture the issue (blocked car, lights on, damage). This helps the owner trust the alert.
+                                </p>
+                            </div>
+                            <div className="shrink-0 rounded-2xl border border-zinc-800/70 bg-zinc-950/50 px-3 py-2">
+                                <p className="text-[10px] font-medium tracking-wide text-zinc-400">TIP</p>
+                                <p className="mt-0.5 text-xs font-medium text-zinc-200">No faces / no personal info</p>
+                            </div>
+                        </div>
+
+                        <div className="mt-4 rounded-2xl border border-zinc-800/70 bg-zinc-950/50 p-3">
+                            <Input
+                                type="file"
+                                accept="image/*"
+                                capture="environment"
+                                onChange={(e) =>{
+
+                                    setImageData(e.target.files[0])
+                                    setImageBlob(URL.createObjectURL(e.target.files[0]))
+
+
+                                }}
+                            />
+
+                            <p className="mt-2 text-xs text-zinc-400/90">
+                                Your phone will open the camera or gallery picker.
+                            </p>
+                        </div>
+
+                        {imageBlob && (
+                          <div className="mt-4">
+                            <div className="overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-950/50">
+                              <div className="flex items-center justify-between gap-3 border-b border-zinc-800/70 px-3 py-2">
+                                <p className="text-xs font-medium text-zinc-300">Preview</p>
+                                <div className="inline-flex items-center gap-2 text-[11px] text-zinc-400">
+                                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500/80" />
+                                  Ready to send
+                                </div>
+                              </div>
+                              <img
+                                src={imageBlob}
+                                alt="Captured"
+                                className="aspect-[4/3] w-full object-cover"
+                              />
+                            </div>
+
+                            <p className="mt-2 text-xs text-zinc-400/90">
+                              If the photo looks wrong, pick again—your latest one will replace it.
+                            </p>
+                          </div>
+                        )}
+
+                        <div className="mt-5 flex flex-col gap-3">
+                          <button
+                            onClick={handleOnclickOption}
+                            className="inline-flex w-full items-center justify-center rounded-2xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-zinc-950 shadow-sm transition hover:bg-cyan-400 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 disabled:opacity-60"
+                          >
+                            Send
+                          </button>
+
+                          <p className="text-xs text-zinc-400/90">
+                            You’ll be taken to chat right after this.
+                          </p>
+                        </div>
+                      </div>
+                )}
+
+            </div>
+
         </div>
     ) : (
         <div className="min-h-[60dvh] bg-transparent text-zinc-100">

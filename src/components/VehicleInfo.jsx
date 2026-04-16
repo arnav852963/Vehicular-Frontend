@@ -69,9 +69,9 @@ export const VehicleInfo = () => {
 
         try{
 
-            const res = await vehicleApi.activateDeactivateQr(vehicleId)
+            const res = await vehicleApi.activateDeactivateQr(vehicleId , activationQr)
 
-            if(!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200){
+            if(!res || !res?.data || res?.data?.data.toString() === undefined || res?.data?.statusCode !== 200){
                toast(<Notification message={ activationQr ?   "failed to deactivate Qr " : "failed to activate Qr"} />)
                 setActivationLoading(false)
                 return
@@ -99,7 +99,7 @@ export const VehicleInfo = () => {
             try {
 
 
-                const res = await vehicleApi.getVehicle(vehicleId)
+                const res = await vehicleApi.getVehicle(vehicleId )
 
                 if (!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200) {
                     setError({error: true, message: "Failed to fetch vehicle data"})

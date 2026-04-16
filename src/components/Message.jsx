@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Message = ({payload , me , time }) => {
+export const Message = ({payload , me , time  , vehicleImage ="" }) => {
     return (
         <>
 
@@ -32,6 +32,25 @@ export const Message = ({payload , me , time }) => {
                                     : "-left-1 bg-zinc-950/70 ring-white/10")
                             }
                         />
+
+                        {vehicleImage && (
+                            <div className="relative mb-2 overflow-hidden rounded-xl ring-1 ring-white/10">
+                                <img
+                                    src={vehicleImage}
+                                    alt={payload || "Attachment"}
+                                    loading="lazy"
+                                    className="h-auto w-full max-h-64 object-cover"
+                                />
+                                <div
+                                    className={
+                                        "pointer-events-none absolute inset-0 " +
+                                        (me
+                                            ? "bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"
+                                            : "bg-gradient-to-t from-zinc-950/50 via-transparent to-transparent")
+                                    }
+                                />
+                            </div>
+                        )}
 
                         <div className="relative">
                             {!!payload && (

@@ -13,3 +13,8 @@ blocking the ip of spammers
 
 
 addd active qr session
+
+use jwt with qr id
+and also give an photo updation option in the qr session(use google cloud vision for detection)
+
+addd a useState boolean which allows the the guest to response only after the owner responses

@@ -20,6 +20,8 @@ export const Chat = () => {
     const [online , setOnline] = useState(true)
 
 
+
+
     const  socket = useRef(null)
 
     const timeInterval = useRef(null)
@@ -278,8 +280,18 @@ if(error.error){
                                 </div>
                             ) : (
                                 <ul className="space-y-2">
-                                    {messages.map((message , index) =>(
-                                        <li key={index}>
+                                    {messages.map((message , index) =>{
+
+                                        return message.vehicleImage ?  (<li key={index}>
+
+                                            <Message
+                                                payload={message?.message}
+                                                me={isOwner === (message?.senderType === "owner")}
+                                                time={message?.timestamp}
+                                                vehicleImage={message?.vehicleImage}
+
+                                            />
+                                        </li> ):  (<li key={index}>
 
                                             <Message
                                                 payload={message?.message}
@@ -287,8 +299,12 @@ if(error.error){
                                                 time={message?.timestamp}
 
                                             />
-                                        </li>
-                                    ))}
+                                        </li>)
+
+                                        }
+
+
+                                    )}
 
                                     {typing ? (
                                         <li>
