@@ -51,7 +51,7 @@ export const Chat = () => {
 
     const isOwner = useSelector((state)=> state?.auth?.isAuthenticated)
 
-    if(isOwner) setAllowedToMessage(true)
+
 
 
     useEffect(() => {

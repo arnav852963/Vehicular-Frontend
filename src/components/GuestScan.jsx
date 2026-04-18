@@ -110,11 +110,11 @@ const handleOnclickOption = async ( ) => {
         const cleanMessage = filter.clean(message)
 
     const formData = new FormData();
-    formData.append('message' , {
+    formData.append('message' , JSON.stringify({
         senderType: "guest",
         message: cleanMessage,
         id: crypto.randomUUID()
-    })
+    }))
 
     formData.append('captured' , imageData)
 
