@@ -65,6 +65,42 @@ function App() {
 
         } catch (e) {
 
+                try {
+
+                    const refreshUser = await userApi.refreshUserToken()
+
+                    if(refreshUser?.data?.statusCode !== 200) {
+
+                        setLoading(false)
+
+                        navigate("/signup" ,  {
+                            state: {
+                                from: location?.pathname
+                            },
+                            replace: true
+                        })
+
+                    }
+                } catch (e){
+
+
+                    setLoading(false)
+
+
+                    navigate("/signup" ,  {
+                        state: {
+                            from: location?.pathname
+                        },
+                        replace: true
+                    })
+
+
+                }
+
+
+
+
+
 
                 navigate('/signup' ,  {
                     state: {
@@ -86,49 +122,7 @@ function App() {
 
 
 
-    useEffect(() => {
 
-
-        if(location.pathname.includes('/scan') || location.pathname.includes('/guest/chat')  ||   location.pathname.includes('/signup')  ) {  setLoading(false)  ;   return}
-        ;(async ()=>{
-
-            try {
-
-                const refreshUser = await userApi.refreshUserToken()
-
-                if(refreshUser?.data?.statusCode !== 200) {
-
-                    setLoading(false)
-
-                    navigate("/signup" ,  {
-                        state: {
-                            from: location?.pathname
-                        },
-                        replace: true
-                    })
-
-                }
-            } catch (e){
-
-
-                setLoading(false)
-
-
-                navigate("/signup" ,  {
-                    state: {
-                        from: location?.pathname
-                    },
-                    replace: true
-                })
-
-
-            }
-
-
-        })()
-
-
-    }, [location.pathname])
 
 
 
@@ -175,7 +169,6 @@ function App() {
 
 
 
-// race condition of get user and refreshtoken
     
     if(error.error) {
         return (

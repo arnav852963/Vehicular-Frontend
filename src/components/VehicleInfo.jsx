@@ -112,7 +112,7 @@ export const VehicleInfo = () => {
                 setActivationQr(res?.data?.data?.vehicle?.activateQr)
                 setLoading(false)
             } catch (e) {
-                setError({error: true, message: e.message || "An error occurred while fetching vehicle data"})
+                setError({error: true, message: e?.response?.data?.message  || "An error occurred while fetching vehicle data"})
                 setLoading(false)
             }
 

@@ -46,7 +46,7 @@ export const MyChatsPage = () => {
             } catch (e) {
                 setError({
                     error: true,
-                    message: e.message || "An error occurred while fetching chats"
+                    message: e?.response?.data?.message || "An error occurred while fetching chats"
                 })
 
                 setLoading(false)

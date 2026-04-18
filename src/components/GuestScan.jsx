@@ -34,11 +34,23 @@ export const GuestScan = () => {
 
     const options =["You’re blocking me", "Lights are on", "Window is open", "Your alarm is going off", "Someone hit/scratched your vehicle", "Other"]
 
+    const photoSectionRef = useRef(null)
+
 
 
 
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!buttonClicked) return
+        const el = photoSectionRef.current
+        if (!el) return
+
+        requestAnimationFrame(() => {
+            el.scrollIntoView({ behavior: "smooth", block: "start" })
+        })
+    }, [buttonClicked, imageBlob])
 
 
     useEffect(() => {
@@ -62,7 +74,7 @@ export const GuestScan = () => {
                 setLoading(false)
 
             } catch (e) {
-                setError({error: true, message: e.message || "An error occurred while fetching vehicle data"})
+                setError({error: true, message: e?.response?.data?.message  || "An error occurred while fetching vehicle data"})
                 setLoading(false)
 
             }
@@ -88,7 +100,9 @@ export const GuestScan = () => {
 
 
 
-const handleOnclickOption = async (message ) => {
+const handleOnclickOption = async ( ) => {
+    
+    setLoading(true)
 
 
 
@@ -98,16 +112,14 @@ const handleOnclickOption = async (message ) => {
     const formData = new FormData();
     formData.append('message' , {
         senderType: "guest",
-        message: cleanMessage
+        message: cleanMessage,
+        id: crypto.randomUUID()
     })
 
     formData.append('captured' , imageData)
 
     try {
-            const res = await vehicleApi.scanQr(qrId , {
-                senderType: "guest",
-                message: cleanMessage,
-            })
+            const res = await vehicleApi.scanQr(qrId ,formData )
 
         if (!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200) {
             toast(<Notification message={"Failed to send alert. Please try again."} />)
@@ -117,6 +129,7 @@ const handleOnclickOption = async (message ) => {
         }
 
         navigate(`/guest/chat/${res?.data?.data?.sessionId}`)
+        setLoading(false)
 
 
 
@@ -124,8 +137,9 @@ const handleOnclickOption = async (message ) => {
 
     } catch (e) {
 
-        toast(<Notification message={e.message || "An error occurred while sending alert. Please try again."} />)
-        setError({error: true, message: e.message || "An error occurred while sending alert"})
+        toast(<Notification message={e?.response?.data?.message || e?.message || "An error occurred while sending alert. Please try again."} />)
+        setError({error: true, message: e?.response?.data?.message || "An error occurred while sending alert"})
+        setLoading(false)
         setLoading(false)
 
     }
@@ -304,7 +318,7 @@ if(error?.error) {
             <div className="mt-4">
 
                 {buttonClicked && (
-                    <div className="rounded-3xl border border-zinc-800/70 bg-zinc-950/40 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur sm:p-6">
+                    <div ref={photoSectionRef} className="rounded-3xl border border-zinc-800/70 bg-zinc-950/40 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur sm:p-6">
                         <div className="flex items-start justify-between gap-3">
                             <div className="min-w-0">
                                 <h2 className="text-base font-semibold tracking-tight text-zinc-50">Add a proof photo (optional)</h2>

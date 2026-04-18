@@ -198,7 +198,7 @@ export const Chat = () => {
                 setLoading(false)
 
             }  catch (e){
-                setError({error:true , message:"could not fetch chats " + e.message})
+                setError({error:true , message:"could not fetch chats " + (e?.response?.data?.message  || "")})
                 setLoading(false)
 
 

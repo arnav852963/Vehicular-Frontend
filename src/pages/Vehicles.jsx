@@ -33,7 +33,7 @@ export const VehiclesPage = () => {
             } catch (e) {
                 setError({
                     error: true,
-                    message: e.message || "An error occurred while fetching vehicles"
+                    message: e?.response?.data?.message || e?.message || "An error occurred while fetching vehicles"
                 })
                 setLoading(false)
             }

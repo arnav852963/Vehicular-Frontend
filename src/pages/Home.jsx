@@ -86,7 +86,7 @@ export const HomePage = () => {
 
                 setError({
                     error: true,
-                    message: String(e?.message) || "could not fetch vehicles daimmm "
+                    message: e?.response?.data?.message  || "could not fetch vehicles daimmm "
                 })
                 setLoading(false)
                 }

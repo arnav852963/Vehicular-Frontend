@@ -72,7 +72,7 @@ const options = ["CAR", "MOTORCYCLE", "TRUCK", "BUS", "OTHER"]
             setError({error: true, message: "An error occurred while adding vehicle"})
             setLoading(false)
             toast(<Notification 
-             message={e.message || "An error occurred while adding vehicle"}
+             message={e?.response?.data?.message || "An error occurred while adding vehicle"}
             
             />)
             

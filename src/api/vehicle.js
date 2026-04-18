@@ -32,9 +32,11 @@ export const vehicleApi = {
 
 },
 
-    scanQr:(qrId  , message)=>{
+    scanQr:(qrId  , formdata)=>{
 
-        return api.post(`/vehicle/qrScanned/${qrId}` , message)
+        return api.post(`/vehicle/qrScanned/${qrId}` , formdata  , {
+            headers:{"Content-Type": "multipart/form-data"}
+        })
 
 
     },
