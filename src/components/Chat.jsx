@@ -19,7 +19,7 @@ export const Chat = () => {
 
     const [online , setOnline] = useState(true)
 
-
+    const messageDictionary = useRef(new Map());
 
 
     const  socket = useRef(null)
@@ -46,8 +46,12 @@ export const Chat = () => {
     const {sessionId}  = useParams()
     const [text, setText] = useState("")
 
+    const [allowedToMessage, setAllowedToMessage] = useState(false)
+
 
     const isOwner = useSelector((state)=> state?.auth?.isAuthenticated)
+
+    if(isOwner) setAllowedToMessage(true)
 
 
     useEffect(() => {
@@ -95,8 +99,37 @@ export const Chat = () => {
         socket.current.on("NEW_MESSAGE" , (message) =>{
 
             console.log("new message received " , message)
+
+
             message.timestamp = new Date().toLocaleString()
-            setMessages((prev) => [...prev , message])
+
+
+            setMessages((prev) => {
+
+
+
+                const next = [...prev , message]
+                messageDictionary.current.set(message?.id , next.length-1)
+                return  next
+
+
+
+            })
+
+
+
+
+
+            setAllowedToMessage(true)
+
+
+            socket.current.emit("client_action" , {
+                type:"RECEIVED",
+                payload: message?.id
+            })
+
+
+
         })
 
         socket.current.on("TYPING" , ()=>{
@@ -110,6 +143,25 @@ export const Chat = () => {
 
         socket.current.on('DISCONNECTED' , ()=>{
             setOnline(false)
+        })
+
+        socket.current.on("MESSAGE_RECEIVED" , (messageId)=>{
+
+            const indx = messageDictionary.current.get(messageId)
+            if(indx === undefined) return
+
+           setMessages((prev)=>{
+               const next = prev.slice()
+                if(next[indx]){
+                    next[indx].received = true
+                }
+
+                return next
+
+           })
+
+
+
         })
 
         return ()=>{
@@ -139,6 +191,10 @@ export const Chat = () => {
                     return
                 }
                 setMessages(res?.data?.data?.messages)
+                res?.data?.data?.messages.forEach((message , index)=>{
+                    messageDictionary.current.set(message?.id , index)
+
+                })
                 setLoading(false)
 
             }  catch (e){
@@ -179,16 +235,37 @@ export const Chat = () => {
 
         const cleanMessage = filter.clean(text)
 
+        const messageId = crypto.randomUUID()
+
         socket.current?.emit("client_action" , {
             type:"SEND_NEW_MESSAGE",
             payload:{
                 sessionId,
-                text:cleanMessage
+                text:cleanMessage,
+                id:messageId
 
             }
         } , (reciet)=>{
             if(reciet.success){
                 setText("")
+                if(!isOwner) setAllowedToMessage(false)
+                setMessages((prev) => {
+
+                   const next =  [...prev , {
+                    senderType: isOwner ? "owner" : "guest",
+                    message: cleanMessage,
+                    timestamp: new Date().toLocaleString(),
+                    id: messageId
+                }]
+
+                    messageDictionary?.current.set(messageId , next.length-1)
+
+                    return next
+
+
+                })
+
+
 
 
 
@@ -282,21 +359,24 @@ if(error.error){
                                 <ul className="space-y-2">
                                     {messages.map((message , index) =>{
 
-                                        return message.vehicleImage ?  (<li key={index}>
+                                        return message.vehicleImage ?  (<li key={message?.id}>
 
                                             <Message
                                                 payload={message?.message}
                                                 me={isOwner === (message?.senderType === "owner")}
                                                 time={message?.timestamp}
                                                 vehicleImage={message?.vehicleImage}
+                                                received={message?.received || false}
+
 
                                             />
-                                        </li> ):  (<li key={index}>
+                                        </li> ):  (<li key={message?.id}>
 
                                             <Message
                                                 payload={message?.message}
                                                 me={isOwner === (message?.senderType === "owner")}
                                                 time={message?.timestamp}
+                                                received={message?.received || false}
 
                                             />
                                         </li>)
@@ -334,28 +414,39 @@ if(error.error){
                 </div>
 
                 <div className="sticky bottom-0 z-20 border-t border-white/10 bg-slate-950/90 px-4 py-3 backdrop-blur">
-                    <div className="flex items-end gap-2">
-                        <div className="flex-1">
-                            <Input
-                                placeholder="Enter your message"
-                                value={text}
-                                onChange={(e) => setText(e.target.value)}
-                                type="text"
-                            />
-                        </div>
+                    {isOwner || allowedToMessage ? (
+                        <>
+                            <div className="flex items-end gap-2">
+                                <div className="flex-1">
+                                    <Input
+                                        placeholder="Enter your message"
+                                        value={text}
+                                        onChange={(e) => setText(e.target.value)}
+                                        type="text"
+                                    />
+                                </div>
 
-                        <button
-                            onClick={handleMessageSubmit}
-                            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500 text-slate-950 shadow-[0_10px_25px_rgba(34,211,238,0.22)] ring-1 ring-cyan-400/30 transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
-                            aria-label="Send message"
-                            title="Send"
-                        >
-                            <Send className="h-5 w-5" />
-                        </button>
-                    </div>
-                    <p className="mt-2 text-[11px] font-medium text-slate-300/60">
-                        Keep it short and clear. You’re chatting anonymously.
-                    </p>
+                                <button
+                                    onClick={handleMessageSubmit}
+                                    className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500 text-slate-950 shadow-[0_10px_25px_rgba(34,211,238,0.22)] ring-1 ring-cyan-400/30 transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                                    aria-label="Send message"
+                                    title="Send"
+                                >
+                                    <Send className="h-5 w-5" />
+                                </button>
+                            </div>
+                            <p className="mt-2 text-[11px] font-medium text-slate-300/60">
+                                Keep it short and clear. You’re chatting anonymously.
+                            </p>
+                        </>
+                    ) : (
+                        <div className="rounded-2xl border border-white/10 bg-slate-900/40 px-3.5 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+                            <p className="text-xs font-semibold text-slate-100">Waiting for owner reply</p>
+                            <p className="mt-0.5 text-[11px] font-medium text-slate-300/70">
+                                To prevent spam, guests can send a message only after the owner replies.
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

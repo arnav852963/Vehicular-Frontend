@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Message = ({payload , me , time  , vehicleImage ="" }) => {
+export const Message = ({payload , me , time  , vehicleImage ="" , received }) => {
     return (
         <>
 
@@ -67,6 +67,19 @@ export const Message = ({payload , me , time  , vehicleImage ="" }) => {
                             <p className={`text-[11px] font-medium ${me ? "text-slate-300/70" : "text-slate-400/90"}`}>
                                 {time}
                             </p>
+                        )}
+
+                        {me && (
+                            <span
+                                className={
+                                    "select-none text-[12px] font-semibold tracking-tight " +
+                                    (received ? "text-cyan-300/90" : "text-slate-300/60")
+                                }
+                                aria-label={received ? "Delivered" : "Sent"}
+                                title={received ? "Delivered" : "Sent"}
+                            >
+                                {received ? "✓✓" : "✓"}
+                            </span>
                         )}
                     </div>
                 </div>
