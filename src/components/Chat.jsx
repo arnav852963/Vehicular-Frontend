@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {chatAPi} from "../api/chat...js";
 import {connectSocket} from "../connection.js";
 import {Input} from "./Input.jsx";
@@ -49,17 +48,21 @@ export const Chat = () => {
     const [allowedToMessage, setAllowedToMessage] = useState(false)
 
 
-    const isOwner = useSelector((state)=> state?.auth?.isAuthenticated)
 
 
+    const location = useLocation()
+
+    
+    const isGuest = location?.pathname?.includes("/guest")
 
 
     useEffect(() => {
 
-        if(!isOwner){
+        if(isGuest){
 
             socket.current = connectSocket({
-                sessionId
+                sessionId,
+                senderType:"guest"
             })
 
 
@@ -73,7 +76,8 @@ export const Chat = () => {
         else {
 
             socket.current = connectSocket({
-                sessionId
+                sessionId,
+                senderType:"owner"
             })
         }
 
@@ -173,7 +177,7 @@ export const Chat = () => {
 
 
 
-    }, [isOwner , sessionId ]);
+    }, [isGuest , sessionId ]);
 
 
 
@@ -248,11 +252,11 @@ export const Chat = () => {
         } , (reciet)=>{
             if(reciet.success){
                 setText("")
-                if(!isOwner) setAllowedToMessage(false)
+                if(isGuest) setAllowedToMessage(false)
                 setMessages((prev) => {
 
                    const next =  [...prev , {
-                    senderType: isOwner ? "owner" : "guest",
+                    senderType: !isGuest ? "owner" : "guest",
                     message: cleanMessage,
                     timestamp: new Date().toLocaleString(),
                     id: messageId
@@ -328,10 +332,10 @@ if(error.error){
                     <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                             <p className="text-[11px] font-semibold tracking-wide text-slate-300/70">
-                                {isOwner ? "OWNER CHAT" : "GUEST CHAT"}
+                                {!isGuest ? "OWNER CHAT" : "GUEST CHAT"}
                             </p>
                             <p className="truncate text-sm font-semibold text-slate-100">
-                                {isOwner ? `Guest ${sessionId}` : `Owner ${sessionId}`}
+                                {!isGuest ? `Guest ${sessionId}` : `Owner ${sessionId}`}
                             </p>
                         </div>
 
@@ -363,7 +367,7 @@ if(error.error){
 
                                             <Message
                                                 payload={message?.message}
-                                                me={isOwner === (message?.senderType === "owner")}
+                                                me={!isGuest === (message?.senderType === "owner")}
                                                 time={message?.timestamp}
                                                 vehicleImage={message?.vehicleImage}
                                                 received={message?.received || false}
@@ -374,7 +378,7 @@ if(error.error){
 
                                             <Message
                                                 payload={message?.message}
-                                                me={isOwner === (message?.senderType === "owner")}
+                                                me={!isGuest === (message?.senderType === "owner")}
                                                 time={message?.timestamp}
                                                 received={message?.received || false}
 
@@ -414,7 +418,7 @@ if(error.error){
                 </div>
 
                 <div className="sticky bottom-0 z-20 border-t border-white/10 bg-slate-950/90 px-4 py-3 backdrop-blur">
-                    {isOwner || allowedToMessage ? (
+                    {!isGuest || allowedToMessage ? (
                         <>
                             <div className="flex items-end gap-2">
                                 <div className="flex-1">

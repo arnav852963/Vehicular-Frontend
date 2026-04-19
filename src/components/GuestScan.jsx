@@ -15,7 +15,7 @@ export const GuestScan = () => {
 
 
 
-    const {qrId} = useParams()
+    const {qrId , senderType} = useParams()
 
 
 
@@ -127,9 +127,10 @@ const handleOnclickOption = async ( ) => {
             setLoading(false)
             return
         }
+        setLoading(false)
 
         navigate(`/guest/chat/${res?.data?.data?.sessionId}`)
-        setLoading(false)
+
 
 
 
