@@ -35,6 +35,8 @@ export const GuestScan = () => {
     const options =["You’re blocking me", "Lights are on", "Window is open", "Your alarm is going off", "Someone hit/scratched your vehicle", "Other"]
 
     const photoSectionRef = useRef(null)
+    const cameraInputRef = useRef(null)
+    const uploadInputRef = useRef(null)
 
 
 
@@ -334,21 +336,55 @@ if(error?.error) {
                         </div>
 
                         <div className="mt-4 rounded-2xl border border-zinc-800/70 bg-zinc-950/50 p-3">
-                            <Input
+                            <input
+                                ref={cameraInputRef}
                                 type="file"
                                 accept="image/*"
                                 capture="environment"
+                                className="hidden"
                                 onChange={(e) =>{
-
-                                    setImageData(e.target.files[0])
-                                    setImageBlob(URL.createObjectURL(e.target.files[0]))
-
-
+                                    const file = e.target.files?.[0]
+                                    if(!file) return
+                                    setImageData(file)
+                                    setImageBlob(URL.createObjectURL(file))
+                                    e.target.value = ""
                                 }}
                             />
 
+                            <input
+                                ref={uploadInputRef}
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) =>{
+                                    const file = e.target.files?.[0]
+                                    if(!file) return
+                                    setImageData(file)
+                                    setImageBlob(URL.createObjectURL(file))
+                                    e.target.value = ""
+                                }}
+                            />
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => cameraInputRef.current?.click()}
+                                    className="inline-flex items-center justify-center rounded-2xl border border-zinc-800/70 bg-zinc-950/60 px-4 py-3 text-sm font-semibold text-zinc-100 shadow-sm transition hover:bg-zinc-900/40 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
+                                >
+                                    Take photo
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() => uploadInputRef.current?.click()}
+                                    className="inline-flex items-center justify-center rounded-2xl border border-zinc-800/70 bg-zinc-950/60 px-4 py-3 text-sm font-semibold text-zinc-100 shadow-sm transition hover:bg-zinc-900/40 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
+                                >
+                                    Upload
+                                </button>
+                            </div>
+
                             <p className="mt-2 text-xs text-zinc-400/90">
-                                Your phone will open the camera or gallery picker.
+                                Choose camera or upload from your device.
                             </p>
                         </div>
 
