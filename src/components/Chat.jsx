@@ -8,6 +8,7 @@ import {toast} from "react-toastify";
 import {Notification} from "./Notification.jsx";
 import {Message} from "./Message.jsx";
 import {Send} from "lucide-react"
+import {vehicleApi} from "../api/vehicle.js";
 const filter = new Filter();
 
 export const Chat = () => {
@@ -38,6 +39,9 @@ export const Chat = () => {
 
 
 
+
+
+
     const [error, setError] = useState({
         error:false,
         message:""
@@ -56,6 +60,8 @@ export const Chat = () => {
 
     
     const isGuest = location?.pathname?.includes("/guest")
+
+    const sendMailInfo = location?.state && location?.state?.mailInfo ? location?.state?.mailInfo : null
 
 
     useEffect(() => {
@@ -226,6 +232,41 @@ export const Chat = () => {
 
 
     useEffect(() => {
+
+        if(!sendMailInfo) return
+
+        (async ()=>{
+
+            try {
+
+                const res = await vehicleApi.sendMail(sendMailInfo)
+
+                if (!res || !res?.data || res?.data?.statusCode !== 200) {
+                    toast(<Notification message={"could not send mail info to the owner " + (res?.data?.message || "")} />)
+                    return
+                }
+
+                toast(<Notification message={"mail info sent to the owner successfully"} />)
+
+
+
+            } catch (e) {
+                toast(<Notification message={"could not send mail info to the owner " + (e?.response?.data?.message || "")} />)
+            }
+
+        })()
+
+
+
+
+
+
+
+
+    }, []);
+
+
+    useEffect(() => {
         const el = scrollContainerRef.current
         if (!el) return
 
@@ -240,15 +281,29 @@ export const Chat = () => {
         return () => el.removeEventListener("scroll", syncStickiness)
     }, [])
 
+
+
+
     useEffect(() => {
+
+
         const el = scrollContainerRef.current
+
+
         if (!el) return
         if (!shouldStickToBottomRef.current) return
 
+
+
         requestAnimationFrame(() => {
+
             el.scrollTo({ top: el.scrollHeight, behavior: "smooth" })
+
+
         })
     }, [messages.length, typing])
+
+
 
 
 

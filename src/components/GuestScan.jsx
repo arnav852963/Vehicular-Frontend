@@ -129,7 +129,7 @@ const handleOnclickOption = async ( ) => {
         }
         setLoading(false)
 
-        navigate(`/guest/chat/${res?.data?.data?.sessionId}`)
+        navigate(`/guest/chat/${res?.data?.data?.sessionId}` ,  {state: {mailInfo: res?.data?.data}})
 
 
 

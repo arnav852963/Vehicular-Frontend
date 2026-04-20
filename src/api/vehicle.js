@@ -48,6 +48,11 @@ export const vehicleApi = {
 
     activateDeactivateQr: (vehicleId , activate)=>{
         return api.patch(`/vehicle/activateQr/${vehicleId}` , {activate})
+    },
+
+    sendMail: (data)=>{
+       return  api.post('/vehicle/sendEmail' , data)
+
     }
 
 
