@@ -32,6 +32,8 @@ export const Chat = () => {
     const scrollContainerRef = useRef(null)
     const bottomRef = useRef(null)
 
+    const shouldStickToBottomRef = useRef(true)
+
 
 
 
@@ -199,6 +201,10 @@ export const Chat = () => {
                     messageDictionary.current.set(message?.id , index)
 
                 })
+
+                if(res?.data?.data?.messages[res?.data?.data?.messages?.length -1]?.senderType === "owner"){
+                    setAllowedToMessage(true)
+                }
                 setLoading(false)
 
             }  catch (e){
@@ -223,8 +229,24 @@ export const Chat = () => {
         const el = scrollContainerRef.current
         if (!el) return
 
+        const syncStickiness = () => {
+            const threshold = 48
+            const distanceFromBottom = el.scrollHeight - (el.scrollTop + el.clientHeight)
+            shouldStickToBottomRef.current = distanceFromBottom <= threshold
+        }
+
+        syncStickiness()
+        el.addEventListener("scroll", syncStickiness, { passive: true })
+        return () => el.removeEventListener("scroll", syncStickiness)
+    }, [])
+
+    useEffect(() => {
+        const el = scrollContainerRef.current
+        if (!el) return
+        if (!shouldStickToBottomRef.current) return
+
         requestAnimationFrame(() => {
-            bottomRef.current?.scrollIntoView({behavior: "smooth", block: "end"})
+            el.scrollTo({ top: el.scrollHeight, behavior: "smooth" })
         })
     }, [messages.length, typing])
 
@@ -348,9 +370,9 @@ if(error.error){
                     </div>
                 </div>
 
-                <div className="flex-1 px-4 py-4">
+                <div className="flex-1 min-h-0 px-4 py-4">
                     <div className="rounded-2xl border border-white/10 bg-slate-900/40 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
-                        <div ref={scrollContainerRef} className="max-h-[calc(100svh-168px)] overflow-y-auto px-3 py-4">
+                        <div ref={scrollContainerRef} className="h-full overflow-y-auto px-3 py-4">
                             {messages.length === 0 ? (
                                 <div className="mx-auto flex max-w-[22rem] flex-col items-center gap-3 py-10 text-center">
                                     <div className="h-12 w-12 rounded-2xl border border-white/10 bg-white/5" />
@@ -361,7 +383,7 @@ if(error.error){
                                 </div>
                             ) : (
                                 <ul className="space-y-2">
-                                    {messages.map((message , index) =>{
+                                    {messages.map((message) =>{
 
                                         return message.vehicleImage ?  (<li key={message?.id}>
 
