@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+@keyframes vehicular-shimmer {
+  0% {
+	transform: translateX(-40%);
+  }
+  100% {
+	transform: translateX(140%);
+  }
+}
+
+@keyframes vehicular-float {
+  0%,
+  100% {
+	transform: translateY(0);
+  }
+  50% {
+	transform: translateY(-6px);
+  }
+}
+
+.animate-vehicular-shimmer {
+  animation: vehicular-shimmer 2.2s linear infinite;
+}
+
+.animate-vehicular-float {
+  animation: vehicular-float 3.2s ease-in-out infinite;
+}

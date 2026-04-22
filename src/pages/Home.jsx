@@ -237,6 +237,45 @@ if(error && error?.error){
                     )}
                 </section>
 
+                {!!vehicles.length && (
+                    <section className="mt-5">
+                        <div className="relative overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-900/40 p-5">
+                            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(600px_280px_at_20%_0%,rgba(56,189,248,0.10),transparent_60%),radial-gradient(520px_260px_at_85%_20%,rgba(16,185,129,0.08),transparent_60%)]" />
+                            <div className="pointer-events-none absolute inset-0 opacity-80 motion-reduce:hidden">
+                                <div className="animate-vehicular-shimmer absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+                            </div>
+
+                            <div className="relative flex items-start justify-between gap-3">
+                                <div>
+                                    <p className="text-sm font-semibold text-zinc-100">You’re all set</p>
+                                    <p className="mt-1 text-sm leading-relaxed text-zinc-400">
+                                        Keep your phone handy — alerts and replies live here.
+                                    </p>
+                                </div>
+                                <div className="mt-0.5 flex items-center gap-2">
+                                    <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_0_6px_rgba(16,185,129,0.12)]" />
+                                    <span className="text-xs font-medium text-zinc-400">Ready</span>
+                                </div>
+                            </div>
+
+                            <div className="relative mt-4 grid grid-cols-3 gap-3">
+                                <div className="animate-vehicular-float rounded-2xl border border-zinc-800/70 bg-zinc-950/40 p-3 motion-reduce:animate-none">
+                                    <p className="text-[11px] font-medium text-zinc-400">Tip</p>
+                                    <p className="mt-1 text-xs text-zinc-200">Print QR in high contrast</p>
+                                </div>
+                                <div className="animate-vehicular-float rounded-2xl border border-zinc-800/70 bg-zinc-950/40 p-3 [animation-delay:220ms] motion-reduce:animate-none">
+                                    <p className="text-[11px] font-medium text-zinc-400">Tip</p>
+                                    <p className="mt-1 text-xs text-zinc-200">Keep chats short & clear</p>
+                                </div>
+                                <div className="animate-vehicular-float rounded-2xl border border-zinc-800/70 bg-zinc-950/40 p-3 [animation-delay:440ms] motion-reduce:animate-none">
+                                    <p className="text-[11px] font-medium text-zinc-400">Tip</p>
+                                    <p className="mt-1 text-xs text-zinc-200">Reply fast to reduce stress</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
                 {triggerAddVehicle && (
                     <div className="fixed inset-0 z-50">
                         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
