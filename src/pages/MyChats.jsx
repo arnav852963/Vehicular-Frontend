@@ -18,8 +18,7 @@ export const MyChatsPage = () => {
         error: false,
         message: ""
     })
-
-
+    const [deleteLoading, setDeleteLoading] = useState(false)
     useEffect(() => {
         ;(async ()=>{
 
@@ -64,7 +63,7 @@ export const MyChatsPage = () => {
 
     const handleDelete = async (chatId)=>{
 
-
+setDeleteLoading(true)
 
 
         try {
@@ -73,6 +72,7 @@ export const MyChatsPage = () => {
 
                 if(!chatDelete || !chatDelete?.data || !chatDelete?.data?.data || chatDelete?.data?.statusCode !== 200){
                     toast(<Notification message="An error occurred while deleting the chat"/>)
+                    setDeleteLoading(false)
                     return
                 }
 
@@ -81,11 +81,14 @@ export const MyChatsPage = () => {
                         return chat?._id !== chatId
                     })
 
+
                     return newChat
                 })
+            setDeleteLoading(false)
 
         } catch (e) {
                 toast(<Notification message={e?.response?.data?.message || "An error occurred while deleting the chat"}/>)
+            setDeleteLoading(false)
 
         }
 
@@ -171,7 +174,11 @@ export const MyChatsPage = () => {
                                             className="inline-flex h-12 w-12 items-center justify-center self-center rounded-2xl border border-zinc-800/70 bg-zinc-950/50 text-zinc-300 shadow-[0_18px_50px_-40px_rgba(0,0,0,0.95)] transition active:scale-[0.97] hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/30"
                                             aria-label="Delete chat"
                                         >
-                                            <Delete className="h-5 w-5" />
+                                            {deleteLoading ? (
+                                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-500/40 border-t-zinc-200" />
+                                            ) : (
+                                                <Delete className="h-5 w-5" />
+                                            )}
                                         </button>
                                     </div>
                                 </div>
