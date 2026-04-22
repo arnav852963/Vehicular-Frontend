@@ -3,6 +3,10 @@ import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {userApi} from "../api/user.js";
 import {Link} from "react-router-dom";
+import {Delete} from "lucide-react";
+import {chatAPi} from "../api/chat...js";
+import {toast} from "react-toastify";
+import {Notification} from "../components/Notification.jsx";
 
 export const MyChatsPage = () => {
 
@@ -55,6 +59,37 @@ export const MyChatsPage = () => {
         })()
 
     }, []);
+
+
+
+    const handleDelete = async (e)=>{
+
+
+            const chatId = e?.target?.value
+
+        try {
+
+                const chatDelete = await chatAPi.deleteChat(chatId)
+
+                if(!chatDelete || !chatDelete?.data || !chatDelete?.data?.data || chatDelete?.data?.statusCode !== 200){
+                    toast(<Notification message="An error occurred while deleting the chat"/>)
+                    return
+                }
+
+                setChats((prev) =>{
+                    const newChat = prev.filter((chat)=>{
+                        return chat?._id !== chatId
+                    })
+
+                    return newChat
+                })
+
+        } catch (e) {
+                toast(<Notification message={e?.response?.data?.message || "An error occurred while deleting the chat"}/>)
+
+        }
+
+    }
 
     if(error && error?.error){
         return (
@@ -112,7 +147,7 @@ export const MyChatsPage = () => {
                                             <div className="min-w-0">
                                                 <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Vehicle</p>
                                                 <p className="mt-1 truncate text-base font-semibold text-zinc-100">
-                                                    {chat?.plateNumber}
+                                                    {chat?.firstMessage}
                                                 </p>
                                                 <p className="mt-1 text-xs text-zinc-500">
                                                     Started {new Date(chat?.createdAt).toLocaleString()}
@@ -124,6 +159,18 @@ export const MyChatsPage = () => {
                                                 <span className="text-sm font-medium text-zinc-300 group-hover:text-zinc-100">
                                                     Open
                                                 </span>
+                                            </div>
+
+                                            <div>
+                                                <button
+                                                    type="button"
+                                                    value={chat?._id}
+                                                    onClick={handleDelete}
+                                                    className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800/70 bg-zinc-950/50 text-zinc-300 shadow-[0_18px_50px_-40px_rgba(0,0,0,0.95)] transition active:scale-[0.97] hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/30"
+                                                    aria-label="Delete chat"
+                                                >
+                                                    <Delete className="h-5 w-5" />
+                                                </button>
                                             </div>
                                         </div>
                                     </Link>
