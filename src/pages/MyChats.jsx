@@ -66,6 +66,7 @@ export const MyChatsPage = () => {
 
 
             const chatId = e?.target?.value
+        console.log("--->" , chatId)
 
         try {
 
