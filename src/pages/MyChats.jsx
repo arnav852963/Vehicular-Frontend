@@ -62,11 +62,10 @@ export const MyChatsPage = () => {
 
 
 
-    const handleDelete = async (e)=>{
+    const handleDelete = async (chatId)=>{
 
 
-            const chatId = e?.target?.value
-        console.log("--->" , chatId)
+
 
         try {
 
@@ -167,8 +166,8 @@ export const MyChatsPage = () => {
 
                                         <button
                                             type="button"
-                                            value={chat?._id}
-                                            onClick={handleDelete}
+
+                                            onClick={()=> handleDelete(chat?._id)}
                                             className="inline-flex h-12 w-12 items-center justify-center self-center rounded-2xl border border-zinc-800/70 bg-zinc-950/50 text-zinc-300 shadow-[0_18px_50px_-40px_rgba(0,0,0,0.95)] transition active:scale-[0.97] hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/30"
                                             aria-label="Delete chat"
                                         >
