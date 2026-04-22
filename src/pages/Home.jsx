@@ -272,6 +272,38 @@ if(error && error?.error){
                                     <p className="mt-1 text-xs text-zinc-200">Reply fast to reduce stress</p>
                                 </div>
                             </div>
+
+                            <div className="relative mt-4">
+                                <div className="relative overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-950/30 px-4 py-3">
+                                    <div className="pointer-events-none absolute inset-0 opacity-70 motion-reduce:hidden">
+                                        <div className="animate-vehicular-shimmer absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-sky-300/10 to-transparent" />
+                                    </div>
+                                    <div className="relative flex items-center justify-between gap-3">
+                                        <div className="flex items-center gap-3">
+                                            <div className="relative">
+                                                <span className="absolute -inset-2 rounded-full bg-sky-500/10 blur-md motion-reduce:hidden" />
+                                                <span className="relative flex h-9 w-9 items-center justify-center rounded-full border border-sky-500/25 bg-sky-500/10 text-sky-200">
+                                                    <span className="text-base">@</span>
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-semibold text-zinc-100">Email backup alerts</p>
+                                                <p className="mt-0.5 text-xs leading-relaxed text-zinc-400">
+                                                    If you miss a ping here, we’ll also notify you on email.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-2">
+                                            <span className="relative inline-flex h-2.5 w-2.5">
+                                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400/70 opacity-60 motion-reduce:hidden" />
+                                                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sky-400" />
+                                            </span>
+                                            <span className="text-[11px] font-medium text-zinc-400">On</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </section>
                 )}
