@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from "react-router-dom";
 
 export const VehicleImage = ({url , key}) => {
     return (
@@ -8,6 +9,8 @@ export const VehicleImage = ({url , key}) => {
 
                 <div className="aspect-[16/10] w-full">
                     {url ? (
+
+                        <Link to={url}>
                         <img
                             key={key}
                             src={url}
@@ -15,6 +18,7 @@ export const VehicleImage = ({url , key}) => {
                             loading="lazy"
                             className="h-full w-full object-cover object-center"
                         />
+                        </Link>
                     ) : (
                         <div className="flex h-full w-full items-center justify-center">
                             <div className="flex flex-col items-center gap-2 px-6 text-center">
