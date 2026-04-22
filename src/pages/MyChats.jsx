@@ -139,41 +139,41 @@ export const MyChatsPage = () => {
                         <div className="mt-5 space-y-3">
                             {chats.map((chat , index) =>(
                                 <div key={index}>
-                                    <Link
-                                        to={`/chat/${chat?._id}`}
-                                        className="group block rounded-2xl border border-zinc-800/70 bg-zinc-900/55 p-4 shadow-[0_18px_60px_-44px_rgba(0,0,0,0.95)] transition active:scale-[0.99]"
-                                    >
-                                        <div className="flex items-start justify-between gap-3">
-                                            <div className="min-w-0">
-                                                <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Vehicle</p>
-                                                <p className="mt-1 truncate text-base font-semibold text-zinc-100">
-                                                    {chat?.firstMessage}
-                                                </p>
-                                                <p className="mt-1 text-xs text-zinc-500">
-                                                    Started {new Date(chat?.createdAt).toLocaleString()}
-                                                </p>
-                                            </div>
+                                    <div className="flex items-stretch gap-3">
+                                        <Link
+                                            to={`/chat/${chat?._id}`}
+                                            className="group block flex-1 rounded-2xl border border-zinc-800/70 bg-zinc-900/55 p-4 shadow-[0_18px_60px_-44px_rgba(0,0,0,0.95)] transition active:scale-[0.99]"
+                                        >
+                                            <div className="flex items-start justify-between gap-3">
+                                                <div className="min-w-0">
+                                                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Vehicle</p>
+                                                    <p className="mt-1 truncate text-base font-semibold text-zinc-100">
+                                                        {chat?.firstMessage}
+                                                    </p>
+                                                    <p className="mt-1 text-xs text-zinc-500">
+                                                        Started {new Date(chat?.createdAt).toLocaleString()}
+                                                    </p>
+                                                </div>
 
-                                            <div className="mt-1 inline-flex items-center gap-2">
-                                                <div className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_0_6px_rgba(251,191,36,0.12)]" />
-                                                <span className="text-sm font-medium text-zinc-300 group-hover:text-zinc-100">
-                                                    Open
-                                                </span>
+                                                <div className="mt-1 inline-flex items-center gap-2">
+                                                    <div className="h-2 w-2 rounded-full bg-amber-400 shadow-[0_0_0_6px_rgba(251,191,36,0.12)]" />
+                                                    <span className="text-sm font-medium text-zinc-300 group-hover:text-zinc-100">
+                                                        Open
+                                                    </span>
+                                                </div>
                                             </div>
+                                        </Link>
 
-                                            <div>
-                                                <button
-                                                    type="button"
-                                                    value={chat?._id}
-                                                    onClick={handleDelete}
-                                                    className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800/70 bg-zinc-950/50 text-zinc-300 shadow-[0_18px_50px_-40px_rgba(0,0,0,0.95)] transition active:scale-[0.97] hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/30"
-                                                    aria-label="Delete chat"
-                                                >
-                                                    <Delete className="h-5 w-5" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </Link>
+                                        <button
+                                            type="button"
+                                            value={chat?._id}
+                                            onClick={handleDelete}
+                                            className="inline-flex h-12 w-12 items-center justify-center self-center rounded-2xl border border-zinc-800/70 bg-zinc-950/50 text-zinc-300 shadow-[0_18px_50px_-40px_rgba(0,0,0,0.95)] transition active:scale-[0.97] hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/30"
+                                            aria-label="Delete chat"
+                                        >
+                                            <Delete className="h-5 w-5" />
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
