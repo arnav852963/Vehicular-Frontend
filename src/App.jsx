@@ -17,6 +17,7 @@ function App() {
 
      const location = useLocation()
 
+
     const [error, setError] = useState({
         error: false,
         message: ""
@@ -205,7 +206,7 @@ function App() {
   return !loading ? (
 
 
-      
+
       <div className="min-h-dvh bg-zinc-950 text-zinc-100">
 
           <Header/>
@@ -218,7 +219,7 @@ function App() {
               </div>
           </main>
 
-          <BottomTabs/>
+            <BottomTabs/>
       </div>
 
 

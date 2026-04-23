@@ -11,7 +11,7 @@ export const BottomTabs = () => {
         {
             name: 'Home',
             slug: "/",
-            active: true,
+            active: authStatus,
             icon:<Home size={20}/>
 
         },

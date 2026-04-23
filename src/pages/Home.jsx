@@ -229,9 +229,14 @@ if(error && error?.error){
 
                             <button
                                 onClick={()=> setTriggerAddVehicle(true)}
-                                className="mt-4 w-full rounded-2xl bg-sky-500 px-4 py-3 text-sm font-semibold text-zinc-950 shadow-[0_14px_40px_-20px_rgba(56,189,248,0.60)] active:scale-[0.99]"
+                                className="group relative mt-4 w-full overflow-hidden rounded-2xl bg-sky-500 px-4 py-3 text-sm font-semibold text-zinc-950 shadow-[0_14px_40px_-20px_rgba(56,189,248,0.60)] active:scale-[0.99]"
                             >
-                                Add your first vehicle
+                                <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-zinc-950/15" />
+                                <span className="pointer-events-none absolute -inset-[2px] rounded-[18px] opacity-70">
+                                    <span className="absolute inset-0 rounded-[18px] ring-1 ring-sky-300/35" />
+                                    <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-vehicular-shimmer" />
+                                </span>
+                                <span className="relative">Add your first vehicle</span>
                             </button>
                         </div>
                     )}
