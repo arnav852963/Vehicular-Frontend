@@ -24,7 +24,7 @@ export const vehicleApi = {
     },
 
     deleteVehicle:(vehicleId)=>{
-        return api.delete(`vehicle/delete/${vehicleId}`)
+        return api.delete(`/vehicle/delete/${vehicleId}`)
     },
     getQr:(vehicleId)=>{
         return api.get(`/vehicle/getQr/${vehicleId}`)

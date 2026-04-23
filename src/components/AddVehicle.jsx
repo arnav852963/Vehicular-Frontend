@@ -87,7 +87,7 @@ const options = ["CAR", "MOTORCYCLE", "TRUCK", "BUS", "OTHER"]
             }
         }
 
-       console.log( Object.fromEntries(formData))
+
         
         try {
             

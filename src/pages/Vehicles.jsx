@@ -15,7 +15,12 @@ export const VehiclesPage = () => {
 
     const location = useLocation()
 
-    if(location?.state &&  !location?.state?.triggerAddVehicle) setTriggerAddVehicle(false)
+    useEffect(() => {
+        if (location?.state && location.state.triggerAddVehicle === false) {
+            setTriggerAddVehicle(false)
+        }
+    }, [location?.state])
+
 
 
     const [error, setError] = useState({
