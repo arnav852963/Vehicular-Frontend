@@ -106,9 +106,7 @@ const options = ["CAR", "MOTORCYCLE", "TRUCK", "BUS", "OTHER"]
 
             setLoading(false)
 
-            navigate('/vehicle' , {state:{
-                triggerAddVehicle: false
-                }} )
+            navigate('/vehicle' , {state:addVehicle?.data?.data} )
 
             
             

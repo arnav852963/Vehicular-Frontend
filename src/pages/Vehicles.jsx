@@ -16,7 +16,8 @@ export const VehiclesPage = () => {
     const location = useLocation()
 
     useEffect(() => {
-        if (location?.state && location.state.triggerAddVehicle === false) {
+        if (location?.state !==undefined) {
+            setVehicles((prev) => [...prev ,location.state ])
             setTriggerAddVehicle(false)
         }
     }, [location?.state])
@@ -200,7 +201,7 @@ if(error && error?.error){
                     {vehicles && vehicles?.length > 0 && (
                         <div className="mt-5 space-y-3">
                             {vehicles.map((vehicle , index) => (
-                                <div key={index}>
+                                <div key={vehicle?._id || index}>
                                     <div className={`group relative overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-900/55 shadow-[0_18px_60px_-44px_rgba(0,0,0,0.95)] transition duration-200 ${explodingId === vehicle?._id ? "animate-vehicular-destroy" : "active:scale-[0.99]"}`}>
                                         <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
                                             <div className="absolute -inset-10 bg-[radial-gradient(420px_220px_at_30%_0%,rgba(56,189,248,0.18),transparent_60%),radial-gradient(380px_220px_at_80%_15%,rgba(16,185,129,0.10),transparent_55%)]" />
