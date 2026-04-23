@@ -2,12 +2,14 @@ import {useEffect, useState} from "react";
 import {vehicleApi} from "../api/vehicle.js";
 import {Link} from "react-router-dom";
 import {Container} from "../components/Container.jsx";
-import {ChevronRight} from "lucide-react";
+import {ChevronRight, Plus} from "lucide-react";
+import {AddVehicle} from "../components/AddVehicle.jsx";
 
 export const VehiclesPage = () => {
 
     const [vehicles, setVehicles] = useState([])
     const [loading, setLoading] = useState(true)
+    const [triggerAddVehicle, setTriggerAddVehicle] = useState(false)
     const [error, setError] = useState({
         error: false,
         message: ""
@@ -88,15 +90,47 @@ if(error && error?.error){
                     </div>
 
                     {(!vehicles || vehicles?.length === 0) && (
-                        <div className="mt-5 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-5 text-amber-200">
-                            <div className="flex items-start justify-between gap-3">
-                                <div>
-                                    <p className="text-sm font-semibold text-zinc-100">No vehicles yet</p>
-                                    <p className="mt-1 text-sm leading-relaxed text-zinc-400">Add a vehicle to generate a QR and receive alerts.</p>
+                        <>
+                            <div className="mt-5 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-5 text-amber-200">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p className="text-sm font-semibold text-zinc-100">No vehicles yet</p>
+                                        <p className="mt-1 text-sm leading-relaxed text-zinc-400">Add a vehicle to generate a QR and receive alerts.</p>
+                                    </div>
+                                    <div className="mt-1 h-2.5 w-2.5 rounded-full bg-amber-400 shadow-[0_0_0_6px_rgba(251,191,36,0.12)]" />
                                 </div>
-                                <div className="mt-1 h-2.5 w-2.5 rounded-full bg-amber-400 shadow-[0_0_0_6px_rgba(251,191,36,0.12)]" />
                             </div>
-                        </div>
+
+                            <div className="mt-4">
+                                <button
+                                    onClick={() => setTriggerAddVehicle(true)}
+                                    className="group relative w-full overflow-hidden rounded-2xl bg-sky-500 px-4 py-3.5 text-center text-sm font-extrabold tracking-wide text-zinc-950 shadow-[0_18px_55px_-25px_rgba(56,189,248,0.80)] transition active:scale-[0.985]"
+                                >
+                                    <span className="pointer-events-none absolute -inset-10 rounded-[26px] bg-[radial-gradient(220px_120px_at_20%_0%,rgba(255,255,255,0.22),transparent_60%),radial-gradient(240px_140px_at_80%_10%,rgba(56,189,248,0.45),transparent_60%),radial-gradient(240px_140px_at_40%_110%,rgba(16,185,129,0.28),transparent_60%)] opacity-75 blur-2xl" />
+                                    <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-zinc-950/18" />
+                                    <span className="pointer-events-none absolute -inset-[2px] rounded-[18px] opacity-90">
+                                        <span className="absolute inset-0 rounded-[18px] bg-[conic-gradient(from_var(--a),rgba(255,255,255,0.20),rgba(56,189,248,0.95),rgba(16,185,129,0.80),rgba(255,255,255,0.18))] animate-vehicular-border-spin" />
+                                        <span className="absolute inset-[2px] rounded-[16px] bg-sky-500" />
+                                    </span>
+                                    <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl opacity-90">
+                                        <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/28 to-transparent animate-vehicular-shimmer" />
+                                    </span>
+
+                                    <span className="relative inline-flex items-center justify-center gap-2">
+                                        <span className="grid h-7 w-7 place-items-center rounded-xl bg-zinc-950/15 ring-1 ring-zinc-950/20">
+                                            <Plus size={16} />
+                                        </span>
+                                        Add Vehicle
+                                    </span>
+                                </button>
+
+                                {triggerAddVehicle ? (
+                                    <div className="mt-4">
+                                        <AddVehicle triggerAddVehicle={triggerAddVehicle} setTriggerAddVehicle={setTriggerAddVehicle} />
+                                    </div>
+                                ) : null}
+                            </div>
+                        </>
                     )}
 
                     {vehicles && vehicles?.length > 0 && (

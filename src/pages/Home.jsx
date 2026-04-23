@@ -171,15 +171,23 @@ if(error && error?.error){
 
                     <button
                         onClick={()=> setTriggerAddVehicle(true)}
-                        className="group relative inline-flex items-center gap-2 rounded-full bg-sky-500/10 px-4 py-2 text-sm font-medium text-sky-200 shadow-[0_10px_30px_-18px_rgba(56,189,248,0.45)] active:scale-[0.99]"
+                        className="group relative inline-flex items-center gap-2 rounded-full bg-sky-500/10 px-4 py-2 text-sm font-semibold text-sky-100 shadow-[0_18px_55px_-32px_rgba(56,189,248,0.70)] transition active:scale-[0.985]"
                     >
+                        <span className="pointer-events-none absolute -inset-6 rounded-full bg-[radial-gradient(160px_80px_at_70%_10%,rgba(56,189,248,0.35),transparent_60%),radial-gradient(160px_80px_at_20%_90%,rgba(16,185,129,0.22),transparent_60%)] opacity-70 blur-2xl transition duration-300 group-hover:opacity-100" />
                         <span className="pointer-events-none absolute inset-0 rounded-full p-[1px]">
-                            <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_var(--a),rgba(56,189,248,0.75),rgba(16,185,129,0.55),rgba(56,189,248,0.75))] blur-[0.3px] opacity-80 animate-vehicular-border-spin" />
-                            <span className="absolute inset-[1px] rounded-full bg-zinc-950/70" />
+                            <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_var(--a),rgba(255,255,255,0.20),rgba(56,189,248,0.95),rgba(16,185,129,0.75),rgba(255,255,255,0.15))] opacity-90 animate-vehicular-border-spin" />
+                            <span className="absolute inset-[1px] rounded-full bg-zinc-950/65" />
                         </span>
-                        <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-sky-500/25" />
-                        <Plus size={18} />
-                        Vehicle
+                        <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-white/10" />
+                        <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-full opacity-80">
+                            <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/22 to-transparent animate-vehicular-shimmer" />
+                        </span>
+
+                        <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/10 ring-1 ring-sky-400/25">
+                            <span className="pointer-events-none absolute -inset-2 rounded-full bg-sky-500/20 blur-md opacity-70" />
+                            <Plus size={18} className="relative" />
+                        </span>
+                        <span className="relative">Vehicle</span>
                     </button>
                 </header>
 
@@ -234,14 +242,23 @@ if(error && error?.error){
 
                             <button
                                 onClick={()=> setTriggerAddVehicle(true)}
-                                className="group relative mt-4 w-full overflow-hidden rounded-2xl bg-sky-500 px-4 py-3 text-sm font-semibold text-zinc-950 shadow-[0_14px_40px_-20px_rgba(56,189,248,0.60)] active:scale-[0.99]"
+                                className="group relative mt-4 w-full overflow-hidden rounded-2xl bg-sky-500 px-4 py-3 text-sm font-extrabold tracking-wide text-zinc-950 shadow-[0_18px_55px_-25px_rgba(56,189,248,0.75)] transition active:scale-[0.985]"
                             >
-                                <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-zinc-950/15" />
-                                <span className="pointer-events-none absolute inset-0 rounded-2xl p-[1.5px]">
-                                    <span className="absolute inset-0 rounded-2xl bg-[conic-gradient(from_var(--a),rgba(255,255,255,0.15),rgba(56,189,248,0.95),rgba(16,185,129,0.75),rgba(255,255,255,0.15))] opacity-90 animate-vehicular-border-spin" />
-                                    <span className="absolute inset-[1.5px] rounded-[14px] bg-sky-500" />
+                                <span className="pointer-events-none absolute -inset-10 rounded-[26px] bg-[radial-gradient(220px_120px_at_20%_0%,rgba(255,255,255,0.22),transparent_60%),radial-gradient(240px_140px_at_80%_10%,rgba(56,189,248,0.45),transparent_60%),radial-gradient(240px_140px_at_40%_110%,rgba(16,185,129,0.28),transparent_60%)] opacity-75 blur-2xl" />
+                                <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-zinc-950/18" />
+                                <span className="pointer-events-none absolute -inset-[2px] rounded-[18px] opacity-90">
+                                    <span className="absolute inset-0 rounded-[18px] bg-[conic-gradient(from_var(--a),rgba(255,255,255,0.20),rgba(56,189,248,0.95),rgba(16,185,129,0.80),rgba(255,255,255,0.18))] animate-vehicular-border-spin" />
+                                    <span className="absolute inset-[2px] rounded-[16px] bg-sky-500" />
                                 </span>
-                                <span className="relative">Add your first vehicle</span>
+                                <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl opacity-90">
+                                    <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/28 to-transparent animate-vehicular-shimmer" />
+                                </span>
+                                <span className="relative inline-flex items-center justify-center gap-2">
+                                    <span className="grid h-6 w-6 place-items-center rounded-xl bg-zinc-950/15 ring-1 ring-zinc-950/20">
+                                        <Plus size={16} />
+                                    </span>
+                                    Add your first vehicle
+                                </span>
                             </button>
                         </div>
                     )}

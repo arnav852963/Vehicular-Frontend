@@ -186,9 +186,9 @@ export const VehicleInfo = () => {
                                 </p>
                             </div>
 
-                            {vehicleInfo?.isActive !== undefined ? (
-                                <div className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${vehicleInfo.isActive ? "bg-emerald-500/10 text-emerald-200 ring-emerald-500/20" : "bg-rose-500/10 text-rose-200 ring-rose-500/20"}`}>
-                                    {vehicleInfo.isActive ? "Active" : "Inactive"}
+                            {activationQr !== undefined ? (
+                                <div className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${activationQr ? "bg-emerald-500/10 text-emerald-200 ring-emerald-500/20" : "bg-rose-500/10 text-rose-200 ring-rose-500/20"}`}>
+                                    {activationQr ? "Active" : "Inactive"}
                                 </div>
                             ) : null}
                         </header>
