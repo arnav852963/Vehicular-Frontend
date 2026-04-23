@@ -171,8 +171,13 @@ if(error && error?.error){
 
                     <button
                         onClick={()=> setTriggerAddVehicle(true)}
-                        className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm font-medium text-sky-200 shadow-[0_10px_30px_-18px_rgba(56,189,248,0.45)] active:scale-[0.99]"
+                        className="group relative inline-flex items-center gap-2 rounded-full bg-sky-500/10 px-4 py-2 text-sm font-medium text-sky-200 shadow-[0_10px_30px_-18px_rgba(56,189,248,0.45)] active:scale-[0.99]"
                     >
+                        <span className="pointer-events-none absolute inset-0 rounded-full p-[1px]">
+                            <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_var(--a),rgba(56,189,248,0.75),rgba(16,185,129,0.55),rgba(56,189,248,0.75))] blur-[0.3px] opacity-80 animate-vehicular-border-spin" />
+                            <span className="absolute inset-[1px] rounded-full bg-zinc-950/70" />
+                        </span>
+                        <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-sky-500/25" />
                         <Plus size={18} />
                         Vehicle
                     </button>
@@ -232,9 +237,9 @@ if(error && error?.error){
                                 className="group relative mt-4 w-full overflow-hidden rounded-2xl bg-sky-500 px-4 py-3 text-sm font-semibold text-zinc-950 shadow-[0_14px_40px_-20px_rgba(56,189,248,0.60)] active:scale-[0.99]"
                             >
                                 <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-zinc-950/15" />
-                                <span className="pointer-events-none absolute -inset-[2px] rounded-[18px] opacity-70">
-                                    <span className="absolute inset-0 rounded-[18px] ring-1 ring-sky-300/35" />
-                                    <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-vehicular-shimmer" />
+                                <span className="pointer-events-none absolute inset-0 rounded-2xl p-[1.5px]">
+                                    <span className="absolute inset-0 rounded-2xl bg-[conic-gradient(from_var(--a),rgba(255,255,255,0.15),rgba(56,189,248,0.95),rgba(16,185,129,0.75),rgba(255,255,255,0.15))] opacity-90 animate-vehicular-border-spin" />
+                                    <span className="absolute inset-[1.5px] rounded-[14px] bg-sky-500" />
                                 </span>
                                 <span className="relative">Add your first vehicle</span>
                             </button>

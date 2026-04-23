@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {vehicleApi} from "../api/vehicle.js";
 import {Link} from "react-router-dom";
 import {Container} from "../components/Container.jsx";
+import {ChevronRight} from "lucide-react";
 
 export const VehiclesPage = () => {
 
@@ -104,8 +105,12 @@ if(error && error?.error){
                                 <div key={index}>
                                     <Link
                                         to={`/vehicleStatus/${vehicle?._id}`}
-                                        className="block overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-900/55 shadow-[0_18px_60px_-44px_rgba(0,0,0,0.95)] transition active:scale-[0.99]"
+                                        className="group relative block overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-900/55 shadow-[0_18px_60px_-44px_rgba(0,0,0,0.95)] transition duration-200 active:scale-[0.99]"
                                     >
+                                        <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
+                                            <div className="absolute -inset-10 bg-[radial-gradient(420px_220px_at_30%_0%,rgba(56,189,248,0.18),transparent_60%),radial-gradient(380px_220px_at_80%_15%,rgba(16,185,129,0.10),transparent_55%)]" />
+                                        </div>
+
                                         <div className="relative">
                                             <div className="aspect-[16/9] w-full bg-zinc-900">
                                                 {vehicle?.vehicleImage?.[0] ? (
@@ -113,7 +118,7 @@ if(error && error?.error){
                                                         src={vehicle.vehicleImage[0]}
                                                         alt={vehicle?.plateNumber}
                                                         loading="lazy"
-                                                        className="h-full w-full object-cover object-center"
+                                                        className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.02]"
                                                     />
                                                 ) : (
                                                     <div className="flex h-full w-full items-center justify-center">
@@ -126,13 +131,23 @@ if(error && error?.error){
                                             </div>
 
                                             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_55%_at_50%_0%,rgba(56,189,248,0.12),transparent_65%)]" />
+                                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950/50 via-transparent to-transparent" />
+
+                                            <div className="pointer-events-none absolute right-3 top-3 grid place-items-center">
+                                                <div className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-zinc-950/45 px-2.5 py-1 text-[11px] font-semibold text-zinc-200 backdrop-blur-md">
+                                                    Open
+                                                    <ChevronRight className="h-4 w-4 opacity-80 transition group-hover:translate-x-0.5" />
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div className="p-4">
                                             <div className="flex items-start justify-between gap-3">
                                                 <div className="min-w-0">
                                                     <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Plate</p>
-                                                    <p className="mt-1 truncate text-base font-semibold text-zinc-100">{vehicle?.plateNumber}</p>
+                                                    <p className="mt-1 truncate text-base font-semibold text-zinc-100">
+                                                        {vehicle?.plateNumber}
+                                                    </p>
                                                     {vehicle?.vehicleType ? (
                                                         <p className="mt-1 text-xs text-zinc-500">{vehicle.vehicleType}</p>
                                                     ) : null}
@@ -147,6 +162,11 @@ if(error && error?.error){
                                                         Open
                                                     </div>
                                                 )}
+                                            </div>
+
+                                            <div className="mt-3 flex items-center justify-between">
+                                                <p className="text-xs text-zinc-500">Tap to view status • QR • images</p>
+                                                <ChevronRight className="h-5 w-5 text-zinc-400 transition group-hover:translate-x-0.5 group-hover:text-zinc-200" />
                                             </div>
                                         </div>
                                     </Link>

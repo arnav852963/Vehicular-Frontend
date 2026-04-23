@@ -26,3 +26,33 @@
 .animate-vehicular-float {
   animation: vehicular-float 3.2s ease-in-out infinite;
 }
+
+@keyframes vehicular-border-spin {
+  0% {
+    --a: 0turn;
+  }
+  100% {
+    --a: 1turn;
+  }
+}
+
+.animate-vehicular-border-spin {
+  animation: vehicular-border-spin 2.2s linear infinite;
+}
+
+@keyframes vehicular-soft-pulse {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.25;
+  }
+}
+
+.animate-vehicular-soft-pulse {
+  animation: vehicular-soft-pulse 1.8s ease-in-out infinite;
+}
+
