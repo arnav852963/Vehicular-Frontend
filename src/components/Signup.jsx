@@ -4,7 +4,7 @@ import { Input } from "./Input";
 import {useForm} from "react-hook-form";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import {authApi} from "../api/auth.js";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {login as authLogin , logout as authLogout} from "../store/authSlice.js";
  import {useLocation, useNavigate} from "react-router-dom";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -26,11 +26,17 @@ export const Signup = () => {
 
     const location = useLocation()
 
+
+    const isAuth = useSelector((state)=>state?.auth?.isAuthenticated)
+
     let pathAfterSubmit = location?.state?.from ? location?.state?.from : '/'
+
+
     pathAfterSubmit  = String(pathAfterSubmit)
 
 
     useEffect(() => {
+        if(!isAuth) return
 
         ;(async ()=>{
 

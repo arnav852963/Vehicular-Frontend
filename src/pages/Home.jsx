@@ -340,6 +340,22 @@ if(error && error?.error){
                         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
                         <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-md rounded-t-3xl border border-zinc-800 bg-zinc-950 p-4 shadow-[0_-20px_60px_-35px_rgba(0,0,0,0.95)]">
                             <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-zinc-800" />
+                            <div className="mb-3 flex items-center justify-between">
+                                <button
+                                    type="button"
+                                    onClick={() => setTriggerAddVehicle(false)}
+                                    className="group relative inline-flex items-center gap-2 rounded-full bg-zinc-900/40 px-3 py-2 text-xs font-semibold text-zinc-200 ring-1 ring-white/10 transition active:scale-[0.98]"
+                                >
+                                    <span className="pointer-events-none absolute -inset-6 rounded-full bg-[radial-gradient(120px_60px_at_30%_0%,rgba(56,189,248,0.25),transparent_60%),radial-gradient(120px_60px_at_80%_100%,rgba(244,63,94,0.18),transparent_60%)] opacity-0 blur-xl transition duration-300 group-hover:opacity-100" />
+                                    <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-full opacity-80">
+                                        <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/12 to-transparent animate-vehicular-shimmer" />
+                                    </span>
+                                    <span className="relative grid h-7 w-7 place-items-center rounded-full bg-zinc-950/40 ring-1 ring-white/10">
+                                        <span className="text-base leading-none">←</span>
+                                    </span>
+                                    <span className="relative">Back</span>
+                                </button>
+                            </div>
                             <AddVehicle/>
                         </div>
                     </div>
