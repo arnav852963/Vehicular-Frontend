@@ -56,3 +56,24 @@
   animation: vehicular-soft-pulse 1.8s ease-in-out infinite;
 }
 
+@keyframes vehicular-destroy {
+  0% {
+    transform: translateY(0) scale(1);
+    filter: saturate(1);
+    opacity: 1;
+  }
+  35% {
+    transform: translateY(-2px) scale(1.01);
+    filter: saturate(1.2);
+  }
+  100% {
+    transform: translateY(6px) scale(0.92) rotate(-1deg);
+    filter: saturate(0.8);
+    opacity: 0;
+  }
+}
+
+.animate-vehicular-destroy {
+  animation: vehicular-destroy 520ms cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+}
+

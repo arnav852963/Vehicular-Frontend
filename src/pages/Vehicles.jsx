@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {vehicleApi} from "../api/vehicle.js";
 import {Link} from "react-router-dom";
 import {Container} from "../components/Container.jsx";
-import {ChevronRight, Plus} from "lucide-react";
+import {ChevronRight, Plus, Trash2, Loader2} from "lucide-react";
 import {AddVehicle} from "../components/AddVehicle.jsx";
 
 export const VehiclesPage = () => {
@@ -10,10 +10,47 @@ export const VehiclesPage = () => {
     const [vehicles, setVehicles] = useState([])
     const [loading, setLoading] = useState(true)
     const [triggerAddVehicle, setTriggerAddVehicle] = useState(false)
+    const [deletingId, setDeletingId] = useState(null)
+    const [explodingId, setExplodingId] = useState(null)
     const [error, setError] = useState({
         error: false,
         message: ""
     })
+
+    const handleDeleteVehicle = async (vehicleId) => {
+        if (!vehicleId) return
+        if (deletingId) return
+
+        try {
+            setDeletingId(vehicleId)
+            setExplodingId(vehicleId)
+
+            const res = await vehicleApi.deleteVehicle(vehicleId)
+
+            if (!res || !res?.data || res?.data?.statusCode !== 200) {
+                setExplodingId(null)
+                setDeletingId(null)
+                setError({
+                    error: true,
+                    message: res?.data?.message || "could not delete vehicle"
+                })
+                return
+            }
+
+            setTimeout(() => {
+                setVehicles((prev) => (prev || []).filter((v) => v?._id !== vehicleId))
+                setExplodingId(null)
+                setDeletingId(null)
+            }, 520)
+        } catch (e) {
+            setExplodingId(null)
+            setDeletingId(null)
+            setError({
+                error: true,
+                message: e?.response?.data?.message || e?.message || "An error occurred while deleting vehicle"
+            })
+        }
+    }
 
     useEffect(() => {
         (async ()=>{
@@ -137,43 +174,45 @@ if(error && error?.error){
                         <div className="mt-5 space-y-3">
                             {vehicles.map((vehicle , index) => (
                                 <div key={index}>
-                                    <Link
-                                        to={`/vehicleStatus/${vehicle?._id}`}
-                                        className="group relative block overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-900/55 shadow-[0_18px_60px_-44px_rgba(0,0,0,0.95)] transition duration-200 active:scale-[0.99]"
-                                    >
+                                    <div className={`group relative overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-900/55 shadow-[0_18px_60px_-44px_rgba(0,0,0,0.95)] transition duration-200 ${explodingId === vehicle?._id ? "animate-vehicular-destroy" : "active:scale-[0.99]"}`}>
                                         <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
                                             <div className="absolute -inset-10 bg-[radial-gradient(420px_220px_at_30%_0%,rgba(56,189,248,0.18),transparent_60%),radial-gradient(380px_220px_at_80%_15%,rgba(16,185,129,0.10),transparent_55%)]" />
                                         </div>
 
-                                        <div className="relative">
-                                            <div className="aspect-[16/9] w-full bg-zinc-900">
-                                                {vehicle?.vehicleImage?.[0] ? (
-                                                    <img
-                                                        src={vehicle.vehicleImage[0]}
-                                                        alt={vehicle?.plateNumber}
-                                                        loading="lazy"
-                                                        className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.02]"
-                                                    />
-                                                ) : (
-                                                    <div className="flex h-full w-full items-center justify-center">
-                                                        <div className="flex flex-col items-center gap-2 px-6 text-center">
-                                                            <div className="h-10 w-10 rounded-xl bg-zinc-800/60 ring-1 ring-white/10" />
-                                                            <p className="text-xs font-medium text-zinc-400">No image</p>
+                                        <Link
+                                            to={`/vehicleStatus/${vehicle?._id}`}
+                                            className="block"
+                                        >
+                                            <div className="relative">
+                                                <div className="aspect-[16/9] w-full bg-zinc-900">
+                                                    {vehicle?.vehicleImage?.[0] ? (
+                                                        <img
+                                                            src={vehicle.vehicleImage[0]}
+                                                            alt={vehicle?.plateNumber}
+                                                            loading="lazy"
+                                                            className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.02]"
+                                                        />
+                                                    ) : (
+                                                        <div className="flex h-full w-full items-center justify-center">
+                                                            <div className="flex flex-col items-center gap-2 px-6 text-center">
+                                                                <div className="h-10 w-10 rounded-xl bg-zinc-800/60 ring-1 ring-white/10" />
+                                                                <p className="text-xs font-medium text-zinc-400">No image</p>
+                                                            </div>
                                                         </div>
+                                                    )}
+                                                </div>
+
+                                                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_55%_at_50%_0%,rgba(56,189,248,0.12),transparent_65%)]" />
+                                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950/50 via-transparent to-transparent" />
+
+                                                <div className="pointer-events-none absolute right-3 top-3 grid place-items-center">
+                                                    <div className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-zinc-950/45 px-2.5 py-1 text-[11px] font-semibold text-zinc-200 backdrop-blur-md">
+                                                        Open
+                                                        <ChevronRight className="h-4 w-4 opacity-80 transition group-hover:translate-x-0.5" />
                                                     </div>
-                                                )}
-                                            </div>
-
-                                            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_55%_at_50%_0%,rgba(56,189,248,0.12),transparent_65%)]" />
-                                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950/50 via-transparent to-transparent" />
-
-                                            <div className="pointer-events-none absolute right-3 top-3 grid place-items-center">
-                                                <div className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-zinc-950/45 px-2.5 py-1 text-[11px] font-semibold text-zinc-200 backdrop-blur-md">
-                                                    Open
-                                                    <ChevronRight className="h-4 w-4 opacity-80 transition group-hover:translate-x-0.5" />
                                                 </div>
                                             </div>
-                                        </div>
+                                        </Link>
 
                                         <div className="p-4">
                                             <div className="flex items-start justify-between gap-3">
@@ -187,23 +226,42 @@ if(error && error?.error){
                                                     ) : null}
                                                 </div>
 
-                                                {vehicle?.isActive !== undefined ? (
-                                                    <div className={`mt-1 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ${vehicle.isActive ? "bg-emerald-500/10 text-emerald-200 ring-emerald-500/20" : "bg-rose-500/10 text-rose-200 ring-rose-500/20"}`}>
-                                                        {vehicle.isActive ? "Active" : "Inactive"}
-                                                    </div>
-                                                ) : (
-                                                    <div className="mt-1 inline-flex items-center rounded-full bg-zinc-900/60 px-2.5 py-1 text-[11px] font-semibold text-zinc-300 ring-1 ring-white/10">
-                                                        Open
-                                                    </div>
-                                                )}
+                                                <div className="flex items-center gap-2">
+                                                    {vehicle?.isActive !== undefined ? (
+                                                        <div className={`mt-1 inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ${vehicle.isActive ? "bg-emerald-500/10 text-emerald-200 ring-emerald-500/20" : "bg-rose-500/10 text-rose-200 ring-rose-500/20"}`}>
+                                                            {vehicle.isActive ? "Active" : "Inactive"}
+                                                        </div>
+                                                    ) : null}
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                            e.preventDefault()
+                                                            e.stopPropagation()
+                                                            handleDeleteVehicle(vehicle?._id)
+                                                        }}
+                                                        disabled={deletingId === vehicle?._id}
+                                                        className={`relative mt-1 inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-2xl border text-sm font-semibold transition active:scale-[0.98] ${deletingId === vehicle?._id ? "border-rose-500/25 bg-rose-500/10 text-rose-200" : "border-white/10 bg-zinc-950/35 text-zinc-200 hover:border-rose-400/25 hover:bg-rose-500/10 hover:text-rose-200"}`}
+                                                        aria-label="Delete vehicle"
+                                                    >
+                                                        <span className="pointer-events-none absolute -inset-8 bg-[radial-gradient(80px_60px_at_50%_20%,rgba(244,63,94,0.18),transparent_65%)] opacity-80" />
+                                                        {deletingId === vehicle?._id ? (
+                                                            <Loader2 className="relative h-4.5 w-4.5 animate-spin" />
+                                                        ) : (
+                                                            <Trash2 className="relative h-4.5 w-4.5" />
+                                                        )}
+                                                    </button>
+                                                </div>
                                             </div>
 
                                             <div className="mt-3 flex items-center justify-between">
-                                                <p className="text-xs text-zinc-500">Tap to view status • QR • images</p>
+                                                <Link to={`/vehicleStatus/${vehicle?._id}`} className="inline-flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-200">
+                                                    Tap to view status • QR • images
+                                                </Link>
                                                 <ChevronRight className="h-5 w-5 text-zinc-400 transition group-hover:translate-x-0.5 group-hover:text-zinc-200" />
                                             </div>
                                         </div>
-                                    </Link>
+                                    </div>
                                 </div>
                             ))}
                         </div>
