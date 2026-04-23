@@ -9,7 +9,7 @@ import {toast} from "react-toastify";
 import {Notification} from "./Notification.jsx";
 import {Bike, Bus, Car, Truck, Shapes} from "lucide-react";
 
-export const AddVehicle = () => {
+export const AddVehicle = ({setTriggerAddVehicle}) => {
     const {register , handleSubmit, formState: { errors, submitCount }} = useForm();
     
     const navigate =  useNavigate()
@@ -103,9 +103,11 @@ const options = ["CAR", "MOTORCYCLE", "TRUCK", "BUS", "OTHER"]
                 />)
                 return
             }
-            
-            
+
+            setLoading(false)
+            setTriggerAddVehicle(false)
             navigate('/vehicle')
+
             
             
             
