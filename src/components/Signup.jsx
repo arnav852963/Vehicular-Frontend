@@ -451,22 +451,33 @@ if(error.error){
     ) : (
 
         <>
-            <div className="min-h-screen bg-zinc-950 text-zinc-100 px-4 py-6 sm:px-6 flex items-start justify-center">
-                <div className="w-full max-w-md">
-                    <div className="relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6 shadow-lg shadow-black/30">
-                        <div className="pointer-events-none absolute -top-24 -right-24 h-48 w-48 rounded-full bg-cyan-500/10 blur-3xl" />
-                        <div className="flex items-center justify-between">
-                            <Logo />
-                            <div className="h-2 w-24 rounded bg-zinc-800 animate-pulse" />
+            <div className="relative min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center overflow-hidden">
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.1),transparent_50%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(56,189,248,0.15),transparent_50%)] pointer-events-none blur-3xl opacity-60" />
+                
+                <div className="w-full max-w-md px-4 relative z-10">
+                    <div className="relative overflow-hidden rounded-3xl border border-sky-500/20 bg-zinc-900/60 p-6 shadow-[0_0_30px_rgba(56,189,248,0.1)] backdrop-blur">
+                        <div className="absolute inset-0 pointer-events-none">
+                            <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
                         </div>
-                        <h1 className="mt-6 text-sm text-zinc-400">Loading…</h1>
+                        <div className="pointer-events-none absolute -top-24 -right-24 h-48 w-48 rounded-full bg-cyan-500/10 blur-3xl" />
+                        
+                        <div className="flex flex-col items-center text-center gap-5 mt-4">
+                            <div className="relative inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-500/10 ring-1 ring-cyan-500/20">
+                                <div className="absolute inset-0 rounded-2xl bg-cyan-500/20 blur-md opacity-60 animate-pulse" />
+                                <div className="relative h-8 w-8 animate-spin rounded-full border-4 border-cyan-400/20 border-t-cyan-400 border-r-cyan-400" />
+                            </div>
+                            
+                            <div className="mb-2">
+                                <h2 className="text-xl font-bold tracking-tight text-zinc-100">Starting engine...</h2>
+                                <p className="mt-1.5 text-sm text-zinc-400 max-w-[200px] mx-auto">
+                                    Hang tight, we're securely logging you in.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-
-
     </>
 
     )

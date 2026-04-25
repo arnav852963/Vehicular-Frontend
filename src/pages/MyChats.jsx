@@ -204,17 +204,46 @@ setDeleteLoading(true)
         <Container>
             <div className="relative">
                 <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(900px_500px_at_20%_-10%,rgba(56,189,248,0.10),transparent_60%)]" />
-                <div className="mx-auto w-full max-w-md pb-24 pt-5">
-                    <div className="animate-pulse rounded-2xl border border-zinc-800/70 bg-zinc-900/60 p-5">
-                        <div className="h-4 w-20 rounded bg-zinc-800" />
-                        <div className="mt-3 h-7 w-40 rounded bg-zinc-800" />
-                        <div className="mt-6 space-y-3">
-                            <div className="h-20 rounded-2xl bg-zinc-900" />
-                            <div className="h-20 rounded-2xl bg-zinc-900" />
-                            <div className="h-20 rounded-2xl bg-zinc-900" />
+                <div className="mx-auto w-full max-w-md pb-24 pt-5 relative">
+                    <div className="relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 shadow-[0_0_20px_rgba(56,189,248,0.05)] backdrop-blur">
+                        <div className="absolute inset-0 pointer-events-none">
+                            <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
+                        </div>
+                        <div className="relative z-10 flex flex-col gap-4">
+                            <div className="h-4 w-20 rounded-lg bg-zinc-800/80 relative overflow-hidden" >
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
+                            </div>
+                            <div className="h-7 w-40 rounded-lg bg-zinc-800/80 relative overflow-hidden" >
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
+                            </div>
+                            <div className="mt-4 space-y-3">
+                                <div className="relative h-20 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 overflow-hidden flex items-center p-4">
+                                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
+                                     <div className="h-10 w-10 shrink-0 rounded-full bg-zinc-700/80 mr-4"></div>
+                                     <div className="space-y-2 flex-1">
+                                         <div className="h-3 w-1/2 rounded bg-zinc-700/80"></div>
+                                         <div className="h-2 w-3/4 rounded bg-zinc-700/60"></div>
+                                     </div>
+                                </div>
+                                <div className="relative h-20 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 overflow-hidden flex items-center p-4">
+                                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
+                                     <div className="h-10 w-10 shrink-0 rounded-full bg-zinc-700/80 mr-4"></div>
+                                     <div className="space-y-2 flex-1">
+                                         <div className="h-3 w-1/2 rounded bg-zinc-700/80"></div>
+                                         <div className="h-2 w-3/4 rounded bg-zinc-700/60"></div>
+                                     </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <p className="mt-4 text-center text-sm text-zinc-500">loading...</p>
+                    
+                    <div className="mt-6 flex flex-col items-center justify-center animate-vehicular-float motion-reduce:animate-none">
+                        <span className="relative flex h-3 w-3 mb-2">
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+                            <span className="relative inline-flex h-3 w-3 rounded-full bg-cyan-500" />
+                        </span>
+                        <p className="text-sm font-medium tracking-widest text-cyan-500/80 uppercase">Loading Inbox</p>
+                    </div>
                 </div>
             </div>
         </Container>

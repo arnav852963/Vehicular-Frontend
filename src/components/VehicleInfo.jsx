@@ -130,16 +130,38 @@ export const VehicleInfo = () => {
                     <div className="min-h-dvh bg-zinc-950 text-zinc-100">
                         <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(900px_500px_at_20%_-10%,rgba(56,189,248,0.12),transparent_60%),radial-gradient(700px_450px_at_80%_0%,rgba(244,63,94,0.10),transparent_55%)]" />
                         <div className="relative mx-auto w-full max-w-md px-4 pb-24 pt-5">
-                            <div className="animate-pulse rounded-2xl border border-zinc-800/70 bg-zinc-900/60 p-5">
-                                <div className="h-4 w-24 rounded bg-zinc-800" />
-                                <div className="mt-3 h-7 w-44 rounded bg-zinc-800" />
-                                <div className="mt-5 grid grid-cols-2 gap-3">
-                                    <div className="h-20 rounded-2xl bg-zinc-900" />
-                                    <div className="h-20 rounded-2xl bg-zinc-900" />
+                            <div className="relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 shadow-[0_0_20px_rgba(56,189,248,0.05)] backdrop-blur">
+                                <div className="absolute inset-0 pointer-events-none">
+                                    <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
                                 </div>
-                                <div className="mt-4 h-52 rounded-2xl bg-zinc-900" />
+                                <div className="relative z-10 flex flex-col gap-4">
+                                    <div className="h-4 w-24 rounded-lg bg-zinc-800/80 relative overflow-hidden" >
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
+                                    </div>
+                                    <div className="h-7 w-44 rounded-lg bg-zinc-800/80 relative overflow-hidden" >
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
+                                    </div>
+                                    <div className="mt-3 grid grid-cols-2 gap-3">
+                                        <div className="h-20 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 relative overflow-hidden">
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 to-transparent" />
+                                        </div>
+                                        <div className="h-20 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 relative overflow-hidden">
+                                            <div className="absolute inset-0 bg-gradient-to-tl from-emerald-500/5 to-transparent" />
+                                        </div>
+                                    </div>
+                                    <div className="mt-2 h-52 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 relative overflow-hidden">
+                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
+                                    </div>
+                                </div>
                             </div>
-                            <p className="mt-4 text-center text-sm text-zinc-500">Loading vehicle…</p>
+                            
+                            <div className="mt-6 flex flex-col items-center justify-center animate-vehicular-float motion-reduce:animate-none">
+                                <span className="relative flex h-3 w-3 mb-2">
+                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+                                    <span className="relative inline-flex h-3 w-3 rounded-full bg-cyan-500" />
+                                </span>
+                                <p className="text-sm font-medium tracking-widest text-cyan-500/80 uppercase">Loading Vehicle Data</p>
+                            </div>
                         </div>
                     </div>
                 )

@@ -430,22 +430,28 @@ if(error?.error) {
 
         </div>
     ) : (
-        <div className="min-h-[60dvh] bg-transparent text-zinc-100">
-            <div className="mx-auto w-full max-w-md px-4 py-10 sm:max-w-lg">
+        <div className="min-h-[60dvh] bg-transparent text-zinc-100 flex items-center relative overflow-hidden">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.1),transparent_70%)]" />
+            <div className="mx-auto w-full max-w-md px-4 py-10 sm:max-w-lg relative z-10">
                 <div
-                    className="w-full rounded-3xl border border-zinc-800/70 bg-zinc-950/40 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur sm:p-6"
+                    className="relative overflow-hidden rounded-3xl border border-sky-500/20 bg-zinc-950/60 p-6 shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur animate-vehicular-float"
                     aria-busy="true"
                     aria-live="polite"
                 >
-                    <div className="flex items-center gap-3">
-                        <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-cyan-500/10 ring-1 ring-cyan-500/20">
-                            <div className="h-5 w-5 animate-spin rounded-full border-2 border-cyan-400/30 border-t-cyan-400" />
+                    <div className="absolute inset-0 pointer-events-none opacity-50">
+                        <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
+                    </div>
+
+                    <div className="relative flex flex-col items-center text-center gap-4">
+                        <div className="relative inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-500/10 ring-1 ring-cyan-500/30">
+                            <div className="absolute inset-0 rounded-2xl bg-cyan-500/20 blur-lg animate-pulse" />
+                            <div className="relative h-8 w-8 animate-spin rounded-full border-4 border-cyan-400/20 border-t-cyan-400 border-l-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)]" />
                         </div>
 
                         <div className="min-w-0">
-                            <h1 className="text-base font-semibold tracking-tight text-zinc-50">Opening vehicle…</h1>
-                            <p className="mt-1 text-sm leading-6 text-zinc-300/90">
-                                Fetching details and securing your guest session.
+                            <h1 className="text-xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-400">Opening vehicle…</h1>
+                            <p className="mt-2 text-sm leading-6 text-zinc-400/90 max-w-[250px] mx-auto">
+                                Fetching details securely and preparing your guest session.
                             </p>
                         </div>
                     </div>
