@@ -10,6 +10,7 @@ import {useDispatch} from "react-redux";
 import {connectSocket} from "./connection.js";
 import {toast} from "react-toastify";
 import {Notification} from "./components/Notification.jsx";
+import {BackgroundPattern} from "./components/BackgroundPattern.jsx";
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -207,19 +208,19 @@ function App() {
 
 
 
-      <div className="min-h-dvh bg-slate-900 text-slate-100">
+      <div className="relative min-h-dvh bg-slate-950 text-slate-100">
+          <BackgroundPattern />
+          <div className="relative z-10">
+              <Header/>
 
-          <Header/>
+              <main className="mx-auto w-full max-w-md px-4 pb-24 pt-3 sm:max-w-lg">
+                  <div className="rounded-2xl border border-slate-700/40 bg-slate-800/30 p-3 shadow-md backdrop-blur-sm sm:p-4">
+                      <Outlet/>
+                  </div>
+              </main>
 
-
-          <main className="mx-auto w-full max-w-md px-4 pb-24 pt-3 sm:max-w-lg">
-
-              <div className="rounded-2xl border border-slate-700/40 bg-slate-800/30 p-3 shadow-md backdrop-blur-sm sm:p-4">
-                  <Outlet/>
-              </div>
-          </main>
-
-            <BottomTabs/>
+              <BottomTabs/>
+          </div>
       </div>
 
 

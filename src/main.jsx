@@ -18,7 +18,7 @@ import {VehiclesPage} from "./pages/Vehicles.jsx";
 import {MyChatsPage} from "./pages/MyChats.jsx";
 import {ProfilePage} from "./pages/Profile.jsx";
 import {VehicleStatusPage} from "./pages/VehicleStatus.jsx";
-
+import {ThemeProvider} from "./context/ThemeContext.jsx";
 
 const router =  createBrowserRouter([
     {
@@ -133,19 +133,20 @@ const router =  createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+      <ThemeProvider>
+          <Provider store={store}>
+              <RouterProvider router={router}/>
 
-      <Provider store={store}>
-          <RouterProvider router={router}/>
-
-          <ToastContainer 
-              position="top-center" 
-              autoClose={4000} 
-              hideProgressBar={true} 
-              closeButton={false}
-              toastClassName={() => "relative flex p-0 mb-4 min-h-0 justify-center overflow-hidden bg-transparent cursor-pointer shadow-none"}
-              bodyClassName={() => "flex w-full p-0 m-0"}
-              className="mt-4 px-4 w-full flex flex-col items-center"
-          />
-      </Provider>
+              <ToastContainer 
+                  position="top-center" 
+                  autoClose={4000} 
+                  hideProgressBar={true} 
+                  closeButton={false}
+                  toastClassName={() => "relative flex p-0 mb-4 min-h-0 justify-center overflow-hidden bg-transparent cursor-pointer shadow-none"}
+                  bodyClassName={() => "flex w-full p-0 m-0"}
+                  className="mt-4 px-4 w-full flex flex-col items-center"
+              />
+          </Provider>
+      </ThemeProvider>
   </StrictMode>,
 )

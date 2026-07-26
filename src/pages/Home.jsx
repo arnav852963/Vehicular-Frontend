@@ -7,11 +7,15 @@ import {Notification} from "../components/Notification.jsx";
 import {vehicleApi} from "../api/vehicle.js";
 import {addVehicle} from "../store/vehicleSlice.js";
 import {userApi} from "../api/user.js";
-import {Plus, ArrowDown} from "lucide-react"
+import {Plus, ArrowDown} from "lucide-react";
+import {Vehicle3DHub} from "../components/Vehicle3DHub.jsx";
 import {AddVehicle} from "../components/AddVehicle.jsx";
 import {Container} from "../components/Container.jsx";
+import {useTheme} from "../context/ThemeContext.jsx";
 
 export const HomePage = () => {
+    const { theme } = useTheme();
+    const isBeige = theme === "beige";
 
     const user = useSelector((state) => state.auth.userInfo)
 
@@ -170,10 +174,14 @@ useEffect(() => {
 
                     <button
                         onClick={()=> setTriggerAddVehicle(true)}
-                        className="group relative inline-flex items-center gap-2 rounded-full bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-100 shadow-md transition active:scale-[0.985] ring-1 ring-indigo-400/25"
+                        className={`group relative inline-flex items-center gap-2 rounded-full px-4.5 py-2.5 text-sm font-bold shadow-md transition active:scale-[0.985] ${
+                            isBeige
+                                ? "bg-amber-700 hover:bg-amber-800 text-amber-50 shadow-amber-900/10"
+                                : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-950/20"
+                        }`}
                     >
-                        <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-200">
-                            <Plus size={18} className="relative" />
+                        <span className="relative inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/20 text-white">
+                            <Plus size={16} className="relative" />
                         </span>
                         <span className="relative">Vehicle</span>
                     </button>
@@ -240,7 +248,11 @@ useEffect(() => {
 
                             <button
                                 onClick={()=> setTriggerAddVehicle(true)}
-                                className="group relative w-full overflow-hidden rounded-2xl bg-indigo-500 px-4 py-3 text-sm font-bold tracking-wide text-slate-50 shadow-md transition hover:bg-indigo-400 active:scale-[0.985]"
+                                className={`group relative w-full overflow-hidden rounded-2xl px-4 py-3 text-sm font-bold tracking-wide shadow-md transition active:scale-[0.985] ${
+                                    isBeige
+                                        ? "bg-amber-700 hover:bg-amber-800 text-amber-50"
+                                        : "bg-indigo-600 hover:bg-indigo-500 text-white"
+                                }`}
                             >
                                 <span className="relative inline-flex items-center justify-center gap-2">
                                     <Plus size={18} />
@@ -268,14 +280,7 @@ useEffect(() => {
                                 </div>
                             </div>
 
-                            {/* Replaced static tips with an interactive hub space */}
-                            <div className="relative mt-5 h-32 rounded-xl border border-slate-700/50 bg-slate-900/50 flex flex-col items-center justify-center overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 to-transparent" />
-                                <div className="text-slate-500 mb-2">
-                                    <ArrowDown size={24} className="opacity-50" />
-                                </div>
-                                <p className="text-sm font-medium text-slate-400">3D Hub Placeholder</p>
-                            </div>
+                            <Vehicle3DHub />
 
                             <div className="relative mt-4">
                                 <div className="relative overflow-hidden rounded-2xl border border-slate-700/40 bg-slate-900/40 px-4 py-3">

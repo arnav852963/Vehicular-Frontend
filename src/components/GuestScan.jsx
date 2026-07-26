@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import {Notification} from "./Notification.jsx";
 
 import {Input} from "./Input.jsx";
+import {BackgroundPattern} from "./BackgroundPattern.jsx";
 import {Filter} from "bad-words";
 const filter = new Filter();
 
@@ -192,8 +193,10 @@ if(error?.error) {
 }
 
     return !loading ? (
-        <div className="mx-auto w-full max-w-md px-4 pb-24 pt-3 sm:max-w-lg">
-            <div className="rounded-3xl border border-zinc-800/70 bg-zinc-950/40 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur sm:p-6">
+        <div className="relative min-h-screen bg-slate-950 text-slate-100 px-4 pb-24 pt-3">
+            <BackgroundPattern />
+            <div className="relative z-10 mx-auto w-full max-w-md sm:max-w-lg">
+                <div className="rounded-3xl border border-slate-700/60 bg-slate-800/40 p-4 shadow-xl backdrop-blur sm:p-6">
                 <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                         <h1 className="text-lg font-semibold tracking-tight text-zinc-50">Send an alert</h1>
@@ -416,8 +419,8 @@ if(error?.error) {
                 )}
 
             </div>
-
         </div>
+    </div>
     ) : (
         <div className="min-h-[60dvh] bg-transparent text-slate-100 flex items-center relative">
             <div className="mx-auto w-full max-w-md px-4 py-10 sm:max-w-lg relative z-10">

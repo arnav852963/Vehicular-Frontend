@@ -2,27 +2,14 @@ import React from "react";
 import {useSelector} from "react-redux";
 
 export const ProfileComponent = () => {
-
-    const userInfo  = useSelector((state) => state.auth.userInfo);
-
+    const userInfo = useSelector((state) => state.auth.userInfo);
     const avatarSrc = typeof userInfo?.avatar === "string" && userInfo.avatar.trim() ? userInfo.avatar.trim() : "";
 
-
-
-
-
-
-
     return (
-        <>
-
         <div className="min-h-dvh bg-transparent text-slate-100">
-            
-
             <div className="relative mx-auto w-full max-w-md px-4 pb-28 pt-5">
                 <div className="rounded-3xl border border-slate-700/50 bg-slate-800/40 shadow-xl backdrop-blur-xl">
                     <div className="relative overflow-hidden rounded-3xl">
-
                         <div className="relative px-5 pb-5 pt-5">
                             <div className="flex items-start justify-between gap-4">
                                 <div className="min-w-0">
@@ -37,7 +24,6 @@ export const ProfileComponent = () => {
 
                                 <div className="shrink-0">
                                     <div className="relative">
-                                        
                                         <div className="relative h-16 w-16 overflow-hidden rounded-[22px] border border-slate-700 bg-slate-900/40 shadow-sm">
                                             {avatarSrc ? (
                                                 <img
@@ -54,7 +40,6 @@ export const ProfileComponent = () => {
                                                 <div className="flex h-full w-full items-center justify-center">
                                                     <div className="relative">
                                                         <div className="h-3 w-3 rounded-full bg-slate-400" />
-                                                        
                                                     </div>
                                                 </div>
                                             )}
@@ -73,7 +58,7 @@ export const ProfileComponent = () => {
                             ) : (
                                 <>
                                     <div className="mt-5 grid grid-cols-2 gap-3">
-                                        <div className="rounded-2xl border border-slate-700/50 bg-slate-900/40 p-4 shadow-sm">
+                                        <div className="rounded-2xl border border-slate-700/50 bg-slate-900/40 p-4 shadow-sm transition duration-200 active:scale-[0.99]">
                                             <p className="text-[11px] font-semibold tracking-[0.16em] text-slate-500">STATUS</p>
                                             <div className="mt-2 flex items-center gap-2">
                                                 <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_0_6px_rgba(16,185,129,0.12)]" />
@@ -81,7 +66,7 @@ export const ProfileComponent = () => {
                                             </div>
                                         </div>
 
-                                        <div className="rounded-2xl border border-slate-700/50 bg-slate-900/40 p-4 shadow-sm">
+                                        <div className="rounded-2xl border border-slate-700/50 bg-slate-900/40 p-4 shadow-sm transition duration-200 active:scale-[0.99]">
                                             <p className="text-[11px] font-semibold tracking-[0.16em] text-slate-500">PRIVACY</p>
                                             <p className="mt-2 text-sm font-semibold text-slate-100">Phone hidden</p>
                                             <p className="mt-1 text-xs text-slate-400">Contact via QR chat</p>
@@ -140,16 +125,14 @@ export const ProfileComponent = () => {
                 </div>
 
                 <div className="mt-5 px-1">
-                    <div className="rounded-2xl border border-slate-700/50 bg-slate-900/30 p-4 shadow-sm">
-                        <p className="text-xs font-semibold text-slate-200">Tip</p>
-                        <p className="mt-1 text-xs leading-relaxed text-slate-400">
+                    <div className="rounded-2xl border border-slate-700/60 bg-slate-800 p-4 shadow-md">
+                        <p className="text-xs font-semibold text-slate-100">Tip</p>
+                        <p className="mt-1 text-xs leading-relaxed text-slate-300">
                             Guests never see your email or phone. They only reach you through the QR chat.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-
-        </>
-    )
-}
+    );
+};

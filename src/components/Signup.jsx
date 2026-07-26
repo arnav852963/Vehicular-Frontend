@@ -10,6 +10,7 @@ import {login as authLogin , logout as authLogout} from "../store/authSlice.js";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Logo } from "./Logo";
 import {userApi} from "../api/user.js";
+import {BackgroundPattern} from "./BackgroundPattern.jsx";
 
 
 
@@ -190,7 +191,6 @@ export const Signup = () => {
 
             return idToken
         } catch (error) {
-            // If the account already exists, we'll fall back to sign-in in handleSignup.
             throw error
         }
     }
@@ -280,8 +280,9 @@ if(error.error){
 
     return !loading ? (
         <>
-            <div className="relative min-h-screen bg-slate-900 text-slate-100 px-4 py-6 sm:px-6 flex items-start justify-center">
-                <div className="w-full max-w-md">
+            <div className="relative min-h-screen bg-slate-950 text-slate-100 px-4 py-6 sm:px-6 flex items-start justify-center">
+                <BackgroundPattern />
+                <div className="relative z-10 w-full max-w-md">
                     <div className="relative overflow-hidden rounded-3xl border border-slate-700/60 bg-slate-800/40 backdrop-blur p-6 shadow-xl">
                         <div className="mb-5 flex items-center justify-between">
                             <Logo />
