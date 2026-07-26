@@ -165,25 +165,41 @@ const handleOnclickOption = async ( ) => {
 
 
 if(error?.error) {
+    const isNotFound = error.message === "NOT_FOUND" || error.message?.includes("NOT_FOUND") || error.message?.toLowerCase().includes("not found");
+    const displayMessage = isNotFound
+        ? "This QR code is unassigned or no longer registered. Please scan a valid vehicle QR code."
+        : error.message;
+
     return (
-        <div className="min-h-dvh bg-zinc-950 text-zinc-100">
-            <div className="mx-auto flex min-h-dvh w-full max-w-md items-center justify-center px-4 py-10 sm:max-w-lg">
+        <div className="relative min-h-screen bg-slate-950 text-slate-100">
+            <BackgroundPattern />
+            <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-md items-center justify-center px-4 py-10 sm:max-w-lg">
                 <div
-                    className="w-full rounded-3xl border border-zinc-800/70 bg-zinc-950/50 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur sm:p-6"
+                    className="w-full rounded-3xl border border-slate-700/60 bg-slate-800/50 p-6 shadow-xl backdrop-blur-xl"
                     role="alert"
                     aria-live="assertive"
                 >
-                    <div className="flex items-start gap-3">
-                        <div className="mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-500/10 ring-1 ring-rose-500/20">
-                            <span className="h-2.5 w-2.5 rounded-full bg-rose-500" aria-hidden="true" />
+                    <div className="flex items-start gap-4">
+                        <div className="mt-0.5 inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-500/10 ring-1 ring-rose-500/25">
+                            <span className="h-3 w-3 rounded-full bg-rose-500" aria-hidden="true" />
                         </div>
 
                         <div className="min-w-0 flex-1">
-                            <h1 className="text-base font-semibold tracking-tight text-zinc-50">Couldn’t open this vehicle</h1>
-                            <p className="mt-1 text-sm leading-6 text-zinc-300/90 break-words">{"error occured " + error.message}</p>
-                            <p className="mt-3 text-xs text-zinc-400/90">
-                                Please rescan the QR or try again in a moment.
+                            <h1 className="text-lg font-semibold tracking-tight text-slate-100">
+                                {isNotFound ? "Vehicle QR Not Found" : "Scan Error"}
+                            </h1>
+                            <p className="mt-1 text-sm leading-relaxed text-slate-300">
+                                {displayMessage}
                             </p>
+                            
+                            <div className="mt-6 flex items-center gap-3">
+                                <button
+                                    onClick={() => navigate('/')}
+                                    className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-md transition active:scale-[0.98] hover:bg-indigo-500"
+                                >
+                                    Return to Home
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
