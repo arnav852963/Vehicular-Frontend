@@ -175,10 +175,10 @@ function App() {
         return (
             <>
 
-                <div className="min-h-dvh bg-zinc-950 text-zinc-100">
+                <div className="min-h-dvh bg-slate-900 text-slate-100">
                     <div className="mx-auto flex min-h-dvh w-full max-w-md items-center justify-center px-4 py-10 sm:max-w-lg">
                         <div
-                            className="w-full rounded-3xl border border-zinc-800/70 bg-zinc-950/50 p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur sm:p-6"
+                            className="w-full rounded-3xl border border-slate-700/50 bg-slate-800/40 p-4 shadow-xl backdrop-blur-md sm:p-6"
                             role="alert"
                             aria-live="assertive"
                         >
@@ -188,9 +188,9 @@ function App() {
                                 </div>
 
                                 <div className="min-w-0 flex-1">
-                                    <h1 className="text-base font-semibold tracking-tight text-zinc-50">Something went wrong</h1>
-                                    <p className="mt-1 text-sm leading-6 text-zinc-300/90 break-words">{error.message}</p>
-                                    <p className="mt-3 text-xs text-zinc-400/90">
+                                    <h1 className="text-base font-semibold tracking-tight text-slate-50">Something went wrong</h1>
+                                    <p className="mt-1 text-sm leading-6 text-slate-300 break-words">{error.message}</p>
+                                    <p className="mt-3 text-xs text-slate-400">
                                         If you’re not signed in, we’ll redirect you to the sign-in screen.
                                     </p>
                                 </div>
@@ -207,14 +207,14 @@ function App() {
 
 
 
-      <div className="min-h-dvh bg-zinc-950 text-zinc-100">
+      <div className="min-h-dvh bg-slate-900 text-slate-100">
 
           <Header/>
 
 
           <main className="mx-auto w-full max-w-md px-4 pb-24 pt-3 sm:max-w-lg">
 
-              <div className="rounded-2xl border border-zinc-800/60 bg-zinc-950/40 p-3 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur sm:p-4">
+              <div className="rounded-2xl border border-slate-700/40 bg-slate-800/30 p-3 shadow-md backdrop-blur-sm sm:p-4">
                   <Outlet/>
               </div>
           </main>
@@ -226,28 +226,22 @@ function App() {
   ) : (
 
 
-      <div className="min-h-dvh bg-zinc-950 text-zinc-100 relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,0.15),transparent_50%),radial-gradient(circle_at_50%_100%,rgba(56,189,248,0.1),transparent_50%)]" />
+      <div className="min-h-dvh bg-slate-900 text-slate-100 relative overflow-hidden">
           
           <div className="mx-auto flex min-h-dvh w-full max-w-md items-center justify-center px-4 py-10 sm:max-w-lg relative z-10">
               <div
-                  className="relative w-full overflow-hidden rounded-3xl border border-sky-500/20 bg-zinc-950/60 p-6 shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur animate-vehicular-float"
+                  className="relative w-full overflow-hidden rounded-3xl border border-slate-700/40 bg-slate-800/40 p-6 shadow-xl backdrop-blur-md"
                   aria-busy="true"
                   aria-live="polite"
               >
-                  <div className="absolute inset-0 pointer-events-none opacity-50">
-                      <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
-                  </div>
-
                   <div className="relative flex flex-col items-center text-center gap-4">
-                      <div className="relative inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-500/10 ring-1 ring-cyan-500/30">
-                          <div className="absolute inset-0 rounded-2xl bg-cyan-500/20 blur-lg animate-pulse" />
-                          <div className="relative h-8 w-8 animate-spin rounded-full border-4 border-cyan-400/20 border-t-cyan-400 border-l-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)]" />
+                      <div className="relative inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 ring-1 ring-indigo-500/20">
+                          <div className="relative h-8 w-8 animate-spin rounded-full border-4 border-indigo-400/20 border-t-indigo-400 border-l-indigo-400" />
                       </div>
 
                       <div className="min-w-0">
-                          <h1 className="text-xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-400">Loading your account…</h1>
-                          <p className="mt-2 text-sm leading-6 text-zinc-400/90 max-w-[250px] mx-auto">
+                          <h1 className="text-xl font-bold tracking-tight text-slate-100">Loading your account…</h1>
+                          <p className="mt-2 text-sm leading-6 text-slate-400 max-w-[250px] mx-auto">
                               Securing your session and fetching your vehicles securely.
                           </p>
                       </div>

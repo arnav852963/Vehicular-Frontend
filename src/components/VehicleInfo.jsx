@@ -127,40 +127,29 @@ export const VehicleInfo = () => {
 
             if (loading) {
                 return (
-                    <div className="min-h-dvh bg-zinc-950 text-zinc-100">
-                        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(900px_500px_at_20%_-10%,rgba(56,189,248,0.12),transparent_60%),radial-gradient(700px_450px_at_80%_0%,rgba(244,63,94,0.10),transparent_55%)]" />
+                    <div className="min-h-dvh bg-transparent text-slate-100">
+                        
                         <div className="relative mx-auto w-full max-w-md px-4 pb-24 pt-5">
-                            <div className="relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 shadow-[0_0_20px_rgba(56,189,248,0.05)] backdrop-blur">
-                                <div className="absolute inset-0 pointer-events-none">
-                                    <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
-                                </div>
+                            <div className="relative overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-800/40 p-5 shadow-sm backdrop-blur">
+                                
                                 <div className="relative z-10 flex flex-col gap-4">
-                                    <div className="h-4 w-24 rounded-lg bg-zinc-800/80 relative overflow-hidden" >
-                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
-                                    </div>
-                                    <div className="h-7 w-44 rounded-lg bg-zinc-800/80 relative overflow-hidden" >
-                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
-                                    </div>
+                                    <div className="h-4 w-24 rounded-lg bg-slate-700 animate-pulse" />
+                                    <div className="h-7 w-44 rounded-lg bg-slate-700 animate-pulse" />
+                                    
                                     <div className="mt-3 grid grid-cols-2 gap-3">
-                                        <div className="h-20 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 relative overflow-hidden">
-                                            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 to-transparent" />
-                                        </div>
-                                        <div className="h-20 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 relative overflow-hidden">
-                                            <div className="absolute inset-0 bg-gradient-to-tl from-emerald-500/5 to-transparent" />
-                                        </div>
+                                        <div className="h-20 rounded-2xl bg-slate-700/30 ring-1 ring-slate-700/50 animate-pulse" />
+                                        <div className="h-20 rounded-2xl bg-slate-700/30 ring-1 ring-slate-700/50 animate-pulse" />
                                     </div>
-                                    <div className="mt-2 h-52 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 relative overflow-hidden">
-                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
-                                    </div>
+                                    <div className="mt-2 h-52 rounded-2xl bg-slate-700/30 ring-1 ring-slate-700/50 animate-pulse" />
                                 </div>
                             </div>
                             
-                            <div className="mt-6 flex flex-col items-center justify-center animate-vehicular-float motion-reduce:animate-none">
+                            <div className="mt-6 flex flex-col items-center justify-center motion-reduce:animate-none">
                                 <span className="relative flex h-3 w-3 mb-2">
-                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
-                                    <span className="relative inline-flex h-3 w-3 rounded-full bg-cyan-500" />
+                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75" />
+                                    <span className="relative inline-flex h-3 w-3 rounded-full bg-indigo-500" />
                                 </span>
-                                <p className="text-sm font-medium tracking-widest text-cyan-500/80 uppercase">Loading Vehicle Data</p>
+                                <p className="text-sm font-medium tracking-widest text-indigo-400 uppercase">Loading Vehicle Data</p>
                             </div>
                         </div>
                     </div>
@@ -169,17 +158,17 @@ export const VehicleInfo = () => {
 
             if (error?.error) {
                 return (
-                    <div className="min-h-dvh bg-zinc-950 text-zinc-100 px-4 py-6">
+                    <div className="min-h-dvh bg-transparent text-slate-100 px-4 py-6">
                         <div className="mx-auto w-full max-w-md">
-                            <div className="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-5 shadow-[0_14px_40px_-28px_rgba(244,63,94,0.45)]">
+                            <div className="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-5 shadow-sm backdrop-blur-sm">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <p className="text-xs font-medium uppercase tracking-wide text-rose-200/80">Error</p>
+                                        <p className="text-xs font-medium uppercase tracking-wide text-rose-300">Error</p>
                                         <p className="mt-1 text-base font-semibold text-rose-100">{error.message || "Failed to fetch vehicle data"}</p>
                                     </div>
                                     <div className="mt-1 h-2.5 w-2.5 rounded-full bg-rose-500 shadow-[0_0_0_6px_rgba(244,63,94,0.14)]" />
                                 </div>
-                                <p className="mt-3 text-sm text-zinc-400">
+                                <p className="mt-3 text-sm text-slate-400">
                                     Please refresh and try again.
                                 </p>
                             </div>
@@ -189,21 +178,21 @@ export const VehicleInfo = () => {
             }
 
             return (
-                <div className="min-h-dvh bg-zinc-950 text-zinc-100">
-                    <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(900px_500px_at_20%_-10%,rgba(56,189,248,0.12),transparent_60%),radial-gradient(700px_450px_at_80%_0%,rgba(244,63,94,0.10),transparent_55%),radial-gradient(800px_500px_at_50%_120%,rgba(16,185,129,0.08),transparent_55%)]" />
+                <div className="min-h-dvh bg-transparent text-slate-100">
+                    
 
                     <div className="relative mx-auto w-full max-w-md px-4 pb-24 pt-5">
                         <header className="flex items-start justify-between gap-4">
                             <div>
-                                <p className="text-xs font-medium tracking-wide text-zinc-400">Vehicle</p>
-                                <h1 className="mt-1 text-2xl font-semibold leading-tight text-zinc-100">
+                                <p className="text-xs font-medium tracking-wide text-slate-400">Vehicle</p>
+                                <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-100">
                                     {vehicleInfo?.plateNumber ? (
-                                        <span className="text-sky-300">{vehicleInfo.plateNumber}</span>
+                                        <span className="text-indigo-400">{vehicleInfo.plateNumber}</span>
                                     ) : (
                                         "Vehicle Info"
                                     )}
                                 </h1>
-                                <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                                <p className="mt-2 text-sm leading-relaxed text-slate-400">
                                     Details for your registered vehicle.
                                 </p>
                             </div>
@@ -217,24 +206,24 @@ export const VehicleInfo = () => {
 
                         <section className="mt-5 grid grid-cols-2 gap-3">
                             {vehicleInfo?.vehicleType ? (
-                                <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/60 p-4">
-                                    <p className="text-xs font-medium text-zinc-400">Type</p>
-                                    <p className="mt-1 text-base font-semibold text-zinc-100">{vehicleInfo.vehicleType}</p>
+                                <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-4 shadow-sm backdrop-blur-sm">
+                                    <p className="text-xs font-medium text-slate-400">Type</p>
+                                    <p className="mt-1 text-base font-semibold text-slate-100">{vehicleInfo.vehicleType}</p>
                                 </div>
                             ) : null}
 
                             {vehicleInfo?.qrId ? (
-                                <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/60 p-4">
-                                    <p className="text-xs font-medium text-zinc-400">QR ID</p>
-                                    <p className="mt-1 font-mono text-sm font-semibold text-zinc-100">{vehicleInfo.qrId}</p>
+                                <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-4 shadow-sm backdrop-blur-sm">
+                                    <p className="text-xs font-medium text-slate-400">QR ID</p>
+                                    <p className="mt-1 font-mono text-sm font-semibold text-slate-100">{vehicleInfo.qrId}</p>
                                 </div>
                             ) : null}
                         </section>
 
                         {vehicleInfo?.description ? (
-                            <section className="mt-3 rounded-2xl border border-zinc-800/70 bg-zinc-900/55 p-4">
-                                <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Description</p>
-                                <p className="mt-1 text-sm leading-relaxed text-zinc-300">{vehicleInfo.description}</p>
+                            <section className="mt-3 rounded-2xl border border-slate-700/50 bg-slate-800/40 p-4 shadow-sm backdrop-blur-sm">
+                                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Description</p>
+                                <p className="mt-1 text-sm leading-relaxed text-slate-300">{vehicleInfo.description}</p>
                             </section>
                         ) : null}
 
@@ -243,15 +232,15 @@ export const VehicleInfo = () => {
                         {(vehicleInfo?.createdAt || vehicleInfo?.updatedAt) ? (
                             <section className="mt-3 grid grid-cols-2 gap-3">
                                 {vehicleInfo?.createdAt ? (
-                                    <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/55 p-4">
-                                        <p className="text-xs font-medium text-zinc-400">Created</p>
-                                        <p className="mt-1 text-xs font-medium text-zinc-200">{new Date(vehicleInfo.createdAt).toLocaleString()}</p>
+                                    <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-4 shadow-sm backdrop-blur-sm">
+                                        <p className="text-xs font-medium text-slate-400">Created</p>
+                                        <p className="mt-1 text-xs font-medium text-slate-200">{new Date(vehicleInfo.createdAt).toLocaleString()}</p>
                                     </div>
                                 ) : null}
                                 {vehicleInfo?.updatedAt ? (
-                                    <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/55 p-4">
-                                        <p className="text-xs font-medium text-zinc-400">Updated</p>
-                                        <p className="mt-1 text-xs font-medium text-zinc-200">{new Date(vehicleInfo.updatedAt).toLocaleString()}</p>
+                                    <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-4 shadow-sm backdrop-blur-sm">
+                                        <p className="text-xs font-medium text-slate-400">Updated</p>
+                                        <p className="mt-1 text-xs font-medium text-slate-200">{new Date(vehicleInfo.updatedAt).toLocaleString()}</p>
                                     </div>
                                 ) : null}
                             </section>
@@ -268,7 +257,7 @@ export const VehicleInfo = () => {
                                 <button
                                     type="button"
                                     onClick={() => setShowQr(true)}
-                                    className="w-full rounded-2xl border border-cyan-500/20 bg-cyan-500/10 px-4 py-3 text-sm font-semibold text-cyan-100 shadow-[0_10px_30px_-18px_rgba(34,211,238,0.45)] transition active:scale-[0.99]"
+                                    className="w-full rounded-2xl border border-indigo-500/20 bg-indigo-500/10 px-4 py-3 text-sm font-semibold text-indigo-200 shadow-sm transition active:scale-[0.99] hover:bg-indigo-500/20"
                                 >
                                     Show QR (screenshot-friendly)
                                 </button>
@@ -281,7 +270,7 @@ export const VehicleInfo = () => {
                             type="button"
                             onClick={handleQrActivation}
                             disabled={activationLoading}
-                            className={`w-full rounded-2xl px-4 py-3 text-sm font-semibold shadow-[0_10px_34px_-20px_rgba(0,0,0,0.65)] ring-1 transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 ${
+                            className={`w-full rounded-2xl px-4 py-3 text-sm font-semibold shadow-sm ring-1 transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 ${
                                 activationQr
                                     ? "border border-rose-500/20 bg-rose-500/10 text-rose-100 ring-rose-500/25"
                                     : "border border-emerald-500/20 bg-emerald-500/10 text-emerald-100 ring-emerald-500/25"
@@ -296,7 +285,7 @@ export const VehicleInfo = () => {
                                 <span>{activationQr ? "Deactivate QR" : "Activate QR"}</span>
                             )}
                         </button>
-                        <p className="mt-2 text-center text-xs text-zinc-500">
+                        <p className="mt-2 text-center text-xs text-slate-500">
                             {activationQr
                                 ? "Turning this off disables new guest scans."
                                 : "Turning this on allows guests to scan and contact you."}
@@ -309,28 +298,28 @@ export const VehicleInfo = () => {
                                 type="button"
                                 aria-label="Close QR"
                                 onClick={() => setShowQr(false)}
-                                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                                className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
                             />
 
                             <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-md px-4 pb-5">
-                                <div className="rounded-3xl border border-zinc-800/70 bg-zinc-950/95 p-4 shadow-[0_22px_70px_-40px_rgba(0,0,0,0.85)]">
+                                <div className="rounded-3xl border border-slate-700/50 bg-slate-800 shadow-2xl p-4">
                                     <div className="mb-3 flex items-center justify-between gap-3">
                                         <div className="min-w-0">
-                                            <p className="text-xs font-medium tracking-wide text-zinc-400">QR Code</p>
-                                            <p className="mt-0.5 text-sm font-semibold text-zinc-100">Screenshot or print</p>
+                                            <p className="text-xs font-medium tracking-wide text-slate-400">QR Code</p>
+                                            <p className="mt-0.5 text-sm font-semibold text-slate-100">Screenshot or print</p>
                                         </div>
                                         <div className="flex shrink-0 items-center gap-2">
                                             <button
                                                 type="button"
                                                 onClick={handleDownloadQr}
-                                                className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-100 shadow-[0_10px_30px_-22px_rgba(16,185,129,0.45)] transition active:scale-[0.99]"
+                                                className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-200 transition active:scale-[0.99] hover:bg-emerald-500/20"
                                             >
                                                 Download QR
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={() => setShowQr(false)}
-                                                className="rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-2 text-xs font-semibold text-zinc-200 transition active:scale-[0.99]"
+                                                className="rounded-xl border border-slate-600 bg-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition active:scale-[0.99] hover:bg-slate-600"
                                             >
                                                 Close
                                             </button>

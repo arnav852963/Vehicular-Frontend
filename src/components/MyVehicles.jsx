@@ -15,8 +15,7 @@ export const MyVehicles = ({urls}) => {
                         </p>
                     </div>
 
-                    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-zinc-900 to-slate-950 p-4 shadow-2xl shadow-black/40 ring-1 ring-white/10">
-                        <div className="pointer-events-none absolute -inset-10 bg-[radial-gradient(60%_40%_at_50%_0%,rgba(56,189,248,0.16),transparent_60%)]" />
+                    <div className="relative overflow-hidden rounded-2xl bg-slate-800/40 p-4 shadow-sm border border-slate-700/50">
                         <div className="relative flex items-start gap-3">
                             <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800/60 ring-1 ring-white/10">
                                 <div className="h-2.5 w-2.5 rounded-full bg-slate-300/60" />

@@ -21,8 +21,7 @@ export const Qr = ({qr , plateNumber}) => {
                         </div>
 
                         <div className="mt-5">
-                            <div className="relative overflow-hidden rounded-2xl border border-zinc-800/70 bg-gradient-to-b from-zinc-900/40 to-zinc-950/40 p-3">
-                                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,rgba(34,211,238,0.16),transparent_60%)]" />
+                            <div className="relative overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-800/40 p-3">
 
                                 <div className="relative mx-auto aspect-square w-full max-w-[320px] rounded-xl bg-white p-3 shadow-xl shadow-black/30 ring-1 ring-black/10">
 

@@ -118,31 +118,31 @@ useEffect(() => {
 
 } , [user , loading , navigate])
 
-if(error && error?.error){
+    if(error && error?.error){
 
-    return (
-        <Container>
-        <div className="min-h-dvh bg-zinc-950 text-zinc-100 px-4 py-6">
-            <div className="mx-auto w-full max-w-md">
-                <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/60 p-5 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.9)]">
-                    <div className="flex items-start justify-between gap-3">
-                        <div>
-                            <p className="text-sm font-medium text-rose-200/90">Something went wrong</p>
-                            <h1 className="mt-1 text-base font-semibold text-zinc-100">{error.message}</h1>
+        return (
+            <Container>
+            <div className="min-h-dvh bg-transparent text-slate-100 px-4 py-6">
+                <div className="mx-auto w-full max-w-md">
+                    <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-5 shadow-lg backdrop-blur-md">
+                        <div className="flex items-start justify-between gap-3">
+                            <div>
+                                <p className="text-sm font-medium text-rose-300">Something went wrong</p>
+                                <h1 className="mt-1 text-base font-semibold text-slate-100">{error.message}</h1>
+                            </div>
+                            <div className="mt-0.5 h-2.5 w-2.5 rounded-full bg-rose-500 shadow-[0_0_0_6px_rgba(244,63,94,0.14)]" />
                         </div>
-                        <div className="mt-0.5 h-2.5 w-2.5 rounded-full bg-rose-500 shadow-[0_0_0_6px_rgba(244,63,94,0.14)]" />
+                        <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                            Please refresh and try again. If this keeps happening, check your network or sign in again.
+                        </p>
                     </div>
-                    <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-                        Please refresh and try again. If this keeps happening, check your network or sign in again.
-                    </p>
                 </div>
             </div>
-        </div>
 
 
-    </Container>
-    )
-}
+        </Container>
+        )
+    }
 
 
 
@@ -154,72 +154,60 @@ if(error && error?.error){
     return !loading ?(
 
         <Container>
-        <div className="min-h-dvh bg-zinc-950 text-zinc-100">
-            <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(900px_500px_at_20%_-10%,rgba(56,189,248,0.12),transparent_60%),radial-gradient(700px_450px_at_80%_0%,rgba(244,63,94,0.10),transparent_55%),radial-gradient(800px_500px_at_50%_120%,rgba(16,185,129,0.10),transparent_55%)]" />
+        <div className="min-h-dvh bg-transparent text-slate-100">
 
             <div className="relative mx-auto w-full max-w-md px-4 pb-24 pt-5">
                 <header className="flex items-start justify-between gap-4">
                     <div>
-                        <p className="text-xs font-medium tracking-wide text-zinc-400">Dashboard</p>
-                        <h1 className="mt-1 text-2xl font-semibold leading-tight">
-                            Welcome to <span className="text-sky-300">vehicular</span>
+                        <p className="text-xs font-medium tracking-wide text-slate-400">Dashboard</p>
+                        <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-50">
+                            Welcome to <span className="text-indigo-400">Vehicular</span>
                         </h1>
-                        <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                        <p className="mt-2 text-sm leading-relaxed text-slate-400">
                             Manage your vehicles and respond fast when someone scans your QR.
                         </p>
                     </div>
 
                     <button
                         onClick={()=> setTriggerAddVehicle(true)}
-                        className="group relative inline-flex items-center gap-2 rounded-full bg-sky-500/10 px-4 py-2 text-sm font-semibold text-sky-100 shadow-[0_18px_55px_-32px_rgba(56,189,248,0.70)] transition active:scale-[0.985]"
+                        className="group relative inline-flex items-center gap-2 rounded-full bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-100 shadow-md transition active:scale-[0.985] ring-1 ring-indigo-400/25"
                     >
-                        <span className="pointer-events-none absolute -inset-6 rounded-full bg-[radial-gradient(160px_80px_at_70%_10%,rgba(56,189,248,0.35),transparent_60%),radial-gradient(160px_80px_at_20%_90%,rgba(16,185,129,0.22),transparent_60%)] opacity-70 blur-2xl transition duration-300 group-hover:opacity-100" />
-                        <span className="pointer-events-none absolute inset-0 rounded-full p-[1px]">
-                            <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_var(--a),rgba(255,255,255,0.20),rgba(56,189,248,0.95),rgba(16,185,129,0.75),rgba(255,255,255,0.15))] opacity-90 animate-vehicular-border-spin" />
-                            <span className="absolute inset-[1px] rounded-full bg-zinc-950/65" />
-                        </span>
-                        <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-white/10" />
-                        <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-full opacity-80">
-                            <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/22 to-transparent animate-vehicular-shimmer" />
-                        </span>
-
-                        <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/10 ring-1 ring-sky-400/25">
-                            <span className="pointer-events-none absolute -inset-2 rounded-full bg-sky-500/20 blur-md opacity-70" />
+                        <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-200">
                             <Plus size={18} className="relative" />
                         </span>
                         <span className="relative">Vehicle</span>
                     </button>
                 </header>
 
-                <section className="mt-5 grid grid-cols-2 gap-3">
-                    <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/60 p-4">
-                        <p className="text-xs font-medium text-zinc-400">Vehicles</p>
-                        <p className="mt-1 text-2xl font-semibold text-zinc-100">{vehicles.length}</p>
-                        <p className="mt-1 text-xs text-zinc-500">Registered plates</p>
+                <section className="mt-6 grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl border border-slate-700/40 bg-slate-800/40 p-5 shadow-sm backdrop-blur-sm">
+                        <p className="text-xs font-medium text-slate-400">Vehicles</p>
+                        <p className="mt-1 text-3xl font-bold text-slate-100">{vehicles.length}</p>
+                        <p className="mt-1 text-xs text-slate-500">Registered plates</p>
                     </div>
-                    <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/60 p-4">
-                        <p className="text-xs font-medium text-zinc-400">Active chats</p>
-                        <p className="mt-1 text-2xl font-semibold text-zinc-100">{chats.length}</p>
-                        <p className="mt-1 text-xs text-zinc-500">Open conversations</p>
+                    <div className="rounded-2xl border border-slate-700/40 bg-slate-800/40 p-5 shadow-sm backdrop-blur-sm">
+                        <p className="text-xs font-medium text-slate-400">Active chats</p>
+                        <p className="mt-1 text-3xl font-bold text-slate-100">{chats.length}</p>
+                        <p className="mt-1 text-xs text-slate-500">Open conversations</p>
                     </div>
                 </section>
 
-                <section className="mt-4 rounded-2xl border border-zinc-800/70 bg-zinc-900/50 p-4">
+                <section className="mt-4 rounded-2xl border border-slate-700/40 bg-slate-800/30 p-4 backdrop-blur-sm">
                     <div className="flex items-center justify-between gap-3">
                         <div>
-                            <p className="text-sm font-semibold text-zinc-100">Quick actions</p>
-                            <p className="mt-1 text-xs text-zinc-500">Jump to the most common tasks</p>
+                            <p className="text-sm font-semibold text-slate-100">Quick actions</p>
+                            <p className="mt-1 text-xs text-slate-400">Jump to the most common tasks</p>
                         </div>
                         <div className="flex items-center gap-2">
                             <Link
                                 to="/vehicle"
-                                className="rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2 text-xs font-medium text-zinc-200"
+                                className="rounded-xl border border-slate-700/50 bg-slate-800/60 px-3 py-2 text-xs font-medium text-slate-200 shadow-sm transition hover:bg-slate-700/60"
                             >
                                 Vehicles
                             </Link>
                             <Link
                                 to="/chats"
-                                className="rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 py-2 text-xs font-medium text-zinc-200"
+                                className="rounded-xl border border-slate-700/50 bg-slate-800/60 px-3 py-2 text-xs font-medium text-slate-200 shadow-sm transition hover:bg-slate-700/60"
                             >
                                 Chats
                             </Link>
@@ -229,45 +217,33 @@ if(error && error?.error){
 
                 <section className="mt-8">
                     {!vehicles.length && (
-                        <div className="relative overflow-hidden rounded-2xl border border-sky-500/20 bg-zinc-900/60 p-6 shadow-[0_0_30px_rgba(56,189,248,0.1)] backdrop-blur">
-                            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(400px_400px_at_50%_0%,rgba(56,189,248,0.1),transparent_70%)]" />
+                        <div className="relative overflow-hidden rounded-2xl border border-indigo-500/20 bg-slate-800/40 p-6 shadow-lg backdrop-blur-md">
                             
                             <div className="relative flex flex-col items-center text-center">
                                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 ring-1 ring-amber-500/25">
-                                    <div className="absolute inset-0 rounded-2xl bg-amber-500/20 blur-md opacity-60" />
+                                    <div className="absolute inset-0 rounded-2xl bg-amber-500/10 blur-md opacity-60" />
                                     <span className="relative h-2.5 w-2.5 rounded-full bg-amber-400 shadow-[0_0_0_6px_rgba(251,191,36,0.12)] animate-pulse" />
                                 </div>
                                 
-                                <h2 className="text-lg font-semibold text-zinc-100">Add your first vehicle</h2>
-                                <p className="mt-2 text-sm leading-relaxed text-zinc-400 max-w-[280px]">
+                                <h2 className="text-lg font-semibold text-slate-100">Add your first vehicle</h2>
+                                <p className="mt-2 text-sm leading-relaxed text-slate-400 max-w-[280px]">
                                     Once added, you can generate a QR and start receiving anonymous alerts.
                                 </p>
                             </div>
 
                             <div className="relative mt-6 mb-3 flex flex-col items-center justify-center animate-vehicular-float motion-reduce:animate-none">
-                                <span className="mb-2 text-[10px] font-bold uppercase tracking-widest text-sky-400">Get Started Here</span>
-                                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-sky-500/10 ring-1 ring-sky-500/20">
-                                    <ArrowDown size={14} className="text-sky-400" />
+                                <span className="mb-2 text-[10px] font-bold uppercase tracking-widest text-indigo-400">Get Started Here</span>
+                                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500/10 ring-1 ring-indigo-500/20">
+                                    <ArrowDown size={14} className="text-indigo-400" />
                                 </div>
                             </div>
 
                             <button
                                 onClick={()=> setTriggerAddVehicle(true)}
-                                className="group relative w-full overflow-hidden rounded-2xl bg-sky-500 px-4 py-3 text-sm font-extrabold tracking-wide text-zinc-950 shadow-[0_18px_55px_-25px_rgba(56,189,248,0.75)] transition active:scale-[0.985]"
+                                className="group relative w-full overflow-hidden rounded-2xl bg-indigo-500 px-4 py-3 text-sm font-bold tracking-wide text-slate-50 shadow-md transition hover:bg-indigo-400 active:scale-[0.985]"
                             >
-                                <span className="pointer-events-none absolute -inset-10 rounded-[26px] bg-[radial-gradient(220px_120px_at_20%_0%,rgba(255,255,255,0.22),transparent_60%),radial-gradient(240px_140px_at_80%_10%,rgba(56,189,248,0.45),transparent_60%),radial-gradient(240px_140px_at_40%_110%,rgba(16,185,129,0.28),transparent_60%)] opacity-75 blur-2xl" />
-                                <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-zinc-950/18" />
-                                <span className="pointer-events-none absolute -inset-[2px] rounded-[18px] opacity-90">
-                                    <span className="absolute inset-0 rounded-[18px] bg-[conic-gradient(from_var(--a),rgba(255,255,255,0.20),rgba(56,189,248,0.95),rgba(16,185,129,0.80),rgba(255,255,255,0.18))] animate-vehicular-border-spin" />
-                                    <span className="absolute inset-[2px] rounded-[16px] bg-sky-500" />
-                                </span>
-                                <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl opacity-90">
-                                    <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/28 to-transparent animate-vehicular-shimmer" />
-                                </span>
                                 <span className="relative inline-flex items-center justify-center gap-2">
-                                    <span className="grid h-6 w-6 place-items-center rounded-xl bg-zinc-950/15 ring-1 ring-zinc-950/20">
-                                        <Plus size={16} />
-                                    </span>
+                                    <Plus size={18} />
                                     Add your first vehicle
                                 </span>
                             </button>
@@ -277,67 +253,50 @@ if(error && error?.error){
 
                 {!!vehicles.length && (
                     <section className="mt-5">
-                        <div className="relative overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-900/40 p-5">
-                            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(600px_280px_at_20%_0%,rgba(56,189,248,0.10),transparent_60%),radial-gradient(520px_260px_at_85%_20%,rgba(16,185,129,0.08),transparent_60%)]" />
-                            <div className="pointer-events-none absolute inset-0 opacity-80 motion-reduce:hidden">
-                                <div className="animate-vehicular-shimmer absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
-                            </div>
-
+                        <div className="relative overflow-hidden rounded-2xl border border-slate-700/40 bg-slate-800/40 p-5 shadow-sm backdrop-blur-sm">
+                            
                             <div className="relative flex items-start justify-between gap-3">
                                 <div>
-                                    <p className="text-sm font-semibold text-zinc-100">You’re all set</p>
-                                    <p className="mt-1 text-sm leading-relaxed text-zinc-400">
-                                        Keep your phone handy — alerts and replies live here.
+                                    <p className="text-sm font-semibold text-slate-100">System Status: Active</p>
+                                    <p className="mt-1 text-sm leading-relaxed text-slate-400">
+                                        Your vehicles are securely monitored.
                                     </p>
                                 </div>
-                                <div className="mt-0.5 flex items-center gap-2">
-                                    <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_0_6px_rgba(16,185,129,0.12)]" />
-                                    <span className="text-xs font-medium text-zinc-400">Ready</span>
+                                <div className="mt-0.5 flex items-center gap-2 bg-emerald-500/10 px-2 py-1 rounded-full ring-1 ring-emerald-500/20">
+                                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                                    <span className="text-[10px] font-medium text-emerald-300 uppercase tracking-wide">Online</span>
                                 </div>
                             </div>
 
-                            <div className="relative mt-4 grid grid-cols-3 gap-3">
-                                <div className="animate-vehicular-float rounded-2xl border border-zinc-800/70 bg-zinc-950/40 p-3 motion-reduce:animate-none">
-                                    <p className="text-[11px] font-medium text-zinc-400">Tip</p>
-                                    <p className="mt-1 text-xs text-zinc-200">Print QR in high contrast</p>
+                            {/* Replaced static tips with an interactive hub space */}
+                            <div className="relative mt-5 h-32 rounded-xl border border-slate-700/50 bg-slate-900/50 flex flex-col items-center justify-center overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 to-transparent" />
+                                <div className="text-slate-500 mb-2">
+                                    <ArrowDown size={24} className="opacity-50" />
                                 </div>
-                                <div className="animate-vehicular-float rounded-2xl border border-zinc-800/70 bg-zinc-950/40 p-3 [animation-delay:220ms] motion-reduce:animate-none">
-                                    <p className="text-[11px] font-medium text-zinc-400">Tip</p>
-                                    <p className="mt-1 text-xs text-zinc-200">Keep chats short & clear</p>
-                                </div>
-                                <div className="animate-vehicular-float rounded-2xl border border-zinc-800/70 bg-zinc-950/40 p-3 [animation-delay:440ms] motion-reduce:animate-none">
-                                    <p className="text-[11px] font-medium text-zinc-400">Tip</p>
-                                    <p className="mt-1 text-xs text-zinc-200">Reply fast to reduce stress</p>
-                                </div>
+                                <p className="text-sm font-medium text-slate-400">3D Hub Placeholder</p>
                             </div>
 
                             <div className="relative mt-4">
-                                <div className="relative overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-950/30 px-4 py-3">
-                                    <div className="pointer-events-none absolute inset-0 opacity-70 motion-reduce:hidden">
-                                        <div className="animate-vehicular-shimmer absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-sky-300/10 to-transparent" />
-                                    </div>
+                                <div className="relative overflow-hidden rounded-2xl border border-slate-700/40 bg-slate-900/40 px-4 py-3">
                                     <div className="relative flex items-center justify-between gap-3">
                                         <div className="flex items-center gap-3">
-                                            <div className="relative">
-                                                <span className="absolute -inset-2 rounded-full bg-sky-500/10 blur-md motion-reduce:hidden" />
-                                                <span className="relative flex h-9 w-9 items-center justify-center rounded-full border border-sky-500/25 bg-sky-500/10 text-sky-200">
-                                                    <span className="text-base">@</span>
-                                                </span>
+                                            <div className="relative flex h-9 w-9 items-center justify-center rounded-full border border-indigo-500/25 bg-indigo-500/10 text-indigo-300">
+                                                <span className="text-base">@</span>
                                             </div>
                                             <div>
-                                                <p className="text-sm font-semibold text-zinc-100">Email backup alerts</p>
-                                                <p className="mt-0.5 text-xs leading-relaxed text-zinc-400">
-                                                    If you miss a ping here, we’ll also notify you on email.
+                                                <p className="text-sm font-medium text-slate-200">Email backup alerts</p>
+                                                <p className="mt-0.5 text-xs leading-relaxed text-slate-400">
+                                                    If you miss a ping here, we’ll email you.
                                                 </p>
                                             </div>
                                         </div>
 
                                         <div className="flex items-center gap-2">
                                             <span className="relative inline-flex h-2.5 w-2.5">
-                                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400/70 opacity-60 motion-reduce:hidden" />
-                                                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-sky-400" />
+                                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-60" />
+                                                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-indigo-400" />
                                             </span>
-                                            <span className="text-[11px] font-medium text-zinc-400">On</span>
                                         </div>
                                     </div>
                                 </div>
@@ -348,21 +307,17 @@ if(error && error?.error){
 
                 {triggerAddVehicle && (
                     <div className="fixed inset-0 z-50">
-                        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-                        <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-md rounded-t-3xl border border-zinc-800 bg-zinc-950 p-4 shadow-[0_-20px_60px_-35px_rgba(0,0,0,0.95)]">
-                            <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-zinc-800" />
+                        <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm" />
+                        <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-md rounded-t-3xl border border-slate-700 bg-slate-900 p-4 shadow-2xl">
+                            <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-slate-700" />
                             <div className="mb-3 flex items-center justify-between">
                                 <button
                                     type="button"
                                     onClick={() => setTriggerAddVehicle(false)}
-                                    className="group relative inline-flex items-center gap-2 rounded-full bg-zinc-900/40 px-3 py-2 text-xs font-semibold text-zinc-200 ring-1 ring-white/10 transition active:scale-[0.98]"
+                                    className="group relative inline-flex items-center gap-2 rounded-full bg-slate-800 px-3 py-2 text-xs font-medium text-slate-200 ring-1 ring-slate-700 transition hover:bg-slate-700 active:scale-[0.98]"
                                 >
-                                    <span className="pointer-events-none absolute -inset-6 rounded-full bg-[radial-gradient(120px_60px_at_30%_0%,rgba(56,189,248,0.25),transparent_60%),radial-gradient(120px_60px_at_80%_100%,rgba(244,63,94,0.18),transparent_60%)] opacity-0 blur-xl transition duration-300 group-hover:opacity-100" />
-                                    <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-full opacity-80">
-                                        <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/12 to-transparent animate-vehicular-shimmer" />
-                                    </span>
-                                    <span className="relative grid h-7 w-7 place-items-center rounded-full bg-zinc-950/40 ring-1 ring-white/10">
-                                        <span className="text-base leading-none">←</span>
+                                    <span className="relative grid h-6 w-6 place-items-center rounded-full bg-slate-900 ring-1 ring-slate-700">
+                                        <span className="text-sm leading-none">←</span>
                                     </span>
                                     <span className="relative">Back</span>
                                 </button>
@@ -377,49 +332,34 @@ if(error && error?.error){
 
     ) : (
         <Container>
-            <div className="min-h-dvh bg-zinc-950 text-zinc-100 px-4 py-8">
+            <div className="min-h-dvh bg-transparent text-slate-100 px-4 py-8">
                 <div className="mx-auto w-full max-w-md relative">
-                    <div className="absolute -inset-4 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.15),transparent_50%)] blur-2xl pointer-events-none" />
-                    
-                    <div className="relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 shadow-[0_0_20px_rgba(56,189,248,0.05)] backdrop-blur">
-                        <div className="absolute inset-0 pointer-events-none">
-                            <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
-                        </div>
+                    <div className="relative overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-800/40 p-5 shadow-lg backdrop-blur-sm">
                         
                         <div className="relative z-10 flex flex-col gap-4">
                             <div className="flex items-center gap-3">
-                                <div className="h-10 w-10 shrink-0 rounded-full bg-zinc-800/80 ring-1 ring-zinc-700 overflow-hidden relative">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
-                                </div>
+                                <div className="h-10 w-10 shrink-0 rounded-full bg-slate-700 animate-pulse" />
                                 <div className="space-y-2 flex-1">
-                                    <div className="h-4 w-1/3 rounded-lg bg-zinc-800/80 relative overflow-hidden">
-                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
-                                    </div>
-                                    <div className="h-3 w-1/4 rounded-lg bg-zinc-800/60" />
+                                    <div className="h-4 w-1/3 rounded-lg bg-slate-700 animate-pulse" />
+                                    <div className="h-3 w-1/4 rounded-lg bg-slate-700/60 animate-pulse" />
                                 </div>
                             </div>
                             
-                            <div className="mt-2 h-20 w-full rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
-                            </div>
+                            <div className="mt-2 h-20 w-full rounded-2xl bg-slate-700/50 animate-pulse" />
                             
                             <div className="grid grid-cols-2 gap-3 mt-2">
-                                <div className="h-24 rounded-2xl bg-zinc-800/40 border border-zinc-800 relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 to-transparent" />
-                                </div>
-                                <div className="h-24 rounded-2xl bg-zinc-800/40 border border-zinc-800 relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-gradient-to-tl from-emerald-500/5 to-transparent" />
-                                </div>
+                                <div className="h-24 rounded-2xl bg-slate-700/40 animate-pulse" />
+                                <div className="h-24 rounded-2xl bg-slate-700/40 animate-pulse" />
                             </div>
                         </div>
                     </div>
                     
-                    <div className="mt-6 flex flex-col items-center justify-center animate-vehicular-float motion-reduce:animate-none">
+                    <div className="mt-6 flex flex-col items-center justify-center motion-reduce:animate-none">
                         <span className="relative flex h-3 w-3 mb-2">
-                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
-                            <span className="relative inline-flex h-3 w-3 rounded-full bg-cyan-500" />
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75" />
+                            <span className="relative inline-flex h-3 w-3 rounded-full bg-indigo-500" />
                         </span>
-                        <p className="text-sm font-medium tracking-widest text-cyan-500/80 uppercase">Loading Dashboard</p>
+                        <p className="text-sm font-medium tracking-widest text-indigo-400 uppercase">Loading Dashboard</p>
                     </div>
                 </div>
             </div>

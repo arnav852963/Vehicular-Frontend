@@ -99,20 +99,20 @@ if(error && error?.error){
     return (
         <Container>
             <div className="relative">
-                <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(900px_500px_at_20%_-10%,rgba(56,189,248,0.12),transparent_60%),radial-gradient(700px_450px_at_85%_0%,rgba(244,63,94,0.10),transparent_55%)]" />
+                
                 <div className="mx-auto w-full max-w-md pb-24 pt-5">
-                    <p className="text-xs font-medium tracking-wide text-zinc-400">Garage</p>
-                    <h1 className="mt-1 text-2xl font-semibold leading-tight text-zinc-100">My <span className="text-sky-300">Vehicles</span></h1>
+                    <p className="text-xs font-medium tracking-wide text-slate-400">Garage</p>
+                    <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-100">My <span className="text-indigo-400">Vehicles</span></h1>
 
-                    <div className="mt-5 rounded-2xl border border-rose-500/20 bg-rose-500/10 p-5 shadow-[0_14px_40px_-28px_rgba(244,63,94,0.45)]">
+                    <div className="mt-5 rounded-2xl border border-rose-500/20 bg-rose-500/10 p-5 shadow-sm backdrop-blur-sm">
                         <div className="flex items-start justify-between gap-3">
                             <div>
-                                <p className="text-xs font-medium uppercase tracking-wide text-rose-200/80">Error</p>
+                                <p className="text-xs font-medium uppercase tracking-wide text-rose-300">Error</p>
                                 <p className="mt-1 text-base font-semibold text-rose-100">{error?.message || "An error occurred while fetching vehicles"}</p>
                             </div>
                             <div className="mt-1 h-2.5 w-2.5 rounded-full bg-rose-500 shadow-[0_0_0_6px_rgba(244,63,94,0.14)]" />
                         </div>
-                        <p className="mt-3 text-sm text-zinc-400">Refresh the page and try again.</p>
+                        <p className="mt-3 text-sm text-slate-400">Refresh the page and try again.</p>
                     </div>
                 </div>
             </div>
@@ -122,53 +122,44 @@ if(error && error?.error){
     return !loading ? (
         <Container>
             <div className="relative">
-                <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(900px_500px_at_20%_-10%,rgba(56,189,248,0.12),transparent_60%),radial-gradient(700px_450px_at_80%_0%,rgba(244,63,94,0.10),transparent_55%),radial-gradient(800px_500px_at_50%_120%,rgba(16,185,129,0.08),transparent_55%)]" />
+                
 
                 <div className="mx-auto w-full max-w-md pb-24 pt-5">
                     <div className="flex items-start justify-between gap-4">
                         <div>
-                            <p className="text-xs font-medium tracking-wide text-zinc-400">Garage</p>
-                            <h1 className="mt-1 text-2xl font-semibold leading-tight text-zinc-100">My <span className="text-sky-300">Vehicles</span></h1>
-                            <p className="mt-2 text-sm leading-relaxed text-zinc-400">Tap a vehicle to open status, images and QR.</p>
+                            <p className="text-xs font-medium tracking-wide text-slate-400">Garage</p>
+                            <h1 className="mt-1 text-2xl font-semibold leading-tight text-slate-100">My <span className="text-indigo-400">Vehicles</span></h1>
+                            <p className="mt-2 text-sm leading-relaxed text-slate-400">Tap a vehicle to open status, images and QR.</p>
                         </div>
 
-                        <div className="shrink-0 rounded-2xl border border-zinc-800/70 bg-zinc-900/60 px-3 py-2 text-right">
-                            <p className="text-[11px] font-medium text-zinc-400">Total</p>
-                            <p className="text-lg font-semibold text-zinc-100">{vehicles.length}</p>
+                        <div className="shrink-0 rounded-2xl border border-slate-700/50 bg-slate-800/40 px-3 py-2 text-right shadow-sm backdrop-blur-sm">
+                            <p className="text-[11px] font-medium text-slate-400">Total</p>
+                            <p className="text-lg font-semibold text-slate-100">{vehicles.length}</p>
                         </div>
                     </div>
 
                     {(!vehicles || vehicles?.length === 0) && (
                         <>
-                            <div className="mt-5 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-5 text-amber-200">
+                            <div className="mt-5 rounded-2xl border border-slate-700/50 bg-slate-800/40 p-5 shadow-sm backdrop-blur-sm">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <p className="text-sm font-semibold text-zinc-100">No vehicles yet</p>
-                                        <p className="mt-1 text-sm leading-relaxed text-zinc-400">Add a vehicle to generate a QR and receive alerts.</p>
+                                        <p className="text-sm font-semibold text-slate-100">No vehicles yet</p>
+                                        <p className="mt-1 text-sm leading-relaxed text-slate-400">Add a vehicle to generate a QR and receive alerts.</p>
                                     </div>
-                                    <div className="mt-1 h-2.5 w-2.5 rounded-full bg-amber-400 shadow-[0_0_0_6px_rgba(251,191,36,0.12)]" />
+                                    <div className="mt-1 h-2.5 w-2.5 rounded-full bg-slate-500" />
                                 </div>
                             </div>
 
                             <div className="mt-4">
                                 <button
                                     onClick={() => setTriggerAddVehicle(true)}
-                                    className="group relative w-full overflow-hidden rounded-2xl bg-sky-500 px-4 py-3.5 text-center text-sm font-extrabold tracking-wide text-zinc-950 shadow-[0_18px_55px_-25px_rgba(56,189,248,0.80)] transition active:scale-[0.985]"
+                                    className="group relative w-full overflow-hidden rounded-2xl bg-indigo-500 px-4 py-3.5 text-center text-sm font-bold tracking-wide text-slate-50 shadow-md transition hover:bg-indigo-400 active:scale-[0.985]"
                                 >
-                                    <span className="pointer-events-none absolute -inset-10 rounded-[26px] bg-[radial-gradient(220px_120px_at_20%_0%,rgba(255,255,255,0.22),transparent_60%),radial-gradient(240px_140px_at_80%_10%,rgba(56,189,248,0.45),transparent_60%),radial-gradient(240px_140px_at_40%_110%,rgba(16,185,129,0.28),transparent_60%)] opacity-75 blur-2xl" />
-                                    <span className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-zinc-950/18" />
-                                    <span className="pointer-events-none absolute -inset-[2px] rounded-[18px] opacity-90">
-                                        <span className="absolute inset-0 rounded-[18px] bg-[conic-gradient(from_var(--a),rgba(255,255,255,0.20),rgba(56,189,248,0.95),rgba(16,185,129,0.80),rgba(255,255,255,0.18))] animate-vehicular-border-spin" />
-                                        <span className="absolute inset-[2px] rounded-[16px] bg-sky-500" />
-                                    </span>
-                                    <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl opacity-90">
-                                        <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/28 to-transparent animate-vehicular-shimmer" />
-                                    </span>
+                                    
 
                                     <span className="relative inline-flex items-center justify-center gap-2">
-                                        <span className="grid h-7 w-7 place-items-center rounded-xl bg-zinc-950/15 ring-1 ring-zinc-950/20">
-                                            <Plus size={16} />
-                                        </span>
+                                        
+                                        <Plus size={18} />
                                         Add Vehicle
                                     </span>
                                 </button>
@@ -179,14 +170,10 @@ if(error && error?.error){
                                             <button
                                                 type="button"
                                                 onClick={() => setTriggerAddVehicle(false)}
-                                                className="group relative inline-flex items-center gap-2 rounded-full bg-zinc-900/40 px-3 py-2 text-xs font-semibold text-zinc-200 ring-1 ring-white/10 transition active:scale-[0.98]"
+                                                className="group relative inline-flex items-center gap-2 rounded-full bg-slate-800 px-3 py-2 text-xs font-medium text-slate-200 ring-1 ring-slate-700 transition hover:bg-slate-700 active:scale-[0.98]"
                                             >
-                                                <span className="pointer-events-none absolute -inset-6 rounded-full bg-[radial-gradient(120px_60px_at_30%_0%,rgba(56,189,248,0.25),transparent_60%),radial-gradient(120px_60px_at_80%_100%,rgba(244,63,94,0.18),transparent_60%)] opacity-0 blur-xl transition duration-300 group-hover:opacity-100" />
-                                                <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-full opacity-80">
-                                                    <span className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/12 to-transparent animate-vehicular-shimmer" />
-                                                </span>
-                                                <span className="relative grid h-7 w-7 place-items-center rounded-full bg-zinc-950/40 ring-1 ring-white/10">
-                                                    <span className="text-base leading-none">←</span>
+                                                <span className="relative grid h-6 w-6 place-items-center rounded-full bg-slate-900 ring-1 ring-slate-700">
+                                                    <span className="text-sm leading-none">←</span>
                                                 </span>
                                                 <span className="relative">Back</span>
                                             </button>
@@ -202,17 +189,15 @@ if(error && error?.error){
                         <div className="mt-5 space-y-3">
                             {vehicles.map((vehicle , index) => (
                                 <div key={vehicle?._id || index}>
-                                    <div className={`group relative overflow-hidden rounded-2xl border border-zinc-800/70 bg-zinc-900/55 shadow-[0_18px_60px_-44px_rgba(0,0,0,0.95)] transition duration-200 ${explodingId === vehicle?._id ? "animate-vehicular-destroy" : "active:scale-[0.99]"}`}>
-                                        <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
-                                            <div className="absolute -inset-10 bg-[radial-gradient(420px_220px_at_30%_0%,rgba(56,189,248,0.18),transparent_60%),radial-gradient(380px_220px_at_80%_15%,rgba(16,185,129,0.10),transparent_55%)]" />
-                                        </div>
+                                    <div className={`group relative overflow-hidden rounded-2xl border border-slate-700/40 bg-slate-800/40 shadow-sm backdrop-blur-sm transition duration-200 ${explodingId === vehicle?._id ? "animate-vehicular-destroy" : "hover:bg-slate-800/60 active:scale-[0.99]"}`}>
+                                        
 
                                         <Link
                                             to={`/vehicleStatus/${vehicle?._id}`}
                                             className="block"
                                         >
                                             <div className="relative">
-                                                <div className="aspect-[16/9] w-full bg-zinc-900">
+                                                <div className="aspect-[16/9] w-full bg-slate-900">
                                                     {vehicle?.vehicleImage?.[0] ? (
                                                         <img
                                                             src={vehicle.vehicleImage[0]}
@@ -223,18 +208,18 @@ if(error && error?.error){
                                                     ) : (
                                                         <div className="flex h-full w-full items-center justify-center">
                                                             <div className="flex flex-col items-center gap-2 px-6 text-center">
-                                                                <div className="h-10 w-10 rounded-xl bg-zinc-800/60 ring-1 ring-white/10" />
-                                                                <p className="text-xs font-medium text-zinc-400">No image</p>
+                                                                <div className="h-10 w-10 rounded-xl bg-slate-800/60 ring-1 ring-slate-700" />
+                                                                <p className="text-xs font-medium text-slate-500">No image</p>
                                                             </div>
                                                         </div>
                                                     )}
                                                 </div>
 
-                                                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_55%_at_50%_0%,rgba(56,189,248,0.12),transparent_65%)]" />
-                                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-950/50 via-transparent to-transparent" />
+                                                
+                                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
 
                                                 <div className="pointer-events-none absolute right-3 top-3 grid place-items-center">
-                                                    <div className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-zinc-950/45 px-2.5 py-1 text-[11px] font-semibold text-zinc-200 backdrop-blur-md">
+                                                    <div className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-slate-900/45 px-2.5 py-1 text-[11px] font-semibold text-slate-200 backdrop-blur-md">
                                                         Open
                                                         <ChevronRight className="h-4 w-4 opacity-80 transition group-hover:translate-x-0.5" />
                                                     </div>
@@ -245,12 +230,12 @@ if(error && error?.error){
                                         <div className="p-4">
                                             <div className="flex items-start justify-between gap-3">
                                                 <div className="min-w-0">
-                                                    <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Plate</p>
-                                                    <p className="mt-1 truncate text-base font-semibold text-zinc-100">
+                                                    <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Plate</p>
+                                                    <p className="mt-1 truncate text-base font-semibold text-slate-100">
                                                         {vehicle?.plateNumber}
                                                     </p>
                                                     {vehicle?.vehicleType ? (
-                                                        <p className="mt-1 text-xs text-zinc-500">{vehicle.vehicleType}</p>
+                                                        <p className="mt-1 text-xs text-slate-500">{vehicle.vehicleType}</p>
                                                     ) : null}
                                                 </div>
 
@@ -269,10 +254,10 @@ if(error && error?.error){
                                                             handleDeleteVehicle(vehicle?._id)
                                                         }}
                                                         disabled={deletingId === vehicle?._id}
-                                                        className={`relative mt-1 inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-2xl border text-sm font-semibold transition active:scale-[0.98] ${deletingId === vehicle?._id ? "border-rose-500/25 bg-rose-500/10 text-rose-200" : "border-white/10 bg-zinc-950/35 text-zinc-200 hover:border-rose-400/25 hover:bg-rose-500/10 hover:text-rose-200"}`}
+                                                        className={`relative mt-1 inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-2xl border text-sm font-semibold transition active:scale-[0.98] ${deletingId === vehicle?._id ? "border-rose-500/25 bg-rose-500/10 text-rose-200" : "border-slate-700 bg-slate-800 text-slate-300 hover:border-rose-400/25 hover:bg-rose-500/10 hover:text-rose-200"}`}
                                                         aria-label="Delete vehicle"
                                                     >
-                                                        <span className="pointer-events-none absolute -inset-8 bg-[radial-gradient(80px_60px_at_50%_20%,rgba(244,63,94,0.18),transparent_65%)] opacity-80" />
+                                                        
                                                         {deletingId === vehicle?._id ? (
                                                             <Loader2 className="relative h-4.5 w-4.5 animate-spin" />
                                                         ) : (
@@ -283,10 +268,10 @@ if(error && error?.error){
                                             </div>
 
                                             <div className="mt-3 flex items-center justify-between">
-                                                <Link to={`/vehicleStatus/${vehicle?._id}`} className="inline-flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-200">
+                                                <Link to={`/vehicleStatus/${vehicle?._id}`} className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-slate-200">
                                                     Tap to view status • QR • images
                                                 </Link>
-                                                <ChevronRight className="h-5 w-5 text-zinc-400 transition group-hover:translate-x-0.5 group-hover:text-zinc-200" />
+                                                <ChevronRight className="h-5 w-5 text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-slate-300" />
                                             </div>
                                         </div>
                                     </div>
@@ -300,36 +285,27 @@ if(error && error?.error){
     ) : (
         <Container>
             <div className="relative">
-                <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(900px_500px_at_20%_-10%,rgba(56,189,248,0.12),transparent_60%)]" />
+                
                 <div className="mx-auto w-full max-w-md pb-24 pt-5 relative">
-                    <div className="relative overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 shadow-[0_0_20px_rgba(56,189,248,0.05)] backdrop-blur">
-                        <div className="absolute inset-0 pointer-events-none">
-                            <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
-                        </div>
+                    <div className="relative overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-800/40 p-5 shadow-sm backdrop-blur-sm">
+                        
                         <div className="relative z-10 flex flex-col gap-4">
-                            <div className="h-4 w-20 rounded-lg bg-zinc-800/80 relative overflow-hidden" >
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
-                            </div>
-                            <div className="h-7 w-44 rounded-lg bg-zinc-800/80 relative overflow-hidden" >
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
-                            </div>
+                            <div className="h-4 w-20 rounded-lg bg-slate-700 animate-pulse" />
+                            <div className="h-7 w-44 rounded-lg bg-slate-700 animate-pulse" />
+                            
                             <div className="mt-4 space-y-4">
-                                <div className="h-40 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 relative overflow-hidden">
-                                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
-                                </div>
-                                <div className="h-40 rounded-2xl bg-zinc-800/50 ring-1 ring-zinc-700/50 relative overflow-hidden">
-                                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
-                                </div>
+                                <div className="h-40 rounded-2xl bg-slate-700/30 ring-1 ring-slate-700/50 animate-pulse" />
+                                <div className="h-40 rounded-2xl bg-slate-700/30 ring-1 ring-slate-700/50 animate-pulse" />
                             </div>
                         </div>
                     </div>
                     
-                    <div className="mt-6 flex flex-col items-center justify-center animate-vehicular-float motion-reduce:animate-none">
+                    <div className="mt-6 flex flex-col items-center justify-center motion-reduce:animate-none">
                         <span className="relative flex h-3 w-3 mb-2">
-                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
-                            <span className="relative inline-flex h-3 w-3 rounded-full bg-cyan-500" />
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75" />
+                            <span className="relative inline-flex h-3 w-3 rounded-full bg-indigo-500" />
                         </span>
-                        <p className="text-sm font-medium tracking-widest text-cyan-500/80 uppercase">Loading Vehicles</p>
+                        <p className="text-sm font-medium tracking-widest text-indigo-400 uppercase">Loading Vehicles</p>
                     </div>
                 </div>
             </div>

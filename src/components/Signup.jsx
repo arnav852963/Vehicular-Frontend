@@ -60,7 +60,7 @@ export const Signup = () => {
 
         } )()
 
-    }, []);
+    }, [isAuth , pathAfterSubmit , navigate]);
 
 
     const handleGoogleLogin = async () => {
@@ -258,23 +258,9 @@ export const Signup = () => {
 
 if(error.error){
     return (
-        <div className="relative min-h-screen bg-zinc-950 text-zinc-100 px-4 py-6 sm:px-6 flex items-start justify-center overflow-hidden">
-            <div className="pointer-events-none absolute inset-0">
-                <div className="absolute inset-0 opacity-[0.18]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.22) 1px, transparent 0)", backgroundSize: "26px 26px" }} />
-                <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-black" />
-                <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(closest-side at 50% 10%, rgba(34,211,238,0.10), transparent 60%), radial-gradient(closest-side at 20% 80%, rgba(16,185,129,0.08), transparent 60%)" }} />
-                <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 85%)" }} />
-            </div>
+        <div className="relative min-h-screen bg-slate-900 text-slate-100 px-4 py-6 sm:px-6 flex items-start justify-center">
             <div className="w-full max-w-md">
-                <div className="relative overflow-hidden rounded-3xl border border-rose-500/30 bg-zinc-900/60 p-6 shadow-xl shadow-black/40">
-                    <style>{`@keyframes vehicular-sweep{0%{transform:translateX(-160%) skewX(-18deg)}100%{transform:translateX(160%) skewX(-18deg)}}`}</style>
-                    <div className="pointer-events-none absolute inset-0 opacity-60">
-                        <div className="absolute -inset-y-12 left-0 w-2/3 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ animation: "vehicular-sweep 4.6s linear infinite" }} />
-                        <div className="absolute -inset-y-12 left-0 w-2/3 bg-gradient-to-r from-transparent via-white/7 to-transparent" style={{ animation: "vehicular-sweep 4.6s linear infinite", animationDelay: "-2.3s" }} />
-                    </div>
-                    <div className="pointer-events-none absolute -top-32 -right-24 h-72 w-72 rounded-full bg-rose-500/10 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-36 -left-24 h-80 w-80 rounded-full bg-cyan-500/10 blur-3xl" />
-
+                <div className="relative overflow-hidden rounded-3xl border border-rose-500/30 bg-slate-800/60 p-6 shadow-xl">
                     <div className="mb-3 flex items-center justify-between">
                         <Logo />
                         <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 text-[11px] font-semibold text-rose-200">
@@ -283,7 +269,7 @@ if(error.error){
                     </div>
 
                     <h1 className="text-sm font-medium text-rose-200">{error.message}</h1>
-                    <p className="mt-2 text-xs text-zinc-400">
+                    <p className="mt-2 text-xs text-slate-400">
                         Try again, or use Google sign-in for the quickest flow.
                     </p>
                 </div>
@@ -292,43 +278,20 @@ if(error.error){
     )
 }
 
-
-
-
-
-
-
-
     return !loading ? (
         <>
-
-            <div className="relative min-h-screen bg-zinc-950 text-zinc-100 px-4 py-6 sm:px-6 flex items-start justify-center overflow-hidden">
-                <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute inset-0 opacity-[0.18]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.22) 1px, transparent 0)", backgroundSize: "26px 26px" }} />
-                    <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-black" />
-                    <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(closest-side at 50% 10%, rgba(34,211,238,0.10), transparent 60%), radial-gradient(closest-side at 20% 80%, rgba(16,185,129,0.08), transparent 60%)" }} />
-                    <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 85%)" }} />
-                </div>
+            <div className="relative min-h-screen bg-slate-900 text-slate-100 px-4 py-6 sm:px-6 flex items-start justify-center">
                 <div className="w-full max-w-md">
-                    <div className="relative overflow-hidden rounded-3xl border border-zinc-800/80 bg-zinc-900/60 backdrop-blur p-6 shadow-xl shadow-black/40">
-                        <style>{`@keyframes vehicular-sweep{0%{transform:translateX(-160%) skewX(-18deg)}100%{transform:translateX(160%) skewX(-18deg)}}`}</style>
-                        <div className="pointer-events-none absolute inset-0 opacity-55">
-                            <div className="absolute -inset-y-12 left-0 w-2/3 bg-gradient-to-r from-transparent via-white/10 to-transparent" style={{ animation: "vehicular-sweep 4.6s linear infinite" }} />
-                            <div className="absolute -inset-y-12 left-0 w-2/3 bg-gradient-to-r from-transparent via-white/7 to-transparent" style={{ animation: "vehicular-sweep 4.6s linear infinite", animationDelay: "-2.3s" }} />
-                        </div>
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-emerald-500/5" />
-                        <div className="pointer-events-none absolute -top-32 -right-28 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
-                        <div className="pointer-events-none absolute -bottom-36 -left-28 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
-
+                    <div className="relative overflow-hidden rounded-3xl border border-slate-700/60 bg-slate-800/40 backdrop-blur p-6 shadow-xl">
                         <div className="mb-5 flex items-center justify-between">
                             <Logo />
-                            <span className="rounded-full border border-zinc-700 bg-zinc-950/30 px-3 py-1 text-[11px] font-semibold text-zinc-200">
+                            <span className="rounded-full border border-slate-700 bg-slate-800/80 px-3 py-1 text-[11px] font-semibold text-slate-300">
                                 Privacy-first
                             </span>
                         </div>
                         <div className="mb-5">
-                            <h2 className="text-2xl font-semibold tracking-tight text-zinc-100">Sign in</h2>
-                            <p className="mt-1 text-sm text-zinc-400">
+                            <h2 className="text-2xl font-semibold tracking-tight text-slate-100">Sign in</h2>
+                            <p className="mt-1 text-sm text-slate-400">
                                 Fast, private contact—no phone numbers. Use Google (recommended) or email.
                             </p>
                         </div>
@@ -337,140 +300,94 @@ if(error.error){
                             <button
                                 onClick={handleGoogleLogin}
                                 type="button"
-                                className="group relative w-full overflow-hidden inline-flex items-center justify-center gap-3 rounded-2xl bg-cyan-500 px-4 py-3.5 text-sm font-semibold text-zinc-950 shadow-lg shadow-cyan-500/10 hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 focus:ring-offset-2 focus:ring-offset-zinc-950"
+                                className="group relative w-full overflow-hidden inline-flex items-center justify-center gap-3 rounded-2xl bg-indigo-500 px-4 py-3.5 text-sm font-semibold text-slate-50 shadow-md hover:bg-indigo-400 transition"
                             >
-                                <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-                                <div className="h-8 w-8 rounded-xl bg-zinc-950/20 ring-1 ring-zinc-950/10 flex items-center justify-center">
+                                <div className="h-8 w-8 rounded-xl bg-slate-900/30 flex items-center justify-center">
                                     <span className="text-base font-black leading-none">G</span>
                                 </div>
                                 <span className="tracking-wide">Google</span>
-                                <span className="ml-auto inline-flex items-center rounded-xl bg-zinc-950/20 px-2.5 py-1 text-[11px] font-semibold text-zinc-900">
+                                <span className="ml-auto inline-flex items-center rounded-xl bg-slate-900/30 px-2.5 py-1 text-[11px] font-semibold text-slate-200">
                                     Recommended
                                 </span>
                             </button>
 
-                            <p className="mt-2 text-xs text-zinc-500">
+                            <p className="mt-2 text-xs text-slate-400">
                                 Tip: Google sign-in is fastest—no password to remember.
                             </p>
                         </div>
 
                         <div className="relative my-4">
                             <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-zinc-800" />
+                                <div className="w-full border-t border-slate-700/60" />
                             </div>
                             <div className="relative flex justify-center">
-                                <span className="rounded-full border border-zinc-800 bg-zinc-950/20 px-3 py-1 text-[11px] font-semibold text-zinc-300">Email sign-in</span>
+                                <span className="rounded-full border border-slate-700/60 bg-slate-800 px-3 py-1 text-[11px] font-semibold text-slate-400">Email sign-in</span>
                             </div>
                         </div>
 
                         <form onSubmit={handleSubmit(handleSignup)} className="space-y-4">
+                            <div>
+                                <Input
+                                    type="text"
+                                    placeholder="email"
+                                    label="Email"
+                                    className=""
+                                    {...register("email", {
+                                        required: true,
+                                        pattern: {
+                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                            message: "Invalid email",
+                                        }
+                                    })}
+                                />
+                            </div>
 
+                            <div>
+                                <Input
+                                    type="password"
+                                    placeholder="password"
+                                    label="Password"
+                                    className=""
+                                    {...register("password", {
+                                        required: true,
+                                        minLength: {
+                                            value: 6,
+                                            message: "Password must be at least 6 characters",
+                                        }
+                                    })}
+                                />
+                            </div>
 
-                    <div>
-
-
-                    <Input
-                    type="text"
-                    placeholder="email"
-                    label = "Email"
-                    className=""
-                    {...register("email" , {
-
-                        required: true,
-                            pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                message: "Invalid email",
-                            }
-
-
-
-                    }
-
-
-
-                    )}
-
-                    />
+                            <div>
+                                <button
+                                    type="submit"
+                                    className="w-full inline-flex items-center justify-center rounded-2xl border border-slate-700/70 bg-slate-800 px-4 py-3 text-sm font-semibold text-slate-100 hover:bg-slate-700 transition"
+                                >
+                                    Continue with email
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
-                    <div>
-                        <Input
-                        type="password"
-                        placeholder="password"
-                        label = "Password"
-                        className=""
-                        {...register("password" , {
-                            required: true,
-                            minLength: {
-                                value: 6,
-                                message: "Password must be at least 6 characters",
-                            }
-                        })}
-
-
-
-                        />
-
-
-
-
-
-                    </div>
-
-                    <div>
-                        <button
-                            type="submit"
-                            className="w-full inline-flex items-center justify-center rounded-2xl border border-zinc-700/70 bg-zinc-800/70 px-4 py-3 text-sm font-semibold text-zinc-100 shadow-sm shadow-black/10 hover:bg-zinc-700/70 focus:outline-none focus:ring-2 focus:ring-cyan-400/60 focus:ring-offset-2 focus:ring-offset-zinc-950"
-                        >
-                            Continue with email
-                        </button>
-                    </div>
-
-
-
-
-                </form>
-
-                    </div>
-
-                    <p className="mt-4 text-center text-xs text-zinc-500">
+                    <p className="mt-4 text-center text-xs text-slate-400">
                         By continuing, you agree to use Vehicular responsibly.
                     </p>
                 </div>
-
             </div>
-
-
-
-
-
-
-
-
         </>
     ) : (
-
         <>
-            <div className="relative min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center overflow-hidden">
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.1),transparent_50%)]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(56,189,248,0.15),transparent_50%)] pointer-events-none blur-3xl opacity-60" />
-                
+            <div className="relative min-h-screen bg-slate-900 text-slate-100 flex items-center justify-center">
                 <div className="w-full max-w-md px-4 relative z-10">
-                    <div className="relative overflow-hidden rounded-3xl border border-sky-500/20 bg-zinc-900/60 p-6 shadow-[0_0_30px_rgba(56,189,248,0.1)] backdrop-blur">
-                        <div className="absolute inset-0 pointer-events-none">
-                            <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/10 to-transparent animate-vehicular-shimmer" />
-                        </div>
-                        <div className="pointer-events-none absolute -top-24 -right-24 h-48 w-48 rounded-full bg-cyan-500/10 blur-3xl" />
-                        
+                    <div className="relative overflow-hidden rounded-3xl border border-slate-700/50 bg-slate-800/40 p-6 shadow-xl backdrop-blur">
                         <div className="flex flex-col items-center text-center gap-5 mt-4">
-                            <div className="relative inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-500/10 ring-1 ring-cyan-500/20">
-                                <div className="absolute inset-0 rounded-2xl bg-cyan-500/20 blur-md opacity-60 animate-pulse" />
-                                <div className="relative h-8 w-8 animate-spin rounded-full border-4 border-cyan-400/20 border-t-cyan-400 border-r-cyan-400" />
+                            <div className="relative inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 ring-1 ring-indigo-500/20">
+                                <div className="relative h-8 w-8 animate-spin rounded-full border-4 border-indigo-400/20 border-t-indigo-400 border-r-indigo-400" />
                             </div>
                             
                             <div className="mb-2">
-                                <h2 className="text-xl font-bold tracking-tight text-zinc-100">Starting engine...</h2>
-                                <p className="mt-1.5 text-sm text-zinc-400 max-w-[200px] mx-auto">
+                                <h2 className="text-xl font-bold tracking-tight text-slate-100">Starting engine...</h2>
+                                <p className="mt-1.5 text-sm text-slate-400 max-w-[200px] mx-auto">
                                     Hang tight, we're securely logging you in.
                                 </p>
                             </div>
@@ -478,7 +395,6 @@ if(error.error){
                     </div>
                 </div>
             </div>
-    </>
-
+        </>
     )
 }

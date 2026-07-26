@@ -214,64 +214,53 @@ if(error?.error) {
                     <div className="grid grid-cols-1 gap-3">
                         {options.map((option, index) => {
                             const isOther = option === "Other";
-                            const accent =
-                                option === "You’re blocking me"
-                                    ? "border-rose-500/30 bg-rose-500/10 text-rose-50"
-                                    : option === "Lights are on" || option === "Window is open"
-                                        ? "border-amber-400/30 bg-amber-400/10 text-amber-50"
-                                        : option === "Someone hit/scratched your vehicle" || option === "Your alarm is going off"
-                                            ? "border-rose-500/25 bg-rose-500/10 text-rose-50"
-                                            : "border-zinc-800/70 bg-zinc-950/50 text-zinc-100";
+                            const isSelected = isOther ? other : (!other && message === option);
 
                             return (
                                 <button
                                     key={index}
+                                    type="button"
                                     onClick={() => {
-
-                                        if(option === "Other")  setOther(true);
-
-
-                                       else {setMessage(option) ; setButtonClicked(true)  }}}
+                                        if (isOther) {
+                                            setOther(true);
+                                            setMessage("");
+                                        } else {
+                                            setOther(false);
+                                            setMessage(option);
+                                            setButtonClicked(true);
+                                        }
+                                    }}
                                     value={option}
                                     className={
-                                        "group w-full rounded-2xl border px-4 py-4 text-left shadow-sm outline-none transition active:scale-[0.99] " +
-                                        "focus-visible:ring-2 focus-visible:ring-cyan-400/40 focus-visible:ring-offset-0 " +
-                                        (isOther
-                                            ? "border-zinc-800/70 bg-zinc-950/60 text-zinc-100 hover:bg-zinc-900/40"
-                                            : accent + " hover:bg-zinc-900/30")
+                                        "group w-full rounded-2xl border px-4 py-4 text-left shadow-sm outline-none transition-all duration-200 active:scale-[0.99] " +
+                                        (isSelected
+                                            ? "border-indigo-500 bg-indigo-500/20 text-slate-50 ring-2 ring-indigo-500/50 shadow-md shadow-indigo-500/10"
+                                            : "border-slate-700/60 bg-slate-800/40 text-slate-300 hover:border-slate-600 hover:bg-slate-800/70")
                                     }
                                 >
                                     <div className="flex items-start justify-between gap-3">
                                         <div className="min-w-0">
                                             <p className="text-base font-semibold leading-6 tracking-tight">{option}</p>
-                                            <p className="mt-1 text-xs leading-5 text-zinc-300/80">
-                                                Tap to notify the owner.
+                                            <p className={`mt-1 text-xs leading-5 ${isSelected ? "text-indigo-200" : "text-slate-400"}`}>
+                                                {isSelected ? "Selected" : "Tap to notify the owner."}
                                             </p>
                                         </div>
 
                                         <div
                                             className={
-                                                "mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-2xl ring-1 transition " +
-                                                (isOther
-                                                    ? "bg-zinc-900/40 ring-zinc-800/70"
-                                                    : option === "You’re blocking me" || option === "Someone hit/scratched your vehicle" || option === "Your alarm is going off"
-                                                        ? "bg-rose-500/10 ring-rose-500/20"
-                                                        : option === "Lights are on" || option === "Window is open"
-                                                            ? "bg-amber-400/10 ring-amber-400/20"
-                                                            : "bg-zinc-900/40 ring-zinc-800/70")
+                                                "mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-2xl ring-1 transition-all duration-200 " +
+                                                (isSelected
+                                                    ? "bg-indigo-500 text-slate-950 ring-indigo-400 shadow-sm"
+                                                    : "bg-slate-800/80 ring-slate-700/60 text-slate-400")
                                             }
                                             aria-hidden="true"
                                         >
                                             <span
                                                 className={
-                                                    "h-2.5 w-2.5 rounded-full " +
-                                                    (isOther
-                                                        ? "bg-zinc-300/70"
-                                                        : option === "You’re blocking me" || option === "Someone hit/scratched your vehicle" || option === "Your alarm is going off"
-                                                            ? "bg-rose-500"
-                                                            : option === "Lights are on" || option === "Window is open"
-                                                                ? "bg-amber-400"
-                                                                : "bg-zinc-400")
+                                                    "rounded-full transition-all duration-200 " +
+                                                    (isSelected
+                                                        ? "h-3 w-3 bg-slate-950"
+                                                        : "h-2 w-2 bg-slate-500")
                                                 }
                                             />
                                         </div>
@@ -430,22 +419,16 @@ if(error?.error) {
 
         </div>
     ) : (
-        <div className="min-h-[60dvh] bg-transparent text-zinc-100 flex items-center relative overflow-hidden">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.1),transparent_70%)]" />
+        <div className="min-h-[60dvh] bg-transparent text-slate-100 flex items-center relative">
             <div className="mx-auto w-full max-w-md px-4 py-10 sm:max-w-lg relative z-10">
                 <div
-                    className="relative overflow-hidden rounded-3xl border border-sky-500/20 bg-zinc-950/60 p-6 shadow-[0_0_40px_rgba(56,189,248,0.15)] backdrop-blur animate-vehicular-float"
+                    className="relative overflow-hidden rounded-3xl border border-slate-700/50 bg-slate-800/40 p-6 shadow-xl backdrop-blur"
                     aria-busy="true"
                     aria-live="polite"
                 >
-                    <div className="absolute inset-0 pointer-events-none opacity-50">
-                        <div className="absolute -left-1/2 top-0 h-full w-[200%] bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent animate-vehicular-shimmer" />
-                    </div>
-
                     <div className="relative flex flex-col items-center text-center gap-4">
-                        <div className="relative inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-500/10 ring-1 ring-cyan-500/30">
-                            <div className="absolute inset-0 rounded-2xl bg-cyan-500/20 blur-lg animate-pulse" />
-                            <div className="relative h-8 w-8 animate-spin rounded-full border-4 border-cyan-400/20 border-t-cyan-400 border-l-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)]" />
+                        <div className="relative inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 ring-1 ring-indigo-500/30">
+                            <div className="relative h-8 w-8 animate-spin rounded-full border-4 border-indigo-400/20 border-t-indigo-400 border-l-indigo-400" />
                         </div>
 
                         <div className="min-w-0">

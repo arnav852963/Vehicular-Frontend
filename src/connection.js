@@ -5,6 +5,6 @@ console.log("--------" , url)
 export const connectSocket  =  (auth= {})=>{
     return io(url , {
         withCredentials: true,
-        auth: auth
+        auth: auth,
     })
 }

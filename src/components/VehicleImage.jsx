@@ -30,7 +30,6 @@ export const VehicleImage = ({url , key}) => {
                 </div>
 
 
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_0%,rgba(56,189,248,0.10),transparent_65%)]" />
             </div>
         </div>
         
