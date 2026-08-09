@@ -1,12 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { useTheme } from "../context/ThemeContext.jsx";
+import { useTheme } from "../../context/ThemeContext.jsx";
 
-export const Vehicle3DHub = () => {
+export const VehicleType3DHub = ({ type = "CAR" }) => {
     const mountRef = useRef(null);
-    const [isAccelerating, setIsAccelerating] = useState(false);
     const { theme } = useTheme();
     const isBeige = theme === "beige";
+
+    const normalizedType = typeof type === "string" ? type.toUpperCase() : "CAR";
+    const activeType = ["CAR", "MOTORCYCLE", "TRUCK", "BUS"].includes(normalizedType)
+        ? normalizedType
+        : "CAR";
 
     useEffect(() => {
         const container = mountRef.current;
@@ -16,8 +20,8 @@ export const Vehicle3DHub = () => {
         const height = container.clientHeight;
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-        camera.position.set(4.4, 2.5, 5.4);
+        const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
+        camera.position.set(4.5, 2.5, 5.5);
         camera.lookAt(0, 0.1, 0);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -140,7 +144,7 @@ export const Vehicle3DHub = () => {
             trees.push(singleTree);
         });
 
-        // 2. PROCEDURAL HIGH-FPS LUXURY SUV MODEL
+        // 2. PROCEDURAL HIGH-FPS VEHICLE MODEL CREATION
         const vehicleGroup = new THREE.Group();
         worldGroup.add(vehicleGroup);
 
@@ -153,50 +157,216 @@ export const Vehicle3DHub = () => {
         const headLensMat = new THREE.MeshBasicMaterial({ color: colors.headlight });
         const tailLensMat = new THREE.MeshBasicMaterial({ color: colors.taillight });
 
-        const mainChassis = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.42, 1.42), bodyMat);
-        mainChassis.position.set(0, -0.06, 0);
+        if (activeType === "MOTORCYCLE") {
+            // === DUCATI SUPERBIKE MODEL ===
+            const ducatiRedMat = new THREE.MeshStandardMaterial({
+                color: isBeige ? 0xd97706 : 0xdc2626,
+                roughness: 0.15,
+                metalness: 0.75,
+            });
 
-        const hoodMesh = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.24, 1.32), bodyMat);
-        hoodMesh.position.set(1.15, 0.1, 0);
-        hoodMesh.rotation.z = -0.05;
+            const mainFrame = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.32, 0.38), ducatiRedMat);
+            mainFrame.position.set(0, 0.08, 0);
 
-        const grilleFascia = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.32, 1.15), trimMat);
-        grilleFascia.position.set(1.61, 0.02, 0);
+            const noseFairing = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.35, 0.44), ducatiRedMat);
+            noseFairing.position.set(0.68, 0.28, 0);
+            noseFairing.rotation.z = -0.22;
 
-        const windshield = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.48, 1.22), glassMat);
-        windshield.position.set(0.48, 0.44, 0);
-        windshield.rotation.z = -0.42;
+            const leftWinglet = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.03, 0.3), trimMat);
+            leftWinglet.position.set(0.75, 0.22, 0.32);
+            const rightWinglet = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.03, 0.3), trimMat);
+            rightWinglet.position.set(0.75, 0.22, -0.32);
 
-        const mainCabinGlass = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.52, 1.25), glassMat);
-        mainCabinGlass.position.set(-0.25, 0.46, 0);
+            const fuelTank = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.34, 0.42), ducatiRedMat);
+            fuelTank.position.set(0.15, 0.35, 0);
 
-        const roofPanel = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.05, 1.24), bodyMat);
-        roofPanel.position.set(-0.22, 0.72, 0);
+            const windscreen = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.28, 0.38), glassMat);
+            windscreen.position.set(0.62, 0.48, 0);
+            windscreen.rotation.z = -0.45;
 
-        const hlL = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.42), headLensMat);
-        hlL.position.set(1.6, 0.12, 0.42);
-        const hlR = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.42), headLensMat);
-        hlR.position.set(1.6, 0.12, -0.42);
+            const trellisMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.9, roughness: 0.2 });
+            const trellisL = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.6), trellisMat);
+            trellisL.rotation.z = 0.5;
+            trellisL.position.set(0.2, 0.12, 0.21);
+            const trellisR = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.6), trellisMat);
+            trellisR.rotation.z = 0.5;
+            trellisR.position.set(0.2, 0.12, -0.21);
 
-        const tailBar = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 1.28), tailLensMat);
-        tailBar.position.set(-1.41, 0.24, 0);
+            const exhaustL = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.35), trimMat);
+            exhaustL.rotation.z = Math.PI / 2;
+            exhaustL.position.set(-0.62, 0.22, 0.12);
+            const exhaustR = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.35), trimMat);
+            exhaustR.rotation.z = Math.PI / 2;
+            exhaustR.position.set(-0.62, 0.22, -0.12);
 
-        vehicleGroup.add(mainChassis, hoodMesh, grilleFascia, windshield, mainCabinGlass, roofPanel, hlL, hlR, tailBar);
+            const leftHead = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 0.18), headLensMat);
+            leftHead.position.set(0.92, 0.25, 0.12);
+            const rightHead = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 0.18), headLensMat);
+            rightHead.position.set(0.92, 0.25, -0.12);
+            const tail = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.06, 0.18), tailLensMat);
+            tail.position.set(-0.78, 0.35, 0);
 
-        const carWheelCoords = [
-            [0.85, -0.24, 0.72], [0.85, -0.24, -0.72],
-            [-0.85, -0.24, 0.72], [-0.85, -0.24, -0.72],
-        ];
-        carWheelCoords.forEach(([x, y, z]) => {
-            const wGroup = new THREE.Group();
-            wGroup.position.set(x, y, z);
-            wGroup.rotation.x = Math.PI / 2;
-            const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.24, 32), tireMat);
-            const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.25, 16), rimMat);
-            wGroup.add(tire, rim);
-            vehicleGroup.add(wGroup);
-            wheels.push(wGroup);
-        });
+            const seat = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.14, 0.34), trimMat);
+            seat.position.set(-0.35, 0.28, 0);
+
+            const fork = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.82, 12), trellisMat);
+            fork.rotation.z = -0.32;
+            fork.position.set(0.72, -0.05, 0);
+
+            vehicleGroup.add(
+                mainFrame, noseFairing, leftWinglet, rightWinglet, fuelTank, windscreen,
+                trellisL, trellisR, exhaustL, exhaustR, leftHead, rightHead, tail, seat, fork
+            );
+
+            const bikeWheelCoords = [[0.76, -0.26, 0], [-0.72, -0.26, 0]];
+            bikeWheelCoords.forEach(([x, y, z]) => {
+                const wGroup = new THREE.Group();
+                wGroup.position.set(x, y, z);
+                wGroup.rotation.x = Math.PI / 2;
+                const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.2, 28), tireMat);
+                const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.21, 14), rimMat);
+                wGroup.add(tire, rim);
+                vehicleGroup.add(wGroup);
+                wheels.push(wGroup);
+            });
+        } else if (activeType === "TRUCK") {
+            // === HEAVY SEMI-TRUCK MODEL ===
+            const cab = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.1, 1.45), bodyMat);
+            cab.position.set(0.6, 0.42, 0);
+            vehicleGroup.add(cab);
+
+            const cabGlass = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.48, 1.38), glassMat);
+            cabGlass.position.set(0.85, 0.68, 0);
+            vehicleGroup.add(cabGlass);
+
+            const grille = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.65, 1.25), trimMat);
+            grille.position.set(1.42, 0.22, 0);
+            vehicleGroup.add(grille);
+
+            const stackL = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.2, 12), trimMat);
+            stackL.position.set(-0.15, 0.85, 0.68);
+            const stackR = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.2, 12), trimMat);
+            stackR.position.set(-0.15, 0.85, -0.68);
+            vehicleGroup.add(stackL, stackR);
+
+            const frame = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.28, 1.2), trimMat);
+            frame.position.set(-0.9, -0.08, 0);
+            vehicleGroup.add(frame);
+
+            const hlL = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.35), headLensMat);
+            hlL.position.set(1.42, 0.05, 0.45);
+            const hlR = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.35), headLensMat);
+            hlR.position.set(1.42, 0.05, -0.45);
+            vehicleGroup.add(hlL, hlR);
+
+            const truckWheelCoords = [
+                [0.85, -0.26, 0.72], [0.85, -0.26, -0.72],
+                [-0.6, -0.26, 0.72], [-0.6, -0.26, -0.72],
+                [-1.2, -0.26, 0.72], [-1.2, -0.26, -0.72],
+            ];
+            truckWheelCoords.forEach(([x, y, z]) => {
+                const wGroup = new THREE.Group();
+                wGroup.position.set(x, y, z);
+                wGroup.rotation.x = Math.PI / 2;
+                const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.22, 28), tireMat);
+                const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.23, 14), rimMat);
+                wGroup.add(tire, rim);
+                vehicleGroup.add(wGroup);
+                wheels.push(wGroup);
+            });
+        } else if (activeType === "BUS") {
+            // === STREAMLINED EXPRESS TRANSIT COACH BUS MODEL ===
+            const busBody = new THREE.Mesh(new THREE.BoxGeometry(3.6, 1.2, 1.4), bodyMat);
+            busBody.position.set(0, 0.45, 0);
+            vehicleGroup.add(busBody);
+
+            const leftGlass = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.48, 0.04), glassMat);
+            leftGlass.position.set(0.1, 0.65, 0.71);
+            const rightGlass = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.48, 0.04), glassMat);
+            rightGlass.position.set(0.1, 0.65, -0.71);
+
+            const frontWindshield = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.85, 1.32), glassMat);
+            frontWindshield.position.set(1.81, 0.58, 0);
+            vehicleGroup.add(leftGlass, rightGlass, frontWindshield);
+
+            const destSign = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.14, 0.95), headLensMat);
+            destSign.position.set(1.81, 0.98, 0);
+            vehicleGroup.add(destSign);
+
+            const bumper = new THREE.Mesh(new THREE.BoxGeometry(3.7, 0.22, 1.44), trimMat);
+            bumper.position.set(0, -0.1, 0);
+            vehicleGroup.add(bumper);
+
+            const hlL = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.35), headLensMat);
+            hlL.position.set(1.81, -0.05, 0.48);
+            const hlR = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.35), headLensMat);
+            hlR.position.set(1.81, -0.05, -0.48);
+            const tailBar = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.1, 1.28), tailLensMat);
+            tailBar.position.set(-1.81, 0.2, 0);
+            vehicleGroup.add(hlL, hlR, tailBar);
+
+            const busWheelCoords = [
+                [1.2, -0.26, 0.72], [1.2, -0.26, -0.72],
+                [-0.8, -0.26, 0.72], [-0.8, -0.26, -0.72],
+                [-1.35, -0.26, 0.72], [-1.35, -0.26, -0.72],
+            ];
+            busWheelCoords.forEach(([x, y, z]) => {
+                const wGroup = new THREE.Group();
+                wGroup.position.set(x, y, z);
+                wGroup.rotation.x = Math.PI / 2;
+                const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.22, 28), tireMat);
+                const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.23, 14), rimMat);
+                wGroup.add(tire, rim);
+                vehicleGroup.add(wGroup);
+                wheels.push(wGroup);
+            });
+        } else {
+            // === MODERN LUXURY SUV / CAR MODEL === (CAR & OTHER)
+            const mainChassis = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.42, 1.42), bodyMat);
+            mainChassis.position.set(0, -0.06, 0);
+
+            const hoodMesh = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.24, 1.32), bodyMat);
+            hoodMesh.position.set(1.15, 0.1, 0);
+            hoodMesh.rotation.z = -0.05;
+
+            const grilleFascia = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.32, 1.15), trimMat);
+            grilleFascia.position.set(1.61, 0.02, 0);
+
+            const windshield = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.48, 1.22), glassMat);
+            windshield.position.set(0.48, 0.44, 0);
+            windshield.rotation.z = -0.42;
+
+            const mainCabinGlass = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.52, 1.25), glassMat);
+            mainCabinGlass.position.set(-0.25, 0.46, 0);
+
+            const roofPanel = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.05, 1.24), bodyMat);
+            roofPanel.position.set(-0.22, 0.72, 0);
+
+            const hlL = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.42), headLensMat);
+            hlL.position.set(1.6, 0.12, 0.42);
+            const hlR = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.42), headLensMat);
+            hlR.position.set(1.6, 0.12, -0.42);
+
+            const tailBar = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 1.28), tailLensMat);
+            tailBar.position.set(-1.41, 0.24, 0);
+
+            vehicleGroup.add(mainChassis, hoodMesh, grilleFascia, windshield, mainCabinGlass, roofPanel, hlL, hlR, tailBar);
+
+            const carWheelCoords = [
+                [0.85, -0.24, 0.72], [0.85, -0.24, -0.72],
+                [-0.85, -0.24, 0.72], [-0.85, -0.24, -0.72],
+            ];
+            carWheelCoords.forEach(([x, y, z]) => {
+                const wGroup = new THREE.Group();
+                wGroup.position.set(x, y, z);
+                wGroup.rotation.x = Math.PI / 2;
+                const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.24, 32), tireMat);
+                const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.25, 16), rimMat);
+                wGroup.add(tire, rim);
+                vehicleGroup.add(wGroup);
+                wheels.push(wGroup);
+            });
+        }
 
         // 3. Motion Particles
         const particleCount = 100;
@@ -237,7 +407,6 @@ export const Vehicle3DHub = () => {
         const onPointerDown = (e) => {
             isDragging = true;
             targetSpeedFactor = 3.6;
-            setIsAccelerating(true);
             previousMousePosition = {
                 x: e.clientX || (e.touches && e.touches[0].clientX) || 0,
                 y: e.clientY || (e.touches && e.touches[0].clientY) || 0,
@@ -261,7 +430,6 @@ export const Vehicle3DHub = () => {
         const onPointerUp = () => {
             isDragging = false;
             targetSpeedFactor = 1;
-            setIsAccelerating(false);
         };
 
         const domElement = renderer.domElement;
@@ -356,10 +524,10 @@ export const Vehicle3DHub = () => {
             }
             renderer.dispose();
         };
-    }, [isBeige]);
+    }, [isBeige, activeType]);
 
     return (
-        <div className={`relative mt-5 h-56 sm:h-64 w-full rounded-2xl border backdrop-blur-md overflow-hidden shadow-xl select-none group transition-colors duration-200 ${
+        <div className={`relative my-4 h-56 sm:h-64 w-full rounded-2xl border backdrop-blur-md overflow-hidden shadow-xl select-none group transition-colors duration-200 ${
             isBeige
                 ? "border-amber-300/60 bg-amber-50/70"
                 : "border-slate-700/50 bg-slate-900/90"

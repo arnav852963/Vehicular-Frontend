@@ -5,6 +5,8 @@ import {MyVehicles} from "./MyVehicles.jsx";
 import {Qr} from "./Qr.jsx";
 import {toast} from "react-toastify";
 import {Notification} from "./Notification.jsx";
+import {VehicleType3DHub} from "./3dModels/VehicleType3DHub.jsx";
+import {useTheme} from "../context/ThemeContext.jsx";
 
 
 const base64ToBlob = (base64, contentType = "image/png") => {
@@ -28,6 +30,8 @@ const base64ToBlob = (base64, contentType = "image/png") => {
 
 
 export const VehicleInfo = () => {
+    const { theme } = useTheme();
+    const isBeige = theme === "beige";
 
     const [vehicleInfo, setVehicleInfo] = useState({})
     const [activationLoading, setActivationLoading] = useState(false)
@@ -198,11 +202,22 @@ export const VehicleInfo = () => {
                             </div>
 
                             {activationQr !== undefined ? (
-                                <div className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${activationQr ? "bg-emerald-500/10 text-emerald-200 ring-emerald-500/20" : "bg-rose-500/10 text-rose-200 ring-rose-500/20"}`}>
+                                <div className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold ring-1 ${
+                                    activationQr
+                                        ? isBeige
+                                            ? "bg-emerald-100 text-emerald-900 ring-emerald-400/50"
+                                            : "bg-emerald-500/10 text-emerald-200 ring-emerald-500/20"
+                                        : isBeige
+                                            ? "bg-rose-100 text-rose-900 ring-rose-400/50"
+                                            : "bg-rose-500/10 text-rose-200 ring-rose-500/20"
+                                }`}>
                                     {activationQr ? "Active" : "Inactive"}
                                 </div>
                             ) : null}
                         </header>
+
+                        {/* Interactive 3D Model based on Vehicle Type */}
+                        <VehicleType3DHub type={vehicleInfo?.vehicleType} />
 
                         <section className="mt-5 grid grid-cols-2 gap-3">
                             {vehicleInfo?.vehicleType ? (
@@ -270,10 +285,14 @@ export const VehicleInfo = () => {
                             type="button"
                             onClick={handleQrActivation}
                             disabled={activationLoading}
-                            className={`w-full rounded-2xl px-4 py-3 text-sm font-semibold shadow-sm ring-1 transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 ${
+                            className={`w-full rounded-2xl px-4 py-3 text-sm font-bold shadow-sm ring-1 transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 ${
                                 activationQr
-                                    ? "border border-rose-500/20 bg-rose-500/10 text-rose-100 ring-rose-500/25"
-                                    : "border border-emerald-500/20 bg-emerald-500/10 text-emerald-100 ring-emerald-500/25"
+                                    ? isBeige
+                                        ? "border border-rose-400/80 bg-rose-100 text-rose-900 ring-rose-400/40 hover:bg-rose-200/80"
+                                        : "border border-rose-500/20 bg-rose-500/10 text-rose-100 ring-rose-500/25"
+                                    : isBeige
+                                        ? "border border-emerald-400/80 bg-emerald-100 text-emerald-900 ring-emerald-400/40 hover:bg-emerald-200/80"
+                                        : "border border-emerald-500/20 bg-emerald-500/10 text-emerald-100 ring-emerald-500/25"
                             }`}
                         >
                             {activationLoading ? (

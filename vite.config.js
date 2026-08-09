@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  assetsInclude: ['**/*.fbx'],
   server: {
     host: true,
     allowedHosts: ['https://ditch-boasting-mower.ngrok-free.dev']
