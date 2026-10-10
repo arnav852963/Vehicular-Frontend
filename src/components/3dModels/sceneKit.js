@@ -143,12 +143,16 @@ export const buildEnvironment = (renderer, envSpec) => {
 // ---------------------------------------------------------------------------
 const TEXTURE_KEYS = ["map", "alphaMap", "envMap", "normalMap", "roughnessMap", "metalnessMap", "emissiveMap"];
 
-export const disposeObject = (root) => {
+/** `shared` is an optional Set of textures that outlive `root` and must not be disposed. */
+export const disposeObject = (root, shared) => {
     root.traverse((obj) => {
         if (obj.geometry) obj.geometry.dispose();
         const mats = obj.material ? (Array.isArray(obj.material) ? obj.material : [obj.material]) : [];
         mats.forEach((mat) => {
-            TEXTURE_KEYS.forEach((key) => mat[key]?.dispose?.());
+            TEXTURE_KEYS.forEach((key) => {
+                const tex = mat[key];
+                if (tex && !shared?.has(tex)) tex.dispose?.();
+            });
             mat.dispose();
         });
     });

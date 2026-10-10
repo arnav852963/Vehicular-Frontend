@@ -17,6 +17,7 @@ import {
 const BASE_SPEED = 4.2; // world units / second at cruise
 const BOOST_SPEED = 3.4; // speed multiplier while the user holds / drags
 const SPAN = 40; // half-length of the visible road
+const SWAP_DISTANCE = 7; // how far off-screen a swapped-in vehicle starts
 const CAM_BASE = new THREE.Vector3(4.6, 2.0, 5.7);
 const CAM_TARGET = new THREE.Vector3(0, 0.3, 0);
 const DEFAULT_ROT = { y: 0.42, x: 0.1 };
@@ -352,33 +353,67 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
         }
     }
 
-    // ----- vehicle + its ground effects -----
-    const vehicle = buildVehicle(type, P, { glow: glowTex, beamAlpha });
-    world.add(vehicle.group);
+    // ----- vehicle rigs: a vehicle + its contact shadow / underglow, swappable at runtime -----
+    const textures = { glow: glowTex, beamAlpha };
+    const sharedTextures = new Set([glowTex, beamAlpha, blobTex]);
 
-    const blob = new THREE.Mesh(
-        new THREE.PlaneGeometry(vehicle.size.x * 1.35, vehicle.size.z * 1.7).rotateX(-Math.PI / 2),
-        new THREE.MeshBasicMaterial({ map: blobTex, transparent: true, opacity: P.shadowOpacity, depthWrite: false })
-    );
-    blob.position.y = GROUND_Y + 0.003;
-    world.add(blob);
+    const createRig = (vehicleType) => {
+        const vehicle = buildVehicle(vehicleType, P, textures);
+        const root = new THREE.Group();
+        root.add(vehicle.group);
 
-    if (P.underglowOpacity > 0) {
-        const glow = new THREE.Mesh(
-            new THREE.PlaneGeometry(vehicle.size.x * 1.5, vehicle.size.z * 2.1).rotateX(-Math.PI / 2),
-            new THREE.MeshBasicMaterial({
-                map: glowTex,
-                color: P.underglow,
-                transparent: true,
-                opacity: P.underglowOpacity,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false,
-                toneMapped: false,
-            })
+        const blob = new THREE.Mesh(
+            new THREE.PlaneGeometry(vehicle.size.x * 1.35, vehicle.size.z * 1.7).rotateX(-Math.PI / 2),
+            new THREE.MeshBasicMaterial({ map: blobTex, transparent: true, opacity: P.shadowOpacity, depthWrite: false })
         );
-        glow.position.y = GROUND_Y + 0.006;
-        world.add(glow);
-    }
+        blob.position.y = GROUND_Y + 0.003;
+        root.add(blob);
+
+        if (P.underglowOpacity > 0) {
+            const glow = new THREE.Mesh(
+                new THREE.PlaneGeometry(vehicle.size.x * 1.5, vehicle.size.z * 2.1).rotateX(-Math.PI / 2),
+                new THREE.MeshBasicMaterial({
+                    map: glowTex,
+                    color: P.underglow,
+                    transparent: true,
+                    opacity: P.underglowOpacity,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false,
+                    toneMapped: false,
+                })
+            );
+            glow.position.y = GROUND_Y + 0.006;
+            root.add(glow);
+        }
+        return { root, vehicle };
+    };
+
+    let rig = createRig(type);
+    world.add(rig.root);
+    let currentType = type;
+    let leaving = null; // { rig, fromX, t } - the previous vehicle driving away
+    let entering = 1; // progress of the arriving vehicle (negative = waiting, 1 = arrived)
+    let kick = 0; // short speed burst while swapping
+
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    const easeIn = (t) => t * t;
+    const retire = (old) => {
+        world.remove(old.root);
+        disposeObject(old.root, sharedTextures);
+    };
+
+    /** Swap to another vehicle: the old one drives off ahead, the new one pulls in from behind. */
+    const setType = (next) => {
+        if (next === currentType) return;
+        currentType = next;
+        if (leaving) retire(leaving.rig);
+        leaving = { rig, fromX: rig.root.position.x, t: 0 };
+        rig = createRig(next);
+        rig.root.position.x = -SWAP_DISTANCE;
+        world.add(rig.root);
+        entering = -0.45; // brief delay so the old vehicle clears the lane first
+        kick = 1;
+    };
 
     // ----- lights -----
     scene.add(new THREE.HemisphereLight(P.hemiSky, P.hemiGround, P.hemiIntensity));
@@ -463,21 +498,39 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
         container,
         onResize: frame,
         update: (dt, now) => {
-            speedFactor += (targetSpeed - speedFactor) * (1 - Math.exp(-dt * 4.5));
+            kick = Math.max(0, kick - dt * 1.4);
+            speedFactor += (Math.max(targetSpeed, 1 + kick * 1.8) - speedFactor) * (1 - Math.exp(-dt * 4.5));
             const v = BASE_SPEED * speedFactor;
             dist += v * dt;
 
             scrollers.forEach(({ group, period, k }) => {
                 group.position.x = -((dist * k) % period);
             });
-            vehicle.wheels.forEach((w) => {
-                w.spin.rotation.z -= (v * dt) / w.radius;
-            });
 
-            // vehicle suspension: bob + squat under acceleration
+            // swap transition
+            if (entering < 1) {
+                entering = Math.min(1, entering + dt / 1.0);
+                rig.root.position.x = -SWAP_DISTANCE * (1 - easeOut(Math.max(0, entering)));
+            }
+            if (leaving) {
+                leaving.t = Math.min(1, leaving.t + dt / 0.6);
+                leaving.rig.root.position.x = leaving.fromX + (SWAP_DISTANCE + 2) * easeIn(leaving.t);
+                if (leaving.t >= 1) {
+                    retire(leaving.rig);
+                    leaving = null;
+                }
+            }
+
+            // wheels + suspension (bob + squat under acceleration)
             const boost = THREE.MathUtils.clamp((speedFactor - 1) / (BOOST_SPEED - 1), 0, 1);
-            vehicle.group.position.y = vehicle.baseY + Math.sin(now * (8 + speedFactor * 4)) * 0.004 * (0.4 + boost * 1.4);
-            vehicle.group.rotation.z = boost * 0.018;
+            const rigs = leaving ? [rig, leaving.rig] : [rig];
+            rigs.forEach(({ vehicle }) => {
+                vehicle.wheels.forEach((w) => {
+                    w.spin.rotation.z -= (v * dt) / w.radius;
+                });
+                vehicle.group.position.y = vehicle.baseY + Math.sin(now * (8 + speedFactor * 4)) * 0.004 * (0.4 + boost * 1.4);
+                vehicle.group.rotation.z = boost * 0.018;
+            });
 
             // camera orbit with smooth return to the hero angle
             if (!dragging && now > returnAt) {
@@ -521,6 +574,7 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
     });
 
     return {
+        setType,
         dispose: () => {
             loop.dispose();
             dom.removeEventListener("pointerdown", onDown);
