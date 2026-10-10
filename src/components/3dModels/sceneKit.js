@@ -78,6 +78,82 @@ export const createShadowBlobTexture = () =>
         ctx.fillRect(0, 0, w, h);
     });
 
+/** Cratered moon with a soft shaded edge. The disc fills ~90% of the texture. */
+export const createMoonTexture = (color = "#e0e7ff") =>
+    canvasTexture(256, 256, (ctx, w) => {
+        const c = w / 2;
+        const r = w * 0.45;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(c, c, r, 0, Math.PI * 2);
+        ctx.clip();
+
+        const base = ctx.createRadialGradient(c - r * 0.3, c - r * 0.3, r * 0.1, c, c, r);
+        base.addColorStop(0, "#ffffff");
+        base.addColorStop(1, color);
+        ctx.fillStyle = base;
+        ctx.fillRect(0, 0, w, w);
+
+        [
+            [-0.32, -0.2, 0.2], [0.26, 0.12, 0.28], [-0.1, 0.46, 0.15],
+            [0.42, -0.4, 0.13], [-0.52, 0.2, 0.1], [0.06, -0.52, 0.09],
+        ].forEach(([x, y, size]) => {
+            ctx.beginPath();
+            ctx.arc(c + x * r, c + y * r, size * r, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(110,122,190,0.24)";
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "rgba(255,255,255,0.4)";
+            ctx.stroke();
+        });
+
+        const shade = ctx.createLinearGradient(c - r, c - r, c + r, c + r);
+        shade.addColorStop(0.5, "rgba(55,65,140,0)");
+        shade.addColorStop(1, "rgba(55,65,140,0.4)");
+        ctx.fillStyle = shade;
+        ctx.fillRect(0, 0, w, w);
+        ctx.restore();
+    });
+
+/** Warm sun disc. The disc fills ~90% of the texture. */
+export const createSunTexture = () =>
+    canvasTexture(256, 256, (ctx, w) => {
+        const c = w / 2;
+        const r = w * 0.45;
+        const g = ctx.createRadialGradient(c, c, 0, c, c, r);
+        g.addColorStop(0, "#fffef2");
+        g.addColorStop(0.7, "#ffeaa8");
+        g.addColorStop(0.94, "#ffd06a");
+        g.addColorStop(1, "rgba(255,208,106,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(c, c, r, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+/** Soft radiating rays, rotated slowly behind the sun. */
+export const createSunRaysTexture = () =>
+    canvasTexture(256, 256, (ctx, w) => {
+        const c = w / 2;
+        const fade = ctx.createRadialGradient(c, c, w * 0.1, c, c, c);
+        fade.addColorStop(0, "rgba(255,214,130,0.75)");
+        fade.addColorStop(1, "rgba(255,214,130,0)");
+        ctx.fillStyle = fade;
+        ctx.translate(c, c);
+        const rays = 14;
+        for (let i = 0; i < rays; i++) {
+            ctx.save();
+            ctx.rotate((i / rays) * Math.PI * 2);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(c, -w * 0.035);
+            ctx.lineTo(c, w * 0.035);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+    });
+
 /** Vertical sky gradient. `horizonAt` is the 0..1 position of the horizon from the top. */
 export const createSkyTexture = ({ top, mid, horizon }, horizonAt = 0.42) =>
     canvasTexture(4, 512, (ctx, w, h) => {

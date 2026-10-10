@@ -10,7 +10,10 @@ import {
     createLoop,
     createRenderer,
     createShadowBlobTexture,
+    createMoonTexture,
     createSkyTexture,
+    createSunRaysTexture,
+    createSunTexture,
     disposeObject,
     prefersReducedMotion,
 } from "./sceneKit.js";
@@ -22,7 +25,7 @@ const DANGER_SECONDS = 10; // ...for this long and the vehicle crashes
 const SPAN = 40; // half-length of the visible road
 const SWAP_DISTANCE = 7; // how far off-screen a swapped-in vehicle starts
 const CAM_BASE = new THREE.Vector3(4.6, 2.0, 5.7);
-const CAM_TARGET = new THREE.Vector3(0, 0.3, 0);
+const CAM_TARGET = new THREE.Vector3(0, 0.75, 0);
 const DEFAULT_ROT = { y: 0.42, x: 0.1 };
 
 // Small deterministic RNG so the scenery looks identical on every mount.
@@ -58,7 +61,7 @@ export const createRoadScene = ({ container, palette: P, type, onSpeed, onBoost,
     const glowTex = createGlowTexture();
     const beamAlpha = createBeamAlphaTexture();
     const blobTex = createShadowBlobTexture();
-    const skyTex = createSkyTexture({ top: P.skyTop, mid: P.skyMid, horizon: P.horizon }, 0.35);
+    const skyTex = createSkyTexture({ top: P.skyTop, mid: P.skyMid, horizon: P.horizon }, 0.25);
     const envTarget = buildEnvironment(renderer, P.env);
 
     scene.background = skyTex;
@@ -288,41 +291,41 @@ export const createRoadScene = ({ container, palette: P, type, onSpeed, onBoost,
     const cloudPivot = new THREE.Group();
     sky.add(cloudPivot);
 
-    const celestialAz = VIEW_AZIMUTH + (P.isNight ? deg(-14) : deg(16));
-    // offsets are relative to the sky group, which sits on the camera base
-const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 70);
+    // ----- moon (dusk) / sun (beige): both sit in the strip of sky just above the horizon,
+    // slightly off-centre so they clear the HUD chips -----
+    let sunRays = null;
+    let celestialHalo = null;
     {
-        const radius = P.isNight ? 3.4 : 5;
-        const disc = new THREE.Mesh(
-            new THREE.CircleGeometry(radius, 48),
-            new THREE.MeshBasicMaterial({ color: P.celestial, fog: false, toneMapped: false })
-        );
-        disc.position.copy(celestialPos);
-        const halo = new THREE.Sprite(
-            new THREE.SpriteMaterial({
-                map: glowTex,
-                color: P.celestialGlow,
-                transparent: true,
-                opacity: P.isNight ? 0.55 : 0.8,
-                blending: P.isNight ? THREE.AdditiveBlending : THREE.NormalBlending,
-                depthWrite: false,
-                fog: false,
-                toneMapped: false,
-            })
-        );
-        halo.position.copy(celestialPos);
-        halo.scale.setScalar(radius * (P.isNight ? 7 : 9));
-        sky.add(halo, disc);
-        scene.updateMatrixWorld(true);
-        disc.lookAt(CAM_BASE); // face the camera (world-space target)
+        const angular = (degrees) => 70 * deg(degrees); // world size of an angular diameter at 70 units
+        const diameter = angular(P.isNight ? 7 : 8.5);
+        const pos = sphericalFromCamera(VIEW_AZIMUTH + deg(P.isNight ? -8 : 8), deg(P.isNight ? 5.6 : 5), 70);
+
+        const sprite = (map, scale, extra) => {
+            const mat = new THREE.SpriteMaterial({ map, transparent: true, depthWrite: false, fog: false, toneMapped: false, ...extra });
+            const obj = new THREE.Sprite(mat);
+            obj.position.copy(pos);
+            obj.scale.setScalar(scale);
+            sky.add(obj);
+            return obj;
+        };
+
+        celestialHalo = sprite(glowTex, diameter * (P.isNight ? 3.4 : 3.8), {
+            color: P.celestialGlow,
+            opacity: P.isNight ? 0.5 : 0.75,
+            blending: P.isNight ? THREE.AdditiveBlending : THREE.NormalBlending,
+        });
+        if (!P.isNight) {
+            sunRays = sprite(createSunRaysTexture(), diameter * 3.2, { opacity: 0.55, blending: THREE.AdditiveBlending });
+        }
+        sprite(P.isNight ? createMoonTexture(P.celestial) : createSunTexture(), diameter / 0.9, {});
     }
 
     if (P.isNight) {
         const rnd = seeded(5);
-        const count = 140;
+        const count = 110;
         const pos = new Float32Array(count * 3);
         for (let i = 0; i < count; i++) {
-            const v = sphericalFromCamera(VIEW_AZIMUTH + (rnd() - 0.5) * deg(100), deg(3 + rnd() * 26), 75);
+            const v = sphericalFromCamera(VIEW_AZIMUTH + (rnd() - 0.5) * deg(100), deg(0.8 + rnd() * 8), 75);
             pos.set([v.x, v.y, v.z], i * 3);
         }
         const geo = new THREE.BufferGeometry();
@@ -350,8 +353,8 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
                 cloud.add(blob);
             }
             const az = VIEW_AZIMUTH + (i / 7 - 0.5) * deg(130) + (rnd() - 0.5) * deg(8);
-            cloud.position.copy(sphericalFromCamera(az, deg(9 + rnd() * 13), 68));
-            cloud.scale.setScalar(0.9 + rnd() * 0.7);
+            cloud.position.copy(sphericalFromCamera(az, deg(2.5 + rnd() * 5.5), 68));
+            cloud.scale.setScalar(0.45 + rnd() * 0.35);
             cloudPivot.add(cloud);
         }
     }
@@ -653,6 +656,8 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
 
             if (starMat) starMat.opacity = P.starOpacity * (0.82 + Math.sin(now * 1.3) * 0.18);
             if (!reduced) cloudPivot.rotation.y += dt * 0.004;
+            if (sunRays && !reduced) sunRays.material.rotation += realDt * 0.05;
+            if (celestialHalo) celestialHalo.material.opacity = (P.isNight ? 0.5 : 0.75) * (0.92 + Math.sin(now * 0.9) * 0.08);
 
             const kmh = Math.round(48 * eff);
             if (kmh !== lastKmh) {
