@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { buildVehicle, GROUND_Y } from "./vehicleModels.js";
+import { createCrashFx } from "./crashFx.js";
 import {
     angleDelta,
     buildEnvironment,
@@ -16,6 +17,8 @@ import {
 
 const BASE_SPEED = 4.2; // world units / second at cruise
 const BOOST_SPEED = 3.4; // speed multiplier while the user holds / drags
+const DANGER_KMH = 100; // stay above this speed...
+const DANGER_SECONDS = 10; // ...for this long and the vehicle crashes
 const SPAN = 40; // half-length of the visible road
 const SWAP_DISTANCE = 7; // how far off-screen a swapped-in vehicle starts
 const CAM_BASE = new THREE.Vector3(4.6, 2.0, 5.7);
@@ -46,7 +49,7 @@ const sphericalFromCamera = (az, el, radius) =>
 const VIEW_AZIMUTH = Math.atan2(CAM_BASE.x, CAM_BASE.z); // direction the camera looks (from -Z towards -X)
 const deg = (d) => (d * Math.PI) / 180;
 
-export const createRoadScene = ({ container, palette: P, type, onSpeed, onBoost }) => {
+export const createRoadScene = ({ container, palette: P, type, onSpeed, onBoost, onDanger, onCrash }) => {
     const renderer = createRenderer(container);
     if (!renderer) return null;
 
@@ -360,7 +363,13 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
     const createRig = (vehicleType) => {
         const vehicle = buildVehicle(vehicleType, P, textures);
         const root = new THREE.Group();
-        root.add(vehicle.group);
+        // the pivot sits at the vehicle's centre so a crash can tumble it around its middle
+        const cY = GROUND_Y + vehicle.size.y / 2;
+        const pivot = new THREE.Group();
+        pivot.position.y = cY;
+        vehicle.group.position.y = vehicle.baseY - cY;
+        pivot.add(vehicle.group);
+        root.add(pivot);
 
         const blob = new THREE.Mesh(
             new THREE.PlaneGeometry(vehicle.size.x * 1.35, vehicle.size.z * 1.7).rotateX(-Math.PI / 2),
@@ -369,8 +378,9 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
         blob.position.y = GROUND_Y + 0.003;
         root.add(blob);
 
+        let glow = null;
         if (P.underglowOpacity > 0) {
-            const glow = new THREE.Mesh(
+            glow = new THREE.Mesh(
                 new THREE.PlaneGeometry(vehicle.size.x * 1.5, vehicle.size.z * 2.1).rotateX(-Math.PI / 2),
                 new THREE.MeshBasicMaterial({
                     map: glowTex,
@@ -385,7 +395,7 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
             glow.position.y = GROUND_Y + 0.006;
             root.add(glow);
         }
-        return { root, vehicle };
+        return { root, pivot, cY, vehicle, blob, glow };
     };
 
     let rig = createRig(type);
@@ -406,6 +416,10 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
     const setType = (next) => {
         if (next === currentType) return;
         currentType = next;
+        if (crashed) {
+            restart();
+            return;
+        }
         if (leaving) retire(leaving.rig);
         leaving = { rig, fromX: rig.root.position.x, t: 0 };
         rig = createRig(next);
@@ -436,6 +450,12 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
     rim.position.set(-7, 1.6, -1.5); // low + sideways: lights the edges without mirroring into the camera
     scene.add(rim);
 
+    // ----- crash (hold above DANGER_KMH for DANGER_SECONDS) -----
+    const crash = createCrashFx({ world, glowTex, palette: P, emit: (event) => onCrash?.(event) });
+    let crashed = false;
+    let overTime = 0;
+    let lastDanger = -1;
+
     // ----- interaction -----
     const dom = renderer.domElement;
     let dragging = false;
@@ -453,10 +473,55 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
         targetSpeed = on ? BOOST_SPEED : cruise;
         onBoost?.(on);
     };
+    const startCrash = () => {
+        crashed = true;
+        dragging = false;
+        onBoost?.(false);
+        if (leaving) {
+            retire(leaving.rig);
+            leaving = null;
+        }
+        entering = 1;
+        rig.root.position.x = 0;
+        targetSpeed = cruise;
+        returnAt = 0; // bring the camera back to the hero angle so the crash is framed well
+        crash.start(rig);
+    };
+
+    /** Reset everything and bring a fresh vehicle in as if the scene had just loaded. */
+    const restart = () => {
+        crash.reset();
+        retire(rig);
+        if (leaving) {
+            retire(leaving.rig);
+            leaving = null;
+        }
+        rig = createRig(currentType);
+        rig.root.position.x = -SWAP_DISTANCE;
+        world.add(rig.root);
+        entering = -0.1;
+        kick = 0.8;
+        crashed = false;
+        overTime = 0;
+        lastDanger = -1;
+        speedFactor = 0.25;
+        targetSpeed = cruise;
+        onCrash?.("none");
+        onDanger?.(0);
+    };
+
     const onDown = (e) => {
+        if (crashed) {
+            restart();
+            return;
+        }
         dragging = true;
         last = { x: e.clientX, y: e.clientY };
-        dom.setPointerCapture?.(e.pointerId);
+        try {
+            dom.setPointerCapture?.(e.pointerId);
+        } catch {
+            /* capture is a nicety; ignore pointers the browser can't capture */
+        }
         setBoost(true);
     };
     const onMove = (e) => {
@@ -468,7 +533,11 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
     const onUp = (e) => {
         if (!dragging) return;
         dragging = false;
-        if (e?.pointerId !== undefined) dom.releasePointerCapture?.(e.pointerId);
+        try {
+            if (e?.pointerId !== undefined) dom.releasePointerCapture?.(e.pointerId);
+        } catch {
+            /* ignore */
+        }
         returnAt = performance.now() / 1000 + 2.2;
         setBoost(false);
     };
@@ -480,11 +549,14 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
 
     // ----- loop -----
     let baseFov = 38;
+    const camPos = new THREE.Vector3();
+    let shaken = false;
     const frame = (w, h) => {
         const aspect = w / h;
         camera.aspect = aspect;
         const pull = Math.min(Math.max(1.55 / aspect, 1), 1.7);
         camera.position.copy(CAM_TARGET).addScaledVector(new THREE.Vector3().subVectors(CAM_BASE, CAM_TARGET), pull);
+        camPos.copy(camera.position);
         camera.lookAt(CAM_TARGET);
         camera.updateProjectionMatrix();
     };
@@ -497,10 +569,27 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
         renderer,
         container,
         onResize: frame,
-        update: (dt, now) => {
-            kick = Math.max(0, kick - dt * 1.4);
-            speedFactor += (Math.max(targetSpeed, 1 + kick * 1.8) - speedFactor) * (1 - Math.exp(-dt * 4.5));
-            const v = BASE_SPEED * speedFactor;
+        update: (realDt, now) => {
+            const fx = crash.update(realDt, now);
+            const dt = realDt * fx.timeScale; // slow-motion during the crash
+
+            if (!crashed) {
+                // sustained overspeed -> crash
+                overTime = 48 * speedFactor > DANGER_KMH ? overTime + realDt : 0;
+                const q = Math.round(Math.min(1, overTime / DANGER_SECONDS) * 20) / 20;
+                if (q !== lastDanger) {
+                    lastDanger = q;
+                    onDanger?.(q);
+                }
+                if (overTime >= DANGER_SECONDS) startCrash();
+            }
+
+            if (!crashed) {
+                kick = Math.max(0, kick - dt * 1.4);
+                speedFactor += (Math.max(targetSpeed, 1 + kick * 1.8) - speedFactor) * (1 - Math.exp(-dt * 4.5));
+            }
+            const eff = crashed ? speedFactor * fx.scroll : speedFactor;
+            const v = BASE_SPEED * eff;
             dist += v * dt;
 
             scrollers.forEach(({ group, period, k }) => {
@@ -522,13 +611,15 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
             }
 
             // wheels + suspension (bob + squat under acceleration)
-            const boost = THREE.MathUtils.clamp((speedFactor - 1) / (BOOST_SPEED - 1), 0, 1);
+            const boost = THREE.MathUtils.clamp((eff - 1) / (BOOST_SPEED - 1), 0, 1);
             const rigs = leaving ? [rig, leaving.rig] : [rig];
-            rigs.forEach(({ vehicle }) => {
+            rigs.forEach((r) => {
+                const { vehicle } = r;
                 vehicle.wheels.forEach((w) => {
                     w.spin.rotation.z -= (v * dt) / w.radius;
                 });
-                vehicle.group.position.y = vehicle.baseY + Math.sin(now * (8 + speedFactor * 4)) * 0.004 * (0.4 + boost * 1.4);
+                if (crashed && r === rig) return; // the crash drives the pose
+                vehicle.group.position.y = vehicle.baseY - r.cY + Math.sin(now * (8 + eff * 4)) * 0.004 * (0.4 + boost * 1.4);
                 vehicle.group.rotation.z = boost * 0.018;
             });
 
@@ -543,7 +634,7 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
             world.rotation.y += (targetY + sway - world.rotation.y) * follow;
             world.rotation.x += (targetX - world.rotation.x) * follow;
 
-            const fov = reduced ? baseFov : baseFov + boost * 4.5;
+            const fov = (reduced ? baseFov : baseFov + boost * 4.5) + fx.fov;
             if (Math.abs(fov - camera.fov) > 0.01) {
                 camera.fov = fov;
                 camera.updateProjectionMatrix();
@@ -563,10 +654,27 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
             if (starMat) starMat.opacity = P.starOpacity * (0.82 + Math.sin(now * 1.3) * 0.18);
             if (!reduced) cloudPivot.rotation.y += dt * 0.004;
 
-            const kmh = Math.round(48 * speedFactor);
+            const kmh = Math.round(48 * eff);
             if (kmh !== lastKmh) {
                 lastKmh = kmh;
                 onSpeed?.(kmh);
+            }
+
+            // camera shake: rattles as the danger timer fills, then the big crash hit
+            const dangerShake = !crashed && lastDanger > 0.3 ? 0.004 + 0.022 * lastDanger * lastDanger : 0;
+            const shakeAmp = (fx.shake + dangerShake) * (reduced ? 0.35 : 1);
+            if (shakeAmp > 0.0005) {
+                camera.position.set(
+                    camPos.x + (Math.random() - 0.5) * shakeAmp,
+                    camPos.y + (Math.random() - 0.5) * shakeAmp,
+                    camPos.z + (Math.random() - 0.5) * shakeAmp
+                );
+                camera.lookAt(CAM_TARGET);
+                shaken = true;
+            } else if (shaken) {
+                camera.position.copy(camPos);
+                camera.lookAt(CAM_TARGET);
+                shaken = false;
             }
 
             renderer.render(scene, camera);
@@ -575,6 +683,7 @@ const celestialPos = sphericalFromCamera(celestialAz, deg(P.isNight ? 17 : 15), 
 
     return {
         setType,
+        restart,
         dispose: () => {
             loop.dispose();
             dom.removeEventListener("pointerdown", onDown);
