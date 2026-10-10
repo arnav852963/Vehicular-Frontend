@@ -11,6 +11,8 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Logo } from "./Logo";
 import {userApi} from "../api/user.js";
 import {BackgroundPattern} from "./BackgroundPattern.jsx";
+import {GoogleButton} from "./GoogleButton.jsx";
+import {useTheme} from "../context/ThemeContext.jsx";
 
 
 
@@ -19,6 +21,9 @@ export const Signup = () => {
 
     const [error, setError] = useState({})
     const [loading, setLoading] = useState(false)
+    const [googleBusy, setGoogleBusy] = useState(false)
+    const {theme} = useTheme()
+    const isBeige = theme === "beige"
     const {register, handleSubmit} = useForm()
     const dispatch = useDispatch()
 
@@ -65,6 +70,8 @@ export const Signup = () => {
 
 
     const handleGoogleLogin = async () => {
+        if (googleBusy) return
+        setGoogleBusy(true)
         try {
 
             const userCredential = await signInWithPopup(auth, googleProvider);
@@ -106,8 +113,12 @@ export const Signup = () => {
 
 
         } catch (error) {
+            // closing the popup is a normal cancel, not an error worth a full-page message
+            if (error?.code === "auth/popup-closed-by-user" || error?.code === "auth/cancelled-popup-request") return
             setError({error: true , message:"google login error " + error.message})
             setLoading(false)
+        } finally {
+            setGoogleBusy(false)
         }
     };
 
@@ -293,28 +304,12 @@ if(error.error){
                         <div className="mb-5">
                             <h2 className="text-2xl font-semibold tracking-tight text-slate-100">Sign in</h2>
                             <p className="mt-1 text-sm text-slate-400">
-                                Fast, private contact—no phone numbers. Use Google (recommended) or email.
+                                Fast, private contact—no phone numbers. One tap with Google, or use email.
                             </p>
                         </div>
 
-                        <div className="mb-4">
-                            <button
-                                onClick={handleGoogleLogin}
-                                type="button"
-                                className="group relative w-full overflow-hidden inline-flex items-center justify-center gap-3 rounded-2xl bg-indigo-500 px-4 py-3.5 text-sm font-semibold text-slate-50 shadow-md hover:bg-indigo-400 transition"
-                            >
-                                <div className="h-8 w-8 rounded-xl bg-slate-900/30 flex items-center justify-center">
-                                    <span className="text-base font-black leading-none">G</span>
-                                </div>
-                                <span className="tracking-wide">Google</span>
-                                <span className="ml-auto inline-flex items-center rounded-xl bg-slate-900/30 px-2.5 py-1 text-[11px] font-semibold text-slate-200">
-                                    Recommended
-                                </span>
-                            </button>
-
-                            <p className="mt-2 text-xs text-slate-400">
-                                Tip: Google sign-in is fastest—no password to remember.
-                            </p>
+                        <div className="mb-5">
+                            <GoogleButton onClick={handleGoogleLogin} loading={googleBusy} />
                         </div>
 
                         <div className="relative my-4">
@@ -362,7 +357,11 @@ if(error.error){
                             <div>
                                 <button
                                     type="submit"
-                                    className="w-full inline-flex items-center justify-center rounded-2xl border border-slate-700/70 bg-slate-800 px-4 py-3 text-sm font-semibold text-slate-100 hover:bg-slate-700 transition"
+                                    className={`w-full inline-flex items-center justify-center rounded-2xl border bg-transparent px-4 py-3 text-sm font-semibold transition active:scale-[0.99] ${
+                                        isBeige
+                                            ? "border-amber-300/70 text-stone-700 hover:bg-amber-50"
+                                            : "border-slate-700/70 text-slate-300 hover:bg-slate-800/60 hover:text-slate-100"
+                                    }`}
                                 >
                                     Continue with email
                                 </button>
